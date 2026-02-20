@@ -982,7 +982,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const switchIcon = document.getElementById('switchIcon');
     if (switchIcon) {
         switchIcon.addEventListener('click', function() {
-            window.location.href = "/Netinfo/switchDetails.html";
+            var uid = new URLSearchParams(window.location.search).get('uid');
+            window.location.href = "/Netinfo/switchDetails.html" + (uid ? "?uid=" + encodeURIComponent(uid) : "");
         });
     } else {
         devLog("Element with id 'switchIcon' not found.");
@@ -1277,54 +1278,46 @@ document.addEventListener('DOMContentLoaded', checkOrientationAndWarn);
 
 
 
-// SECURITY FIX: displayBasicDeviceInfo uses safe DOM methods instead of innerHTML
 function displayBasicDeviceInfo(device) {
     const basicDeviceInfoDiv = document.getElementById('basicDeviceInfo');
 
-    // Clear existing content safely
     while (basicDeviceInfoDiv.firstChild) {
         basicDeviceInfoDiv.removeChild(basicDeviceInfoDiv.firstChild);
     }
 
     if (!device) return;
 
-    // Hostname card
-    var card1 = document.createElement('div');
-    card1.className = 'info-card';
-    var icon1 = document.createElement('i');
-    icon1.className = 'fas fa-server';
-    card1.appendChild(icon1);
-    var p1 = document.createElement('p');
-    p1.textContent = 'Hostname: ' + device.hostname;
-    card1.appendChild(p1);
-    basicDeviceInfoDiv.appendChild(card1);
+    var fields = [
+        { icon: 'fa-server', label: 'Hostname', value: device.hostname },
+        { icon: 'fa-network-wired', label: 'IP Adresi', value: device.ipaddress },
+        { icon: 'fa-microchip', label: 'Model', value: device.model },
+        { icon: 'fa-signal', label: 'Durum', value: device.status, isStatus: true },
+        { icon: 'fa-clock', label: 'Uptime', value: device.uptime },
+        { icon: 'fa-map-marker-alt', label: 'Lokasyon', value: device.location || device.sysLocation }
+    ];
 
-    // IP Address card
-    var card2 = document.createElement('div');
-    card2.className = 'info-card';
-    var icon2 = document.createElement('i');
-    icon2.className = 'fas fa-network-wired';
-    card2.appendChild(icon2);
-    var p2 = document.createElement('p');
-    p2.textContent = 'IP Adresi: ' + device.ipaddress;
-    card2.appendChild(p2);
-    basicDeviceInfoDiv.appendChild(card2);
-
-    // Status card
-    var card3 = document.createElement('div');
-    card3.className = 'info-card';
-    var icon3 = document.createElement('i');
-    icon3.className = 'fas fa-signal';
-    card3.appendChild(icon3);
-    var p3 = document.createElement('p');
-    p3.textContent = 'Durum: ' + device.status;
-    var statusSpan = document.createElement('span');
-    statusSpan.className = 'status-indicator ' + (device.status === 'Online' ? 'status-online' : 'status-offline');
-    statusSpan.setAttribute('role', 'status');
-    p3.appendChild(document.createTextNode(' '));
-    p3.appendChild(statusSpan);
-    card3.appendChild(p3);
-    basicDeviceInfoDiv.appendChild(card3);
+    fields.forEach(function(f) {
+        if (!f.value) return;
+        var card = document.createElement('div');
+        card.className = 'info-card';
+        var iconEl = document.createElement('i');
+        iconEl.className = 'fas ' + f.icon;
+        card.appendChild(iconEl);
+        var p = document.createElement('p');
+        var strong = document.createElement('strong');
+        strong.textContent = f.label + ': ';
+        p.appendChild(strong);
+        p.appendChild(document.createTextNode(f.value));
+        if (f.isStatus) {
+            var statusSpan = document.createElement('span');
+            statusSpan.className = 'status-indicator ' + (f.value === 'Online' ? 'status-online' : 'status-offline');
+            statusSpan.setAttribute('role', 'status');
+            p.appendChild(document.createTextNode(' '));
+            p.appendChild(statusSpan);
+        }
+        card.appendChild(p);
+        basicDeviceInfoDiv.appendChild(card);
+    });
 }
 
 // SECURITY FIX: displayAdminDeviceInfo uses safe DOM methods instead of innerHTML
