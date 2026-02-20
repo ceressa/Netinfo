@@ -2,10 +2,12 @@ import requests
 import pandas as pd
 import logging
 import urllib3
+import os
 
 # Loglama yapılandırması
+log_path = os.environ.get("VLAN_LOG_PATH", "vlan_port_mapping.log")
 logging.basicConfig(
-    filename=r"D:\INTRANET\Netinfo\Data\vlan_port_mapping.log",
+    filename=log_path,
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
@@ -15,16 +17,13 @@ auth_url = "https://network-api.npe.fedex.com/v1/authorize"
 interfaces_url = "https://network-api.npe.fedex.com/v1/device/TrCHO1104sw06/interfaces?device_type=cisco_ios"
 vlans_url = "https://network-api.npe.fedex.com/v1/device/TrCHO1104sw06/vlans?device_type=cisco_ios"
 
-# Kullanıcı Bilgileri
-username = "3723002"
-password = "Xerez386251-"
-deviceid = "21998892"  # Statseeker'dan alınan deviceid
+# Kullanıcı Bilgileri - environment variable'dan oku
+username = os.environ.get("NETDB_USERNAME", "")
+password = os.environ.get("NETDB_PASSWORD", "")
+deviceid = os.environ.get("STATSEEKER_DEVICE_ID", "21998892")
 
 # Çıktı dosyası
-output_file = r"D:\INTRANET\Netinfo\Data\vlan_port_mapping.xlsx"
-
-# SSL Uyarılarını devre dışı bırak
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+output_file = os.environ.get("VLAN_OUTPUT_FILE", "vlan_port_mapping.xlsx")
 
 # Bearer Token Alımı
 def fetch_bearer_token():
@@ -32,7 +31,7 @@ def fetch_bearer_token():
     auth_data = {'grant_type': 'password', 'username': username, 'password': password}
     headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
     try:
-        response = requests.post(auth_url, data=auth_data, headers=headers, verify=False)
+        response = requests.post(auth_url, data=auth_data, headers=headers, verify=True)
         response.raise_for_status()
         token = response.json().get("access_token")
         if not token:
@@ -61,7 +60,7 @@ def fetch_device_data(token):
     try:
         # Port bilgileri
         logging.info("Port bilgileri çekiliyor...")
-        ports_response = requests.get(interfaces_url, headers=headers, verify=False)
+        ports_response = requests.get(interfaces_url, headers=headers, verify=True)
         ports_response.raise_for_status()
         ports_data = ports_response.json()
         logging.debug("Port bilgileri alındı.")
@@ -72,7 +71,7 @@ def fetch_device_data(token):
     try:
         # VLAN bilgileri
         logging.info("VLAN bilgileri çekiliyor...")
-        vlans_response = requests.get(vlans_url, headers=headers, verify=False)
+        vlans_response = requests.get(vlans_url, headers=headers, verify=True)
         vlans_response.raise_for_status()
         vlan_data = vlans_response.json()
         logging.debug("VLAN bilgileri alındı.")

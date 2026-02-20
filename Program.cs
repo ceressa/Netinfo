@@ -67,15 +67,15 @@ builder.Services.AddCors(options =>
         if (allowedOrigins.Length > 0)
         {
             policy.WithOrigins(allowedOrigins)
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
+                  .WithMethods("GET", "POST", "DELETE")
+                  .WithHeaders("Content-Type", "Authorization");
         }
         else
         {
             // Fallback: sadece same-origin izin ver
             policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
+                  .WithMethods("GET", "POST", "DELETE")
+                  .WithHeaders("Content-Type", "Authorization");
         }
     });
 });
@@ -183,18 +183,28 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// API rate limiting middleware (100 requests/minute per IP)
+// API rate limiting middleware - per IP, per endpoint category
 var _rateLimitStore = new System.Collections.Concurrent.ConcurrentDictionary<string, (int count, DateTime windowStart)>();
 app.Use(async (context, next) =>
 {
     if (context.Request.Path.StartsWithSegments("/api"))
     {
         var clientIp = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var path = context.Request.Path.Value ?? "";
         var now = DateTime.UtcNow;
         var window = TimeSpan.FromMinutes(1);
-        const int maxRequests = 100;
 
-        var entry = _rateLimitStore.AddOrUpdate(clientIp,
+        // Sensitive endpoints get stricter limits
+        int maxRequests;
+        if (path.Contains("/validate_admin_password") || path.Contains("/token/create"))
+            maxRequests = 10;
+        else if (path.Contains("/token/") || path.Contains("/reload") || path.Contains("/ap-reload"))
+            maxRequests = 20;
+        else
+            maxRequests = 100;
+
+        var rateLimitKey = $"{clientIp}:{(maxRequests <= 20 ? path : "general")}";
+        var entry = _rateLimitStore.AddOrUpdate(rateLimitKey,
             _ => (1, now),
             (_, existing) =>
             {
@@ -275,9 +285,9 @@ app.MapGet("/api/health", (IServiceProvider sp) =>
 
         // Test if DeviceDataService can be resolved
         try { sp.GetRequiredService<DeviceDataService>(); result["deviceDataService"] = "OK"; }
-        catch (Exception ex) { result["deviceDataService"] = $"FAILED: {ex.Message}"; }
+        catch { result["deviceDataService"] = "FAILED"; }
     }
-    catch (Exception ex) { result["error"] = ex.Message; }
+    catch { result["error"] = "Health check error"; }
     return Results.Json(result);
 });
 

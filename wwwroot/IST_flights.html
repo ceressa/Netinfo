@@ -2316,6 +2316,10 @@ border-color: rgba(34,197,94,0.7);
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 let activeDay = 'all';
 let activeRoutes = new Set();
 let routeLayers = {};

@@ -4,12 +4,9 @@ from datetime import datetime
 import os
 import urllib3
 
-# HTTPS uyarılarını devre dışı bırak
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 # Statseeker API ayarları
 base_url = "https://statseeker.emea.fedex.com/api/v2.1/cdt_port/"
-auth = ("tr-api", "F3xpres!")
+auth = (os.environ.get("STATSEEKER_USERNAME", ""), os.environ.get("STATSEEKER_PASSWORD", ""))
 fields = ["deviceid", "name", "ifTitle", "ifSpeed", "ifDescr", "ifAdminStatus", "if90day"]
 group = "NOC-Turkey"
 output_file = "port_data.xlsx"
@@ -25,7 +22,7 @@ def fetch_all_ports():
         # API çağrısı için gerekli parametreler
         fields_param = "&".join([f"fields={field}" for field in fields])
         url = f"{base_url}?{fields_param}&groups={group}&limit={limit}&offset={offset}"
-        response = requests.get(url, auth=auth, verify=False)
+        response = requests.get(url, auth=auth, verify=True)
 
         if response.status_code != 200:
             print(f"Hata: {response.status_code} - {response.text}")

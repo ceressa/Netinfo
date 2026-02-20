@@ -1418,8 +1418,14 @@
         let statusFilter = 'all'; // all, online, offline
 		let refreshTimer = null;
 		let inFlightController = null;
-		
+
 		let clientLoadHistory = [];
+
+        // XSS protection helper
+        function escapeHtml(str) {
+            if (str == null) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
 
         // API Endpoints
         const API_BASE = '/Netinfo/api/device';
@@ -1744,7 +1750,7 @@ function renderSSIDBreakdown() {
         .slice(0, 4)
         .map(([ssid, count]) => `
             <div class="breakdown-item">
-                ${ssid}: <span>${count}</span>
+                ${escapeHtml(ssid)}: <span>${escapeHtml(count)}</span>
             </div>
         `).join('');
 }
@@ -1869,7 +1875,7 @@ function renderCriticalSubnet() {
 
     document.getElementById('topSubnetsBreakdown').innerHTML = top5.map(r => `
         <div class="breakdown-item">
-            ${r.locationCode} ${r.labelSSID}: <span>${r.percentage.toFixed(1)}%</span>
+            ${escapeHtml(r.locationCode)} ${escapeHtml(r.labelSSID)}: <span>${escapeHtml(r.percentage.toFixed(1))}%</span>
         </div>
     `).join('');
 }
@@ -1930,8 +1936,8 @@ function renderStats() {
         .slice(0, 5)
         .map(ap => `
             <div class="breakdown-item">
-                <span style="font-size: 0.7rem; overflow: hidden; text-overflow: ellipsis;">${ap.hostname}</span>
-                <span>${ap.wireless_clients_numbers || 0}</span>
+                <span style="font-size: 0.7rem; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(ap.hostname)}</span>
+                <span>${escapeHtml(ap.wireless_clients_numbers || 0)}</span>
             </div>
         `).join('');
 }
@@ -2143,10 +2149,10 @@ function animateValue(elementId, targetValue) {
     });
 
     signalSummary.innerHTML = Object.entries(signalRanges).map(([level, data]) => `
-        <div class="signal-summary-card" style="border-left: 4px solid ${data.color};">
-            <h4>${level}</h4>
-            <div class="signal-count" style="color: ${data.color};">${data.count}</div>
-            <div class="signal-range">${data.range}</div>
+        <div class="signal-summary-card" style="border-left: 4px solid ${escapeHtml(data.color)};">
+            <h4>${escapeHtml(level)}</h4>
+            <div class="signal-count" style="color: ${escapeHtml(data.color)};">${escapeHtml(data.count)}</div>
+            <div class="signal-range">${escapeHtml(data.range)}</div>
         </div>
     `).join('');
 }
@@ -2189,14 +2195,14 @@ function renderSignalChart() {
     cardsContainer.innerHTML = Object.entries(ssidUsage).map(([ssid, count]) => {
         const percentage = totalClients > 0 ? ((count / totalClients) * 100).toFixed(1) : 0;
         const config = ssidConfig[ssid];
-        
+
         return `
-            <div class="ssid-card" style="border-color: ${config.color};">
-                <div class="ssid-name">${ssid}</div>
-                <div class="ssid-client-count" style="color: ${config.color};">${count}</div>
-                <div class="ssid-percentage">%${percentage}</div>
-                <div class="ssid-icon" style="background: ${config.color};">
-                    <i class="${config.icon}"></i>
+            <div class="ssid-card" style="border-color: ${escapeHtml(config.color)};">
+                <div class="ssid-name">${escapeHtml(ssid)}</div>
+                <div class="ssid-client-count" style="color: ${escapeHtml(config.color)};">${escapeHtml(count)}</div>
+                <div class="ssid-percentage">%${escapeHtml(percentage)}</div>
+                <div class="ssid-icon" style="background: ${escapeHtml(config.color)};">
+                    <i class="${escapeHtml(config.icon)}"></i>
                 </div>
             </div>
         `;
@@ -2249,31 +2255,31 @@ function renderAPGrid() {
                               (colorClass === 'warning' ? 'fa-exclamation-circle' : 'fa-check-circle');
             
             capacityIndicator = `
-                <div class="vlan-capacity ${colorClass}">
+                <div class="vlan-capacity ${escapeHtml(colorClass)}">
                     <div class="capacity-text">
                         <div class="capacity-main">
-                            <i class="fas ${statusIcon}"></i>
-                            ${vlanCapacity.used}/${vlanCapacity.total} IP (${perc}%)
+                            <i class="fas ${escapeHtml(statusIcon)}"></i>
+                            ${escapeHtml(vlanCapacity.used)}/${escapeHtml(vlanCapacity.total)} IP (${escapeHtml(perc)}%)
                         </div>
-                        ${thisAPContribution > 0 ? `<div class="capacity-this-ap">Bu AP: ${thisAPContribution}</div>` : ''}
+                        ${thisAPContribution > 0 ? `<div class="capacity-this-ap">Bu AP: ${escapeHtml(thisAPContribution)}</div>` : ''}
                     </div>
                     <div class="capacity-bar">
-                        <div class="capacity-fill" style="width: ${perc}%"></div>
+                        <div class="capacity-fill" style="width: ${escapeHtml(perc)}%"></div>
                     </div>
                     <div class="subnet-info">
-                        <div class="subnet-address">${vlanCapacity.subnet}</div>
-                        <div class="vlan-info">${locationCode} • ${dominantSSID}</div>
+                        <div class="subnet-address">${escapeHtml(vlanCapacity.subnet)}</div>
+                        <div class="vlan-info">${escapeHtml(locationCode)} • ${escapeHtml(dominantSSID)}</div>
                     </div>
                 </div>
             `;
         }
 
         return `
-            <div class="ap-card" onclick="showAPDetails('${ap.hostname}')">
+            <div class="ap-card" onclick="showAPDetails('${escapeHtml(ap.hostname)}')">
                 <div class="ap-card-header">
                     <div class="ap-name">
-                        ${ap.hostname}
-                        ${ap.wireless_clients_numbers > 0 ? `<span class="client-count-badge">${ap.wireless_clients_numbers}</span>` : ''}
+                        ${escapeHtml(ap.hostname)}
+                        ${ap.wireless_clients_numbers > 0 ? `<span class="client-count-badge">${escapeHtml(ap.wireless_clients_numbers)}</span>` : ''}
                     </div>
                     <div class="ap-status ${ap.is_up || ap.ping_state === 'up' ? 'status-online' : 'status-offline'}">
                         ${ap.is_up || ap.ping_state === 'up' ? 'Online' : 'Offline'}
@@ -2285,19 +2291,19 @@ function renderAPGrid() {
                 <div class="ap-details">
                     <div class="detail-item">
                         <div class="detail-label">IP Address</div>
-                        <div class="detail-value">${ap.ipaddress || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(ap.ipaddress || 'N/A')}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Model</div>
-                        <div class="detail-value">${ap.model || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(ap.model || 'N/A')}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Location</div>
-                        <div class="detail-value">${ap.city || ap.location || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(ap.city || ap.location || 'N/A')}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Uptime</div>
-                        <div class="detail-value">${ap.uptime || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(ap.uptime || 'N/A')}</div>
                     </div>
                 </div>
             </div>
@@ -2401,19 +2407,19 @@ function renderAPSummary() {
     
     summaryContainer.innerHTML = `
         <div class="summary-item">
-            <div class="summary-number">${totalFiltered}</div>
+            <div class="summary-number">${escapeHtml(totalFiltered)}</div>
             <div class="summary-label">Gösterilen AP</div>
         </div>
         <div class="summary-item">
-            <div class="summary-number">${onlineCount}</div>
+            <div class="summary-number">${escapeHtml(onlineCount)}</div>
             <div class="summary-label">Online</div>
         </div>
         <div class="summary-item">
-            <div class="summary-number">${totalClients}</div>
+            <div class="summary-number">${escapeHtml(totalClients)}</div>
             <div class="summary-label">Toplam Client</div>
         </div>
         <div class="summary-item">
-            <div class="summary-number">${averageClients}</div>
+            <div class="summary-number">${escapeHtml(averageClients)}</div>
             <div class="summary-label">Ort. Client</div>
         </div>
     `;
@@ -2455,20 +2461,20 @@ function renderAPSummary() {
                     
                     return `
                         <tr>
-                            <td style="color: #FFD700; font-weight: 600;">${client.hostname || 'Unknown'}</td>
-                            <td style="color: #22C55E; font-family: monospace;">${client.ip_address || 'N/A'}</td>
-                            <td style="color: #8B5CF6; font-family: monospace;">${client.mac_address || 'N/A'}</td>
-                            <td style="color: #F59E0B;">${client.wlan || 'N/A'}</td>
+                            <td style="color: #FFD700; font-weight: 600;">${escapeHtml(client.hostname || 'Unknown')}</td>
+                            <td style="color: #22C55E; font-family: monospace;">${escapeHtml(client.ip_address || 'N/A')}</td>
+                            <td style="color: #8B5CF6; font-family: monospace;">${escapeHtml(client.mac_address || 'N/A')}</td>
+                            <td style="color: #F59E0B;">${escapeHtml(client.wlan || 'N/A')}</td>
                             <td>
                                 <div class="signal-strength">
                                     <div class="signal-bar">
-                                        <div class="signal-fill ${signalData.class}" style="width: ${signalData.percentage}%"></div>
+                                        <div class="signal-fill ${escapeHtml(signalData.class)}" style="width: ${escapeHtml(signalData.percentage)}%"></div>
                                     </div>
-                                    <span>${signalStrength} dBm</span>
+                                    <span>${escapeHtml(signalStrength)} dBm</span>
                                 </div>
                             </td>
-                            <td>${connectionTime}</td>
-                            <td style="color: #06B6D4;">${radioId}</td>
+                            <td>${escapeHtml(connectionTime)}</td>
+                            <td style="color: #06B6D4;">${escapeHtml(radioId)}</td>
                         </tr>
                     `;
                 }).join('');
@@ -2565,7 +2571,7 @@ function renderAPSummary() {
             const now = new Date();
             lastUpdate.innerHTML = `
                 <i class="fas fa-clock"></i>
-                Son güncelleme: ${now.toLocaleString('tr-TR')} 
+                Son güncelleme: ${escapeHtml(now.toLocaleString('tr-TR'))}
                 <span style="margin-left: 20px;"><i class="fas fa-sync-alt"></i> Otomatik yenileme: Her 5 dakikada</span>
             `;
         }

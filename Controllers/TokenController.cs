@@ -18,9 +18,17 @@ namespace Netinfo.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        private bool RequireAdmin()
+        {
+            var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+            return AdminController.IsAdminSession(clientIp);
+        }
+
         [HttpPost("create")]
         public IActionResult CreateToken()
         {
+            if (!RequireAdmin())
+                return Unauthorized(new { success = false, error = "Admin authentication required." });
             try
             {
                 var token = _tokenService.CreateToken();
@@ -76,6 +84,9 @@ namespace Netinfo.Controllers
         [HttpGet("list")]
         public IActionResult GetActiveTokens()
         {
+            if (!RequireAdmin())
+                return Unauthorized(new { success = false, error = "Admin authentication required." });
+
             try
             {
                 var tokens = _tokenService.GetActiveTokens();
@@ -91,6 +102,9 @@ namespace Netinfo.Controllers
         [HttpDelete("revoke/{tokenValue}")]
         public IActionResult RevokeToken(string tokenValue)
         {
+            if (!RequireAdmin())
+                return Unauthorized(new { success = false, error = "Admin authentication required." });
+
             try
             {
                 if (string.IsNullOrWhiteSpace(tokenValue))
