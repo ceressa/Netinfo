@@ -45,7 +45,7 @@ namespace Netinfo.Controllers
         }
 
         [HttpGet("get_device_info")]
-        public IActionResult GetDeviceInfo(string id, string uid)
+        public IActionResult GetDeviceInfo(string? id, string? uid)
         {
             try
             {
