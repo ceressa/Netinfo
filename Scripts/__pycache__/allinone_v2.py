@@ -9,6 +9,9 @@ import io
 import os
 import time
 from functools import lru_cache
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API ve dosya yolları
 netdb_auth_url = "https://network-api.npe.fedex.com/v1/authorize"
@@ -18,8 +21,8 @@ output_file = "D:/INTRANET/Netinfo/Data/network_device_data.json"
 log_dir = "D:/INTRANET/Netinfo/Logs/New_logs/"
 
 # Kullanıcı bilgileri
-netdb_username = "3723002"
-netdb_password = "Xerez386251-"
+netdb_username = os.environ.get("NETDB_USERNAME")
+netdb_password = os.environ.get("NETDB_PASSWORD")
 
 # Loglama ayarları
 os.makedirs(log_dir, exist_ok=True)
