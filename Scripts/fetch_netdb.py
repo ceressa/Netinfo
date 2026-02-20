@@ -5,12 +5,15 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from time import time, sleep
 import logging
 import socket
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # NetDB API Credentials
 netdb_auth_url = "https://network-api.npe.fedex.com/v1/authorize"
 netdb_device_url = "https://network-api.npe.fedex.com/v1/device/{hostname}/details?device_type=cisco_ios&config_type=running"
-username = "3723002"
-password = "Xerez386251-"
+username = os.environ.get("NETDB_USERNAME")
+password = os.environ.get("NETDB_PASSWORD")
 
 # Output File
 output_excel_file = "D:/INTRANET/Netinfo/Data/Netdb_data.xlsx"

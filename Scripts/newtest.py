@@ -6,6 +6,10 @@ from mac_vendor_lookup import MacLookup, VendorNotFoundError
 from functools import lru_cache
 import re
 import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API ve dosya yolları
 netdb_auth_url = "https://network-api.npe.fedex.com/v1/authorize"
@@ -13,8 +17,8 @@ netdb_base_url = "https://network-api.npe.fedex.com/v1/device/"
 output_file = "D:/INTRANET/Netinfo/Data/traytsw01_data.json"
 
 # Kullanıcı bilgileri
-netdb_username = "3723002"
-netdb_password = "Xerez386251-"
+netdb_username = os.environ.get("NETDB_USERNAME")
+netdb_password = os.environ.get("NETDB_PASSWORD")
 
 # Loglama ayarları
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

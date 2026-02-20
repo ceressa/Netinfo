@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Netinfo.Services;
-using System.Text.Json;
 
 namespace Netinfo.Controllers
 {

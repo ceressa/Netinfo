@@ -57,8 +57,7 @@ namespace Netinfo.Controllers
             // Başarısız giriş işlemleri
             _failedAttempts++;
             _logger.Warning(
-                "Başarısız admin giriş denemesi. Girilen şifre: {Password}, IP: {IP}, Zaman: {Time}",
-                model.Password,
+                "Basarisiz admin giris denemesi. IP: {IP}, Zaman: {Time}",
                 HttpContext.Connection.RemoteIpAddress?.ToString(),
                 logTime
             );

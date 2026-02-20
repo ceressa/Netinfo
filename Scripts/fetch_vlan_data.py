@@ -2,14 +2,19 @@ import requests
 import logging
 import pandas as pd
 import urllib3
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API Bilgileri
 auth_url = "https://network-api.npe.fedex.com/v1/authorize"
 vlan_url_template = "https://network-api.npe.fedex.com/v1/device/{hostname}/vlans?device_type=cisco_ios"
-username = "3723002"
-password = "Xerez386251-"
+username = os.environ.get("NETDB_USERNAME")
+password = os.environ.get("NETDB_PASSWORD")
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
-# Çikti dosyasi
+# ï¿½ikti dosyasi
 vlan_output_file = "D:/INTRANET/Netinfo/Data/all_devices_vlan.xlsx"
 statseeker_file = "D:/INTRANET/Netinfo/Data/statseeker_data.xlsx"
 
@@ -28,7 +33,7 @@ def fetch_bearer_token():
     auth_data = {'grant_type': 'password', 'username': username, 'password': password}
     headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
     try:
-        response = requests.post(auth_url, data=auth_data, headers=headers, verify=False)
+        response = requests.post(auth_url, data=auth_data, headers=headers, verify=SSL_VERIFY)
         response.raise_for_status()
         token = response.json().get("access_token")
         if not token:
@@ -42,12 +47,12 @@ def fetch_bearer_token():
         logging.error("Token alimi sirasinda hata olustu: %s", req_err)
         return None
 
-# VLAN Bilgilerini Çekme
+# VLAN Bilgilerini ï¿½ekme
 def fetch_vlan_info(hostname, token):
     url = vlan_url_template.format(hostname=hostname)
     headers = {'Authorization': f'Bearer {token}', 'Accept': 'application/json'}
     try:
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=SSL_VERIFY)
         response.raise_for_status()
         vlan_data = response.json()
         logging.info(f"Successfully fetched VLAN data for {hostname}.")
@@ -61,15 +66,15 @@ def save_to_excel(all_vlan_data):
     if all_vlan_data:
         df = pd.DataFrame(all_vlan_data)
         df.to_excel(vlan_output_file, index=False)
-        logging.info(f"Tüm cihazlarin VLAN bilgileri {vlan_output_file} dosyasina kaydedildi.")
+        logging.info(f"Tï¿½m cihazlarin VLAN bilgileri {vlan_output_file} dosyasina kaydedildi.")
     else:
-        logging.warning("Hiçbir cihaz için VLAN datasi kaydedilmedi.")
+        logging.warning("Hiï¿½bir cihaz iï¿½in VLAN datasi kaydedilmedi.")
 
 # Ana Fonksiyon
 def main():
     token = fetch_bearer_token()
     if not token:
-        logging.error("Token alinamadi. Çikiliyor.")
+        logging.error("Token alinamadi. ï¿½ikiliyor.")
         return
 
     try:

@@ -7,6 +7,10 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from mac_vendor_lookup import MacLookup
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API ve dosya yolları
 netdb_auth_url = "https://network-api.npe.fedex.com/v1/authorize"
@@ -17,8 +21,8 @@ output_excel_file = "D:/INTRANET/Netinfo/Data/Netdb_port_data_v2.xlsx"
 log_file = "D:/INTRANET/Netinfo/Logs/switch_data.log"
 
 # Kullanıcı bilgileri
-netdb_username = "3723002"
-netdb_password = "Xerez386251-"
+netdb_username = os.environ.get("NETDB_USERNAME")
+netdb_password = os.environ.get("NETDB_PASSWORD")
 
 # Loglama ayarları
 logging.basicConfig(filename=log_file, level=logging.INFO,

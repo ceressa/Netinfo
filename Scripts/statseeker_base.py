@@ -9,18 +9,22 @@ import urllib3
 import os
 import re
 import sys
+from dotenv import load_dotenv
+
+load_dotenv()
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 
 # API connection details
 base_url = 'https://statseeker.emea.fedex.com/api/v2.1/'
-user = 'tr-api'
-password = 'F3xpres!'
+user = os.environ.get("STATSEEKER_USERNAME")
+password = os.environ.get("STATSEEKER_PASSWORD")
 
 fields = {
     'device': 'id,deviceid,hostname,ipaddress,ping_state',
@@ -230,7 +234,7 @@ def fetch_data(url):
         response = requests.get(
             url,
             auth=(user, password),
-            verify=False,
+            verify=SSL_VERIFY,
             timeout=60,
               # Proxy kullanma - direkt bağlantı
         )
@@ -258,7 +262,7 @@ def debug_noc_turkey_devices():
     # 1. Grup bilgilerini kontrol et
     group_url = f"{base_url}cdt_group?fields=id,name,description&links=none&limit=1000"
     try:
-        response = requests.get(group_url, auth=(user, password), verify=False, timeout=60)
+        response = requests.get(group_url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
         if response.status_code == 200:
             data = response.json()
             if 'data' in data and 'objects' in data['data'] and data['data']['objects']:
@@ -279,7 +283,7 @@ def debug_noc_turkey_devices():
     recent_device_url = f"{base_url}cdt_device?fields=id,deviceid,hostname,ipaddress,ping_state,sysObjectID,sysName,sysUpTime,dateAdded&groups=NOC-Turkey&links=none&limit=10000"
 
     try:
-        response = requests.get(recent_device_url, auth=(user, password), verify=False, timeout=60)
+        response = requests.get(recent_device_url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
         if response.status_code == 200:
             data = response.json()
             if 'data' in data and 'objects' in data['data'] and data['data']['objects']:
@@ -332,7 +336,7 @@ def debug_device_inventory_mismatch():
 
     for name, url in urls.items():
         try:
-            response = requests.get(url, auth=(user, password), verify=False, timeout=60)
+            response = requests.get(url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
             if response.status_code == 200:
                 data = response.json()
                 df = process_data(data)
@@ -384,7 +388,7 @@ def debug_model_types():
     # Inventory verisini al
     inventory_url = urls['inventory']
     try:
-        response = requests.get(inventory_url, auth=(user, password), verify=False, timeout=60)
+        response = requests.get(inventory_url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
         if response.status_code == 200:
             data = response.json()
             df = process_data(data)

@@ -10,7 +10,7 @@ namespace Netinfo.Controllers
     public class TokenController : ControllerBase
     {
         private readonly TokenService _tokenService;
-        private readonly Serilog.ILogger _logger;  // Microsoft.Extensions.Logging değil, Serilog.ILogger
+        private readonly Serilog.ILogger _logger;
 
         public TokenController(TokenService tokenService, Serilog.ILogger logger)
         {
@@ -19,52 +19,57 @@ namespace Netinfo.Controllers
         }
 
         [HttpPost("create")]
-public IActionResult CreateToken()
-{
-    try
-    {
-        var token = _tokenService.CreateToken();
-        _logger.Information("Token created: {TokenId}", token.Id);
-
-        return Ok(new
+        public IActionResult CreateToken()
         {
-            token = token.TokenValue,
-            expires = token.ExpiresAt
-        });
-    }
-    catch (Exception ex)
-    {
-        _logger.Error(ex, "Error creating token");
-        return StatusCode(500, new { error = ex.Message });
-    }
-}
+            try
+            {
+                var token = _tokenService.CreateToken();
+                _logger.Information("Token created: {TokenId}", token.Id);
 
+                return Ok(new
+                {
+                    success = true,
+                    token = token.TokenValue,
+                    expires = token.ExpiresAt
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error creating token");
+                return StatusCode(500, new { success = false, error = "Token olusturulamadi." });
+            }
+        }
 
         [HttpGet("validate/{tokenValue}")]
         public IActionResult ValidateToken(string tokenValue)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(tokenValue))
+                    return BadRequest(new { success = false, error = "Token degeri gerekli." });
+
                 var isValid = _tokenService.ValidateToken(tokenValue);
                 var tokenInfo = _tokenService.GetTokenInfo(tokenValue);
 
                 if (isValid && tokenInfo != null)
                 {
                     _logger.Information("Token validated successfully: {TokenId}", tokenInfo.Id);
-                    return Ok(new { 
-                        valid = true, 
+                    return Ok(new
+                    {
+                        success = true,
+                        valid = true,
                         expires = tokenInfo.ExpiresAt,
-                        description = tokenInfo.Description 
+                        description = tokenInfo.Description
                     });
                 }
 
-                _logger.Warning("Invalid token validation attempt: {Token}", tokenValue);
-                return Ok(new { valid = false });
+                _logger.Warning("Invalid token validation attempt");
+                return Ok(new { success = true, valid = false });
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error validating token");
-                return StatusCode(500, new { error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Token dogrulanamadi." });
             }
         }
 
@@ -74,12 +79,12 @@ public IActionResult CreateToken()
             try
             {
                 var tokens = _tokenService.GetActiveTokens();
-                return Ok(tokens);
+                return Ok(new { success = true, data = tokens, total = tokens.Count });
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error listing tokens");
-                return StatusCode(500, new { error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Token listesi alinamadi." });
             }
         }
 
@@ -88,24 +93,22 @@ public IActionResult CreateToken()
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(tokenValue))
+                    return BadRequest(new { success = false, error = "Token degeri gerekli." });
+
                 var revoked = _tokenService.RevokeToken(tokenValue);
                 if (revoked)
                 {
-                    _logger.Information("Token revoked: {Token}", tokenValue);
-                    return Ok(new { message = "Token revoked successfully" });
+                    _logger.Information("Token revoked successfully");
+                    return Ok(new { success = true, message = "Token iptal edildi." });
                 }
-                return NotFound(new { error = "Token not found" });
+                return NotFound(new { success = false, error = "Token bulunamadi." });
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error revoking token");
-                return StatusCode(500, new { error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Token iptal edilemedi." });
             }
         }
-    }
-
-    public class CreateTokenRequest
-    {
-        public string Description { get; set; } = "";
     }
 }

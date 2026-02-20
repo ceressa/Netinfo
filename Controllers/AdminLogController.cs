@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.Text.RegularExpressions;
 
 namespace Netinfo.Controllers
 {
@@ -15,28 +16,28 @@ namespace Netinfo.Controllers
         }
 
         [HttpPost("admin_activity")]
-public IActionResult LogAdminActivity([FromBody] AdminActivityLogModel model)
-{
-    if (model == null || string.IsNullOrEmpty(model.Activity))
-    {
-        _logger.Warning("Log isteği eksik veri ile yapıldı. IP: {IP}", HttpContext.Connection.RemoteIpAddress);
-        return BadRequest(new { success = false, message = "Eksik veya geçersiz veri." });
+        public IActionResult LogAdminActivity([FromBody] AdminActivityLogModel model)
+        {
+            if (model == null || string.IsNullOrEmpty(model.Activity))
+            {
+                return BadRequest(new { success = false, error = "Eksik veya gecersiz veri." });
+            }
+
+            // Sanitize activity string to prevent log injection
+            string sanitizedActivity = Regex.Replace(model.Activity, @"[\r\n]", " ");
+            string clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP";
+
+            _logger.Information("Admin aktivitesi. Aktivite: {Activity}, Tarih: {Timestamp}, IP: {IP}",
+                sanitizedActivity, model.Timestamp, clientIp);
+
+            return Ok(new { success = true, message = "Log kaydedildi." });
+        }
     }
 
-    string clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP";
-
-    _logger.Information("Admin aktivitesi loglandı. Aktivite: {Activity}, Tarih: {Timestamp}, IP: {IP}", model.Activity, model.Timestamp, clientIp);
-
-    return Ok(new { success = true, message = "Log kaydedildi." });
-}
-
-}
-
     public class AdminActivityLogModel
-{
-    public string? Activity { get; set; }
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow; // Varsayılan değer
-    public string? Username { get; set; } // Aktiviteyi gerçekleştiren kullanıcı
-}
-
+    {
+        public string? Activity { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public string? Username { get; set; }
+    }
 }

@@ -1,7 +1,10 @@
 ﻿const jwt = require('jsonwebtoken');
 const { logAccess } = require('./utils/logger');
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
+const SECRET_KEY = process.env.JWT_SECRET;
+if (!SECRET_KEY) {
+    throw new Error('JWT_SECRET environment variable is required');
+}
 
 function verifyJWT(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];

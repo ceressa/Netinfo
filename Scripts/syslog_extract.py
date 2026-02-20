@@ -3,6 +3,9 @@ import json
 import os
 from datetime import datetime, timedelta
 import pytz
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Proxy ayarları
 PROXY = {
@@ -17,8 +20,9 @@ MAX_LOG_AGE_HOURS = 48  # Maksimum log yaşı
 
 # API bağlantı bilgileri
 base_url = "https://statseeker.emea.fedex.com/api/v2.1/"
-user = "tr-api"
-password = "F3xpres!"
+user = os.environ.get("STATSEEKER_USERNAME")
+password = os.environ.get("STATSEEKER_PASSWORD")
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 # API'den çekilecek alanlar
 fields = {
@@ -77,7 +81,7 @@ def fetch_syslog_data():
     url = urls["syslog"]
     try:
         log_message(f"📡 API çağrısı yapılıyor... (Limit: {SYSLOG_LIMIT})")
-        response = requests.get(url, auth=(user, password), verify=False, timeout=60)
+        response = requests.get(url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
 
         # HTTP Yanıt Kontrolü
         if response.status_code != 200:

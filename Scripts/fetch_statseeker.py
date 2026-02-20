@@ -2,16 +2,21 @@ import requests
 import json
 import pandas as pd
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username = os.environ.get("STATSEEKER_USERNAME")
+password = os.environ.get("STATSEEKER_PASSWORD")
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 def fetch_device_data():
     # API URL'si
     api_url = "https://statseeker.emea.fedex.com/api/v2.1/cdt_device?fields=deviceid,hostname,ipaddress&groups=NOC-Turkey&links=none&limit=100000&ping_state_formats=state_time"
-    username = "tr-api"
-    password = "F3xpres!"
 
     try:
-        # API'ye istek gönder
-        response = requests.get(api_url, auth=(username, password), verify=False)
+        # API'ye istek gï¿½nder
+        response = requests.get(api_url, auth=(username, password), verify=SSL_VERIFY)
         response.raise_for_status()
         data = response.json()
 
@@ -24,13 +29,13 @@ def fetch_device_data():
         if not device_data:
             raise ValueError("Belirtilen cihazlara ait veri bulunamadi.")
 
-        # SEG içeren cihazlari filtrele
+        # SEG iï¿½eren cihazlari filtrele
         filtered_data = [device for device in device_data if "SEG" not in device.get("hostname", "")]
 
-        # Veriyi DataFrame'e dönüstür
+        # Veriyi DataFrame'e dï¿½nï¿½stï¿½r
         df = pd.DataFrame(filtered_data)
 
-        # Sütunlari düzenleme
+        # Sï¿½tunlari dï¿½zenleme
         if 'data' in df.columns:
             df = pd.json_normalize(df['data'])
 

@@ -9,6 +9,11 @@ import os
 from functools import lru_cache
 import time
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 # File paths
 CREDENTIALS_FILE = "D:/INTRANET/Netinfo/Config/credentials.json"
@@ -116,7 +121,7 @@ def fetch_device_data(hostname, bearer_token, max_retries=3):
         for attempt in range(max_retries):
             try:
                 log_message("info", f"Attempt {attempt + 1} for {key} data: {url}")
-                response = requests.get(url, headers=headers, timeout=30, verify=False)
+                response = requests.get(url, headers=headers, timeout=30, verify=SSL_VERIFY)
                 response.raise_for_status()
                 results[key] = response.json().get('results', {})
                 break  # Break out of the retry loop on success

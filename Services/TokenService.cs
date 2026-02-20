@@ -13,31 +13,33 @@ namespace Netinfo.Services
     {
         private readonly string _tokenFilePath;
         private readonly Serilog.ILogger _logger;  // Serilog.ILogger kullan
+        private readonly DataPathsConfig _paths;
         private List<TokenInfo> _tokens;
 
-        public TokenService(Serilog.ILogger logger)  // Serilog.ILogger parametre
+        public TokenService(Serilog.ILogger logger, DataPathsConfig paths)  // Serilog.ILogger parametre
         {
             _logger = logger;
-            _tokenFilePath = Path.Combine("D:", "INTRANET", "Netinfo", "Data", "tool_tokens.json");
+            _paths = paths;
+            _tokenFilePath = Path.Combine(_paths.DataDir, _paths.ToolTokens);
             LoadTokens();
         }
 
         public TokenInfo CreateToken()
-{
-    var token = new TokenInfo
-    {
-        Id = Guid.NewGuid().ToString("N")[..8],
-        TokenValue = GenerateToken(),
-        CreatedAt = DateTime.UtcNow,
-        ExpiresAt = DateTime.UtcNow.AddHours(1),
-        Description = "",
-        IsActive = true
-    };
+        {
+            var token = new TokenInfo
+            {
+                Id = Guid.NewGuid().ToString("N")[..8],
+                TokenValue = GenerateToken(),
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddHours(1),
+                Description = "",
+                IsActive = true
+            };
 
-    _tokens.Add(token);
-    SaveTokens();
-    return token;
-}
+            _tokens.Add(token);
+            SaveTokens();
+            return token;
+        }
 
 
 
@@ -54,10 +56,10 @@ namespace Netinfo.Services
         }
 
         public List<TokenInfo> GetActiveTokens()
-{
-    CleanExpiredTokens(); // otomatik siler
-    return _tokens.Where(t => t.IsActive && t.ExpiresAt > DateTime.UtcNow).ToList();
-}
+        {
+            CleanExpiredTokens(); // otomatik siler
+            return _tokens.Where(t => t.IsActive && t.ExpiresAt > DateTime.UtcNow).ToList();
+        }
 
 
         public bool RevokeToken(string tokenValue)
@@ -72,66 +74,44 @@ namespace Netinfo.Services
             return false;
         }
 
-       private string GenerateToken()
-{
-    // Komik token formatı: AQ-TR-[ADJECTIVE][NUMBER]
-    var adjective = GetFunnyPrefix();     // Örn: "NOOB", "FATAL", "WEIRD"
-    var number = GenerateRandomString(5); // Örn: "X7P3Q"
-    return $"WTF-{adjective}{number}";
-}
-
-private string GenerateRandomString(int length)
-{
-    const string chars = "123456789";
-    using var rng = RandomNumberGenerator.Create();
-    var bytes = new byte[length];
-    rng.GetBytes(bytes);
-    return new string(bytes.Select(b => chars[b % chars.Length]).ToArray());
-}
-
-private string GetFunnyPrefix()
-{
-    // Bu listeye istediğin kadar mizahi veya yerel terim ekleyebilirsin
-    string[] prefixes = new[]
-    {
-        "UFUK-", "MEHMETCAN-", "KADRIYECAN-", "NIHATOZ-", "KORLAELCI-"
-    };
-
-    using var rng = RandomNumberGenerator.Create();
-    byte[] buffer = new byte[1];
-    rng.GetBytes(buffer);
-    int index = buffer[0] % prefixes.Length;
-    return prefixes[index];
-}
-
+        private string GenerateToken()
+        {
+            // Cryptographically secure URL-safe Base64 token
+            var tokenBytes = RandomNumberGenerator.GetBytes(32);
+            var base64Token = Convert.ToBase64String(tokenBytes)
+                .Replace("+", "-")
+                .Replace("/", "_")
+                .TrimEnd('=');
+            return base64Token;
+        }
 
         private void LoadTokens()
-{
-    try
-    {
-        _logger.Information("Loading tokens from: {FilePath}", _tokenFilePath);
-        
-        if (File.Exists(_tokenFilePath))
         {
-            var json = File.ReadAllText(_tokenFilePath);
-            _tokens = JsonConvert.DeserializeObject<List<TokenInfo>>(json) ?? new List<TokenInfo>();
-            _logger.Information("Loaded {Count} tokens from storage", _tokens.Count);
+            try
+            {
+                _logger.Information("Loading tokens from: {FilePath}", _tokenFilePath);
+
+                if (File.Exists(_tokenFilePath))
+                {
+                    var json = File.ReadAllText(_tokenFilePath);
+                    _tokens = JsonConvert.DeserializeObject<List<TokenInfo>>(json) ?? new List<TokenInfo>();
+                    _logger.Information("Loaded {Count} tokens from storage", _tokens.Count);
+                }
+                else
+                {
+                    _tokens = new List<TokenInfo>();
+                    _logger.Warning("Token file not found, creating empty list: {FilePath}", _tokenFilePath);
+
+                    // Dosyayı oluştur
+                    SaveTokens();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error loading tokens from {FilePath}", _tokenFilePath);
+                _tokens = new List<TokenInfo>();
+            }
         }
-        else
-        {
-            _tokens = new List<TokenInfo>();
-            _logger.Warning("Token file not found, creating empty list: {FilePath}", _tokenFilePath);
-            
-            // Dosyayı oluştur
-            SaveTokens();
-        }
-    }
-    catch (Exception ex)
-    {
-        _logger.Error(ex, "Error loading tokens from {FilePath}", _tokenFilePath);
-        _tokens = new List<TokenInfo>();
-    }
-}
 
         private void SaveTokens()
         {

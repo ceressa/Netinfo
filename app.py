@@ -1,6 +1,14 @@
 ﻿from flask import Flask, request, jsonify
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username = os.environ.get("STATSEEKER_USERNAME")
+password = os.environ.get("STATSEEKER_PASSWORD")
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 app = Flask(__name__)
 
@@ -11,10 +19,8 @@ def get_report():
         return jsonify({"error": "Device ID gerekli"}), 400
 
     api_url = f"https://statseeker.emea.fedex.com/api/v2.1/cdt_port/?fields=deviceid,name,ifTitle,ifSpeed,ifDescr,ifAdminStatus,if90day&deviceid={deviceid}"
-    username = "tr-api"
-    password = "F3xpres!"
 
-    response = requests.get(api_url, auth=(username, password), verify=False)
+    response = requests.get(api_url, auth=(username, password), verify=SSL_VERIFY)
     if response.status_code != 200:
         return jsonify({"error": "Statseeker API isteği başarısız"}), 500
 
@@ -41,5 +47,5 @@ def get_report():
         return jsonify({"error": f"Veri işleme hatası: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)  # Debug modunu etkinleştir
+    app.run(host='0.0.0.0', port=5000, debug=False)
 

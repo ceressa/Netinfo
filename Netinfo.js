@@ -1,73 +1,65 @@
-﻿// Statseeker'dan raporu almak için fetch fonksiyonu
+// Statseeker raporu icin backend proxy uzerinden fetch fonksiyonu
+// Credentials artik backend tarafinda yonetiliyor
 async function getStatseekerReport(hostname) {
-    const username = 'tr-api';
-    const password = 'F3xpres!';
-    const deviceName = hostname;  // Bu parametre Excel'den çekilecek hostname olacak
+    const deviceName = hostname;
+    const url = `/Netinfo/api/get_report?deviceid=${encodeURIComponent(deviceName)}`;
+    const maxRetries = 3;
+    const timeoutMs = 15000;
 
-    // Temel kimlik doğrulama için base64 encoding
-    const auth = btoa(`${username}:${password}`);
-    const url = `https://statseeker.emea.fedex.com/cgi/nimc02?rid=54366&sort=Ntxutil&tfc_fav=range+%3D+start_of_today+to+now%3B&year=&month=&day=&hour=&minute=&duration=&wday_from=&wday_to=&time_from=&time_to=&tz=Europe%2FIstanbul&tfc=range+%3D+start_of_today+to+now%3B&regex=&top_n=&group_selector=geto&report=37&device=${deviceName}&has_refreshed=1`;
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Basic ${auth}`,
-                'Content-Type': 'text/html',  // HTML döneceği için bunu belirtiyoruz
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (attempt === maxRetries - 1) {
+                console.error('Fetch error after retries:', error);
+                return [];
+            }
+            const delay = Math.pow(2, attempt) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
         }
-
-        const html = await response.text(); // Raporun HTML olarak döneceğini kabul ediyoruz
-
-        // HTML içeriği parse etmek için bir DOM parser kullanıyoruz
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        // HTML içerisinden gerekli bilgileri çekiyoruz
-        const rows = doc.querySelectorAll('table tbody tr');  // Statseeker'ın HTML tablosunun gövdesinden tüm satırları seçiyoruz
-        const reportData = [];
-
-        rows.forEach(row => {
-            const device = row.cells[0]?.textContent.trim(); // Birinci hücre: cihaz adı
-            const interfaceName = row.cells[1]?.textContent.trim(); // İkinci hücre: interface adı
-            const title = row.cells[22]?.textContent.trim(); // 23. hücre: title
-
-            if (device && interfaceName && title) {
-                reportData.push({ device, interface: interfaceName, title });
-            }
-        });
-
-        return reportData; // Geriye rapor verisini döndürün
-    } catch (error) {
-        console.error('Fetch error:', error);
-        return [];
     }
+    return [];
 }
 
-// Excel'deki hostname ile eşleştirip raporu admin ekranına yansıtma
+// Excel'deki hostname ile eslestirip raporu admin ekranina yansitma
 async function updateAdminScreen(hostname) {
     const reportData = await getStatseekerReport(hostname);
     if (reportData && reportData.length > 0) {
         const tableBody = document.getElementById('statseekerTableBody');
-        tableBody.innerHTML = ''; // Önce tabloyu temizleyin
+        tableBody.textContent = ''; // Guvenli temizleme
 
         reportData.forEach((port) => {
             const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${port.device}</td>
-                <td>${port.interface}</td>
-                <td>${port.title}</td>
-            `;
+
+            const deviceCell = document.createElement("td");
+            deviceCell.textContent = port.device || port["Device ID"] || "";
+
+            const interfaceCell = document.createElement("td");
+            interfaceCell.textContent = port.interface || port["Interface"] || "";
+
+            const titleCell = document.createElement("td");
+            titleCell.textContent = port.title || port["Tanim"] || "";
+
+            row.appendChild(deviceCell);
+            row.appendChild(interfaceCell);
+            row.appendChild(titleCell);
             tableBody.appendChild(row);
         });
 
         document.getElementById("statseekerReportContainer").style.display = "block";
     } else {
-        alert('Rapor alınırken bir hata oluştu veya veri mevcut değil.');
+        console.warn('Rapor alinamadi veya veri mevcut degil.');
     }
 }
 
@@ -76,6 +68,6 @@ async function fetchStatseekerReport() {
     if (deviceData && deviceData.hostname) {
         await updateAdminScreen(deviceData.hostname);
     } else {
-        alert('Cihaz bilgileri henüz yüklenmedi.');
+        console.warn('Cihaz bilgileri henuz yuklenmedi.');
     }
 }
