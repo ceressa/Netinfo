@@ -1,5 +1,6 @@
 using Serilog;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Caching.Memory;
 using DotNetEnv;
 using Netinfo.Services;
 
