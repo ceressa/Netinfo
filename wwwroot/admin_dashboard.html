@@ -2963,7 +2963,7 @@ li.green {
 
 <!-- Loading Screen -->
 <div id="loaderContainer">
-    <img id="loaderGif" src="https://tr.eu.fedex.com/Netinfo/Netinfo_logo_animated.gif" alt="Yükleniyor...">
+    <img id="loaderGif" src="/Netinfo/Netinfo_logo_animated.gif" alt="Yükleniyor..." onerror="this.style.display='none'">
     <p>Veri yükleniyor...</p>
 </div>
 
@@ -2971,7 +2971,7 @@ li.green {
 <!-- 📋 FOOTER -->
 <!-- ============================== -->
 <div class="fixed bottom-5 right-5 flex items-center justify-center">
-    <img src="https://tr.eu.fedex.com/Netinfo/Netinfo_logo_animated_wtext.gif" class="fedex-logo">
+    <img src="/Netinfo/Netinfo_logo_animated_wtext.gif" class="fedex-logo" onerror="this.style.display='none'">
 </div>
 
 <footer class="footer">
@@ -5555,8 +5555,11 @@ async function updateRecentStatusChanges() {
         const response = await fetch(`/Netinfo/api/device/device-status-changes?nocache=${Date.now()}`);
 
         if (!response.ok) {
-            console.warn("⚠️ API çağrısı başarısız, status:", response.status);
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-gray-400">⚠️ Durum değişiklikleri yüklenemedi.</td></tr>`;
+            // 404 = log dosyası henüz oluşturulmamış, sessizce göster
+            if (response.status !== 404) {
+                console.warn("⚠️ API çağrısı başarısız, status:", response.status);
+            }
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-gray-400">Henüz durum değişikliği kaydı yok.</td></tr>`;
             return;
         }
 
