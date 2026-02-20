@@ -2994,6 +2994,9 @@ li.green {
 		let selectedCriticalDevices = getSavedCriticalDevices();
 		var userLoggedIn = false;
 
+        // Interval ID'lerini takip et (temizlik için) - tüm setInterval'lerden ÖNCE tanımlanmalı
+        const activeIntervals = [];
+
 
 document.addEventListener("DOMContentLoaded", () => {
     initializeDashboard();
@@ -5330,9 +5333,6 @@ const INTERVALS = {
     trafficData: 600000, // 10 dakikada bir
     clock: 1000, // Her saniye
 };
-
-// Interval ID'lerini takip et (temizlik için)
-const activeIntervals = [];
 
 function startAutoUpdate() {
     activeIntervals.push(setInterval(fetchAllDevices, INTERVALS.normalData));
