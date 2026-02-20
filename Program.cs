@@ -130,16 +130,23 @@ builder.Services.AddSingleton<DeviceDataService>(provider =>
     var paths = provider.GetRequiredService<DataPathsConfig>();
     var deviceService = new DeviceDataService(logger, paths);
 
-    deviceService.LoadDeviceData(Path.Combine(paths.DataDir, paths.DeviceInventory));
-    deviceService.LoadPreviousDeviceData(Path.Combine(paths.DataDir, paths.PreviousDeviceInventory));
-    deviceService.LoadPortData(Path.Combine(paths.DataDir, paths.MainData));
-    deviceService.LoadRouterPortData(Path.Combine(paths.DataDir, paths.RouterData));
-    try { deviceService.LoadUUIDPool(Path.Combine(paths.DataDir, paths.UUIDPool)); }
-    catch (Exception ex) { logger.Warning(ex, "UUID Pool could not be loaded on startup. UUID resolution will retry on demand."); }
-    deviceService.LoadLocationData(Path.Combine(paths.DataDir, paths.StationInfo));
-    deviceService.LoadLogAnalysisData(Path.Combine(paths.SyslogDir, paths.SyslogSummary));
-    deviceService.LoadInsightSummary(Path.Combine(paths.DataDir, paths.InsightSummary));
+    // Each load is wrapped individually so one missing file doesn't crash the entire service
+    void SafeLoad(string label, Action action)
+    {
+        try { action(); }
+        catch (Exception ex) { logger.Warning(ex, "{Label} could not be loaded on startup.", label); }
+    }
 
+    SafeLoad("DeviceData", () => deviceService.LoadDeviceData(Path.Combine(paths.DataDir, paths.DeviceInventory)));
+    SafeLoad("PreviousDeviceData", () => deviceService.LoadPreviousDeviceData(Path.Combine(paths.DataDir, paths.PreviousDeviceInventory)));
+    SafeLoad("PortData", () => deviceService.LoadPortData(Path.Combine(paths.DataDir, paths.MainData)));
+    SafeLoad("RouterPortData", () => deviceService.LoadRouterPortData(Path.Combine(paths.DataDir, paths.RouterData)));
+    SafeLoad("UUIDPool", () => deviceService.LoadUUIDPool(Path.Combine(paths.DataDir, paths.UUIDPool)));
+    SafeLoad("LocationData", () => deviceService.LoadLocationData(Path.Combine(paths.DataDir, paths.StationInfo)));
+    SafeLoad("LogAnalysisData", () => deviceService.LoadLogAnalysisData(Path.Combine(paths.SyslogDir, paths.SyslogSummary)));
+    SafeLoad("InsightSummary", () => deviceService.LoadInsightSummary(Path.Combine(paths.DataDir, paths.InsightSummary)));
+
+    logger.Information("DeviceDataService initialized. DataDir={DataDir}, SyslogDir={SyslogDir}", paths.DataDir, paths.SyslogDir);
     return deviceService;
 });
 
@@ -168,6 +175,7 @@ app.Use(async (context, next) =>
     headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
     headers["Content-Security-Policy"] =
         "default-src 'self'; " +
+        "connect-src 'self'; " +
         "script-src 'self' 'unsafe-inline' https://code.jquery.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com; " +
         "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com; " +
         "img-src 'self' https://tr.eu.fedex.com data:; " +
@@ -242,6 +250,35 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+});
+
+// Diagnostic health check - no DI dependencies, always works if app is running
+app.MapGet("/api/health", (IServiceProvider sp) =>
+{
+    var result = new Dictionary<string, object> { ["status"] = "running", ["time"] = DateTime.UtcNow.ToString("o") };
+    try
+    {
+        var paths = sp.GetRequiredService<DataPathsConfig>();
+        result["dataDir"] = paths.DataDir;
+        result["dataDirExists"] = Directory.Exists(paths.DataDir);
+        result["syslogDir"] = paths.SyslogDir;
+
+        var files = new Dictionary<string, object>
+        {
+            ["DeviceInventory"] = File.Exists(Path.Combine(paths.DataDir, paths.DeviceInventory)),
+            ["UUIDPool"] = File.Exists(Path.Combine(paths.DataDir, paths.UUIDPool)),
+            ["MainData"] = File.Exists(Path.Combine(paths.DataDir, paths.MainData)),
+            ["StationInfo"] = File.Exists(Path.Combine(paths.DataDir, paths.StationInfo)),
+            ["SyslogSummary"] = File.Exists(Path.Combine(paths.SyslogDir, paths.SyslogSummary)),
+        };
+        result["files"] = files;
+
+        // Test if DeviceDataService can be resolved
+        try { sp.GetRequiredService<DeviceDataService>(); result["deviceDataService"] = "OK"; }
+        catch (Exception ex) { result["deviceDataService"] = $"FAILED: {ex.Message}"; }
+    }
+    catch (Exception ex) { result["error"] = ex.Message; }
+    return Results.Json(result);
 });
 
 app.Run();
