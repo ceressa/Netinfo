@@ -257,7 +257,7 @@ body::before {
     border-radius: var(--radius);
     padding: 24px;
     position: relative;
-    overflow: hidden;
+    overflow-x: auto;
 }
 
 .chassis::before {
@@ -268,6 +268,35 @@ body::before {
     background: linear-gradient(90deg, var(--purple), var(--orange));
 }
 
+/* Each physical module panel */
+.module-panel {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+}
+
+.module-panel:last-child { margin-bottom: 0; }
+
+.module-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.module-label .port-count {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
 .port-grid {
     display: flex;
     flex-direction: column;
@@ -276,18 +305,35 @@ body::before {
 
 .port-row {
     display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
+    gap: 3px;
 }
 
 .port-group {
     display: flex;
-    gap: 4px;
-    margin-right: 12px;
+    gap: 3px;
+    margin-right: 14px;
 }
 
 .port-group:last-child {
     margin-right: 0;
+}
+
+/* SFP/Uplink modules - smaller layout */
+.module-panel.sfp .port {
+    width: 44px;
+    height: 28px;
+    font-size: 10px;
+    border-radius: 3px;
+}
+
+.module-panel.sfp .port-row {
+    gap: 4px;
+}
+
+.modules-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 /* ========== PORT ========== */
@@ -925,108 +971,275 @@ function renderStats() {
 }
 
 // ========== RENDER CHASSIS ==========
+function parsePortName(name) {
+    var raw = name || '';
+    // Detect type
+    var lower = raw.toLowerCase();
+    var type = 'unknown';
+    if (lower.indexOf('appgigabit') === 0) type = 'App';
+    else if (lower.indexOf('tengig') === 0) type = 'Te';
+    else if (lower.indexOf('twentyfivegig') === 0) type = 'Twe';
+    else if (lower.indexOf('fortygig') === 0) type = 'Fo';
+    else if (lower.indexOf('gigabit') === 0) type = 'Gi';
+    else if (lower.indexOf('fastethernet') === 0) type = 'Fa';
+
+    var match = raw.match(/(\d+)\/(\d+)\/(\d+)$/);
+    if (match) {
+        return { type: type, stack: parseInt(match[1]), slot: parseInt(match[2]), num: parseInt(match[3]) };
+    }
+    // Handle 2-part like GigabitEthernet0/0
+    var match2 = raw.match(/(\d+)\/(\d+)$/);
+    if (match2) {
+        return { type: type, stack: parseInt(match2[1]), slot: -1, num: parseInt(match2[2]) };
+    }
+    return null;
+}
+
 function renderChassis() {
     var chassis = document.getElementById('chassis');
     chassis.textContent = '';
 
     if (physicalPorts.length === 0) {
-        chassis.textContent = 'Fiziksel port bulunamadı.';
+        chassis.textContent = 'Fiziksel port bulunamadi.';
         return;
     }
 
-    // Parse: extract stack/slot/port from interface name
-    var parsed = physicalPorts.map(function(p) {
-        var match = (p.interface_name || '').match(/(\d+)\/(\d+)\/(\d+)$/);
-        var stack = match ? parseInt(match[1]) : 1;
-        var slot  = match ? parseInt(match[2]) : 0;
-        var num   = match ? parseInt(match[3]) : 0;
-        // Short type prefix: Gi, Te, Fa, etc.
-        var typeMatch = (p.interface_name || '').match(/^([A-Za-z]+)/);
-        var typePrefix = typeMatch ? typeMatch[1] : '';
-        // Abbreviate: GigabitEthernet -> Gi, TenGigabitEthernet -> Te, etc.
-        if (typePrefix.toLowerCase().indexOf('tengig') === 0) typePrefix = 'Te';
-        else if (typePrefix.toLowerCase().indexOf('gigabit') === 0) typePrefix = 'Gi';
-        else if (typePrefix.toLowerCase().indexOf('fastethernet') === 0) typePrefix = 'Fa';
-        else if (typePrefix.toLowerCase().indexOf('twentyfive') === 0) typePrefix = 'Twe';
-        else if (typePrefix.toLowerCase().indexOf('forty') === 0) typePrefix = 'Fo';
-        return { port: p, stack: stack, slot: slot, num: num, typePrefix: typePrefix };
+    // Parse all physical ports
+    var parsed = [];
+    physicalPorts.forEach(function(p) {
+        var info = parsePortName(p.interface_name);
+        if (info) {
+            parsed.push({ port: p, type: info.type, stack: info.stack, slot: info.slot, num: info.num });
+        }
     });
 
-    // Group by stack -> slot
-    var groups = {};
+    // Separate into categories:
+    // 1. Main access ports: Gi with slot 0 (these are the 24/48 port panels)
+    // 2. Gi uplink ports: Gi with slot 1 (network module uplinks)
+    // 3. High-speed SFP: Te, Fo, Twe (SFP+ modules)
+    // 4. Special: App, standalone Gi0/0 etc.
+    var mainPorts = [];   // Gi x/0/1-48
+    var uplinkGi = [];    // Gi x/1/1-4
+    var sfpPorts = [];    // Te, Fo, Twe
+    var specialPorts = []; // App, Gi0/0 etc.
+
     parsed.forEach(function(item) {
-        var key = item.stack + '/' + item.slot;
-        if (!groups[key]) groups[key] = { stack: item.stack, slot: item.slot, typePrefix: item.typePrefix, ports: [] };
-        groups[key].ports.push(item);
+        if (item.type === 'App' || item.slot === -1) {
+            specialPorts.push(item);
+        } else if (item.type === 'Gi' && item.slot === 0) {
+            mainPorts.push(item);
+        } else if (item.type === 'Gi' && item.slot >= 1) {
+            uplinkGi.push(item);
+        } else {
+            sfpPorts.push(item);
+        }
     });
 
-    // Sort groups by stack then slot
-    var sortedKeys = Object.keys(groups).sort(function(a, b) {
-        var ga = groups[a], gb = groups[b];
-        if (ga.stack !== gb.stack) return ga.stack - gb.stack;
-        return ga.slot - gb.slot;
+    // Sort each group
+    [mainPorts, uplinkGi, sfpPorts, specialPorts].forEach(function(arr) {
+        arr.sort(function(a, b) {
+            if (a.stack !== b.stack) return a.stack - b.stack;
+            if (a.slot !== b.slot) return a.slot - b.slot;
+            return a.num - b.num;
+        });
     });
 
-    sortedKeys.forEach(function(key) {
-        var group = groups[key];
-        var ports = group.ports;
-        ports.sort(function(a, b) { return a.num - b.num; });
+    // ---- 1. MAIN ACCESS PORTS (Gi x/0) ----
+    if (mainPorts.length > 0) {
+        // Group by stack
+        var stacks = {};
+        mainPorts.forEach(function(item) {
+            if (!stacks[item.stack]) stacks[item.stack] = [];
+            stacks[item.stack].push(item);
+        });
 
-        // Section label: e.g. "Gi1/0  (24 port)"
-        var label = document.createElement('div');
-        label.style.cssText = 'font-size:12px;color:var(--text-muted);margin-bottom:8px;' +
-            (key !== sortedKeys[0] ? 'margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);' : '');
-        var labelText = group.typePrefix + group.stack + '/' + group.slot;
-        label.textContent = labelText + '  (' + ports.length + ' port)';
-        chassis.appendChild(label);
+        Object.keys(stacks).sort(function(a, b) { return a - b; }).forEach(function(stackNum) {
+            var ports = stacks[stackNum];
+            var total = ports.length;
 
-        var grid = document.createElement('div');
-        grid.className = 'port-grid';
+            // Split into 24-port panels
+            var panelSize = total <= 24 ? total : 24;
+            var panelCount = Math.ceil(total / 24);
 
-        // Odd ports row (top)
-        var topRow = document.createElement('div');
-        topRow.className = 'port-row';
-        var topGroup = document.createElement('div');
-        topGroup.className = 'port-group';
-        var groupCount = 0;
+            for (var pi = 0; pi < panelCount; pi++) {
+                var panelPorts = ports.slice(pi * 24, (pi + 1) * 24);
+                var startNum = panelPorts[0].num;
+                var endNum = panelPorts[panelPorts.length - 1].num;
 
-        ports.forEach(function(item) {
-            if (item.num % 2 === 1) {
-                if (groupCount > 0 && groupCount % 12 === 0) {
-                    topRow.appendChild(topGroup);
-                    topGroup = document.createElement('div');
-                    topGroup.className = 'port-group';
-                }
-                topGroup.appendChild(createPortElement(item));
-                groupCount++;
+                var panel = document.createElement('div');
+                panel.className = 'module-panel';
+
+                var label = document.createElement('div');
+                label.className = 'module-label';
+                var labelIcon = document.createElement('i');
+                labelIcon.className = 'fas fa-ethernet';
+                label.appendChild(labelIcon);
+                label.appendChild(document.createTextNode(
+                    ' Gi' + stackNum + '/0/' + startNum + '-' + endNum
+                ));
+                var countSpan = document.createElement('span');
+                countSpan.className = 'port-count';
+                countSpan.textContent = panelPorts.length + ' port';
+                label.appendChild(countSpan);
+                panel.appendChild(label);
+
+                panel.appendChild(buildPortGrid(panelPorts, 12));
+                chassis.appendChild(panel);
             }
         });
-        if (groupCount > 0) topRow.appendChild(topGroup);
+    }
 
-        // Even ports row (bottom)
-        var bottomRow = document.createElement('div');
-        bottomRow.className = 'port-row';
-        var bottomGroup = document.createElement('div');
-        bottomGroup.className = 'port-group';
-        var groupCount2 = 0;
+    // ---- 2. UPLINK / SFP ROW ----
+    var hasUplinks = uplinkGi.length > 0 || sfpPorts.length > 0 || specialPorts.length > 0;
+    if (hasUplinks) {
+        var row = document.createElement('div');
+        row.className = 'modules-row';
 
-        ports.forEach(function(item) {
-            if (item.num % 2 === 0) {
-                if (groupCount2 > 0 && groupCount2 % 12 === 0) {
-                    bottomRow.appendChild(bottomGroup);
-                    bottomGroup = document.createElement('div');
-                    bottomGroup.className = 'port-group';
-                }
-                bottomGroup.appendChild(createPortElement(item));
-                groupCount2++;
-            }
+        // Gi uplinks (network module)
+        if (uplinkGi.length > 0) {
+            var panel = document.createElement('div');
+            panel.className = 'module-panel sfp';
+
+            var label = document.createElement('div');
+            label.className = 'module-label';
+            var labelIcon = document.createElement('i');
+            labelIcon.className = 'fas fa-arrow-up';
+            label.appendChild(labelIcon);
+            label.appendChild(document.createTextNode(' Gi Uplink'));
+            var countSpan = document.createElement('span');
+            countSpan.className = 'port-count';
+            countSpan.textContent = uplinkGi.length + ' port';
+            label.appendChild(countSpan);
+            panel.appendChild(label);
+
+            // Simple single-row for small number of ports
+            var grid = document.createElement('div');
+            grid.className = 'port-grid';
+            var singleRow = document.createElement('div');
+            singleRow.className = 'port-row';
+            uplinkGi.forEach(function(item) {
+                singleRow.appendChild(createPortElement(item));
+            });
+            grid.appendChild(singleRow);
+            panel.appendChild(grid);
+            row.appendChild(panel);
+        }
+
+        // SFP+ Modules by type
+        var sfpByType = {};
+        sfpPorts.forEach(function(item) {
+            if (!sfpByType[item.type]) sfpByType[item.type] = [];
+            sfpByType[item.type].push(item);
         });
-        if (groupCount2 > 0) bottomRow.appendChild(bottomGroup);
 
-        grid.appendChild(topRow);
-        grid.appendChild(bottomRow);
-        chassis.appendChild(grid);
+        var typeLabels = { Te: 'SFP+ 10G', Fo: 'QSFP+ 40G', Twe: 'SFP28 25G' };
+
+        Object.keys(sfpByType).forEach(function(type) {
+            var ports = sfpByType[type];
+            var panel = document.createElement('div');
+            panel.className = 'module-panel sfp';
+
+            var label = document.createElement('div');
+            label.className = 'module-label';
+            var labelIcon = document.createElement('i');
+            labelIcon.className = 'fas fa-bolt';
+            label.appendChild(labelIcon);
+            label.appendChild(document.createTextNode(' ' + (typeLabels[type] || type)));
+            var countSpan = document.createElement('span');
+            countSpan.className = 'port-count';
+            countSpan.textContent = ports.length + ' port';
+            label.appendChild(countSpan);
+            panel.appendChild(label);
+
+            var grid = document.createElement('div');
+            grid.className = 'port-grid';
+            var singleRow = document.createElement('div');
+            singleRow.className = 'port-row';
+            ports.forEach(function(item) {
+                singleRow.appendChild(createPortElement(item));
+            });
+            grid.appendChild(singleRow);
+            panel.appendChild(grid);
+            row.appendChild(panel);
+        });
+
+        // Special ports (App, Gi0/0)
+        if (specialPorts.length > 0) {
+            var panel = document.createElement('div');
+            panel.className = 'module-panel sfp';
+
+            var label = document.createElement('div');
+            label.className = 'module-label';
+            var labelIcon = document.createElement('i');
+            labelIcon.className = 'fas fa-cog';
+            label.appendChild(labelIcon);
+            label.appendChild(document.createTextNode(' Management'));
+            panel.appendChild(label);
+
+            var grid = document.createElement('div');
+            grid.className = 'port-grid';
+            var singleRow = document.createElement('div');
+            singleRow.className = 'port-row';
+            specialPorts.forEach(function(item) {
+                singleRow.appendChild(createPortElement(item));
+            });
+            grid.appendChild(singleRow);
+            panel.appendChild(grid);
+            row.appendChild(panel);
+        }
+
+        chassis.appendChild(row);
+    }
+}
+
+// Build a Cisco-style odd/even port grid with groups of groupSize
+function buildPortGrid(ports, groupSize) {
+    var grid = document.createElement('div');
+    grid.className = 'port-grid';
+
+    // Top row: odd ports
+    var topRow = document.createElement('div');
+    topRow.className = 'port-row';
+    var topGroup = document.createElement('div');
+    topGroup.className = 'port-group';
+    var count = 0;
+
+    ports.forEach(function(item) {
+        if (item.num % 2 === 1) {
+            if (count > 0 && count % groupSize === 0) {
+                topRow.appendChild(topGroup);
+                topGroup = document.createElement('div');
+                topGroup.className = 'port-group';
+            }
+            topGroup.appendChild(createPortElement(item));
+            count++;
+        }
     });
+    if (count > 0) topRow.appendChild(topGroup);
+
+    // Bottom row: even ports
+    var bottomRow = document.createElement('div');
+    bottomRow.className = 'port-row';
+    var bottomGroup = document.createElement('div');
+    bottomGroup.className = 'port-group';
+    var count2 = 0;
+
+    ports.forEach(function(item) {
+        if (item.num % 2 === 0) {
+            if (count2 > 0 && count2 % groupSize === 0) {
+                bottomRow.appendChild(bottomGroup);
+                bottomGroup = document.createElement('div');
+                bottomGroup.className = 'port-group';
+            }
+            bottomGroup.appendChild(createPortElement(item));
+            count2++;
+        }
+    });
+    if (count2 > 0) bottomRow.appendChild(bottomGroup);
+
+    grid.appendChild(topRow);
+    grid.appendChild(bottomRow);
+    return grid;
 }
 
 function createPortElement(item) {
