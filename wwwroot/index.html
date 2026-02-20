@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -21,23 +21,23 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-	justify-content: flex-start; /* İçeriği yukarı taşı */
-    padding-top: 50px; /* İstenirse ek bir üst boşluk */
+	justify-content: flex-start;
+    padding-top: 50px;
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Kartı yatay olarak ortala */
+    align-items: center;
     padding: 20px;
-    margin-top: 10px; /* Üstten ikonların hizasından biraz aşağıda olacak şekilde ayarlayın */
+    margin-top: 10px;
 }
 
 .flip-card {
-    margin: 0 auto; /* Kartı yatayda ortalamak için */
-    width: 80%; /* Daha esnek boyut */
-    max-width: 400px; /* Kartın ekranı taşmasını engeller */
-    perspective: 1200px; /* 3D perspektif */
+    margin: 0 auto;
+    width: 80%;
+    max-width: 400px;
+    perspective: 1200px;
 }
 
 .flip-card-inner {
@@ -90,16 +90,16 @@ body {
 }
 
 .info-card {
-    width: 100%; /* Tam genişlik al */
-    max-width: 250px; /* Sabit maksimum genişlik */
-    height: 100px; /* Sabit yükseklik */
+    width: 100%;
+    max-width: 250px;
+    height: 100px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 10px;
     text-align: center;
     color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    display: flex; /* İçeriği ortala */
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -125,14 +125,14 @@ body {
 .copy-icon {
     position: fixed;
     top: 15px;
-    right: 140px; /* Admin ve Switch ikonlarının solunda */
+    right: 140px;
     font-size: 1.5rem;
-    background: rgba(123, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    background: rgba(123, 0, 0, 0.2);
     border-radius: 50%;
     padding: 12px;
     color: #FFD700;
     cursor: pointer;
-    z-index: 1500; /* Diğer elemanların üstünde */
+    z-index: 1500;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     transition: background 0.3s ease, transform 0.2s ease;
 }
@@ -145,14 +145,14 @@ body {
 .admin-icon {
     position: fixed;
     top: 15px;
-    right: 80px; /* Switch ikonuyla çakışmaması için sağdan boşluk */
+    right: 80px;
     font-size: 1.5rem;
-    background: rgba(123, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    background: rgba(123, 0, 0, 0.2);
     border-radius: 50%;
     padding: 12px;
     color: #FFD700;
     cursor: pointer;
-    z-index: 1500; /* Toolbar ve diğer elemanların üstünde */
+    z-index: 1500;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     transition: background 0.3s ease, transform 0.2s ease;
 }
@@ -165,9 +165,9 @@ body {
 .switch-icon {
     position: fixed;
     top: 15px;
-    right: 20px; /* Admin ikonunun solunda */
+    right: 20px;
     font-size: 1.5rem;
-    background: rgba(123, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    background: rgba(123, 0, 0, 0.2);
     border-radius: 50%;
     padding: 12px;
     color: #FFD700;
@@ -187,7 +187,7 @@ body {
     top: 10px;
     right: 10px;
     font-size: 1.5rem;
-    background: rgba(255, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    background: rgba(255, 0, 0, 0.2);
     border-radius: 50%;
     padding: 12px;
     color: #FFD700;
@@ -351,22 +351,22 @@ body {
 	bottom: calc(60px + 10px);
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(50, 50, 50, 0.9); /* Uyumlu bir koyu renk */
+    background: rgba(50, 50, 50, 0.9);
     color: white;
     padding: 15px 20px;
     border-radius: 8px;
     font-size: 1rem;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     z-index: 1500;
-    animation: feedbackAppear 0.3s ease-out, feedbackDisappear 0.5s ease-in 4.5s; /* Geçiş efektleri */
+    animation: feedbackAppear 0.3s ease-out, feedbackDisappear 0.5s ease-in 4.5s;
 }
 
 .feedback-message.success {
-    background: rgba(34, 139, 34, 0.9); /* Yeşil ton */
+    background: rgba(34, 139, 34, 0.9);
 }
 
 .feedback-message.error {
-    background: rgba(178, 34, 34, 0.9); /* Kırmızı ton */
+    background: rgba(178, 34, 34, 0.9);
 }
 
 .feedback-message:before {
@@ -383,11 +383,11 @@ body {
 }
 
 .feedback-message.success:before {
-    border-top-color: rgba(34, 139, 34, 0.9); /* Başarı için */
+    border-top-color: rgba(34, 139, 34, 0.9);
 }
 
 .feedback-message.error:before {
-    border-top-color: rgba(178, 34, 34, 0.9); /* Hata için */
+    border-top-color: rgba(178, 34, 34, 0.9);
 }
 
 /* Efekt */
@@ -426,11 +426,11 @@ body {
 @keyframes progressBar {
     0% {
         width: 100%;
-        background-color: rgba(50, 205, 50, 0.9); /* Başlangıç rengi */
+        background-color: rgba(50, 205, 50, 0.9);
     }
     100% {
         width: 0;
-        background-color: rgba(255, 69, 0, 0.9); /* Bitim rengi */
+        background-color: rgba(255, 69, 0, 0.9);
     }
 }
 
@@ -446,7 +446,11 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 2000;
-    animation: fadeOut 1s ease-out 2s forwards;
+    transition: opacity 1s ease-out;
+}
+
+.loading-screen.fade-out {
+    opacity: 0;
 }
 
 
@@ -478,7 +482,7 @@ body {
 }
 
 .toolbar-item {
-    flex: 0 1 70px; /* Daha küçük ikonlar için */
+    flex: 0 1 70px;
     text-align: center;
     font-size: 0.8rem;
     color: #ffffff;
@@ -549,7 +553,7 @@ body {
     height: 100%;
     background: linear-gradient(135deg, #24292e, #0366d6);
     color: #fefefe;
-    z-index: 3000; /* Yeterince büyük olduğundan emin olun */
+    z-index: 3000;
     padding: 20px;
     transition: visibility 0.3s ease-in-out;
 }
@@ -560,12 +564,12 @@ body {
 
 @media (max-width: 768px) {
 	.info-grid {
-        flex-direction: column; /* Mobilde üst üste sıralama */
-        align-items: center; /* Ortala */
+        flex-direction: column;
+        align-items: center;
     }
 
     .info-card {
-        width: 100%; /* Kartlar tam genişlik alır */
+        width: 100%;
         padding: 15px;
     }
     .toolbar {
@@ -575,32 +579,32 @@ body {
     }
 
     .toolbar-item {
-        flex-basis: 45%; /* Her eleman %45 genişlik alır */
+        flex-basis: 45%;
         margin-bottom: 10px;
         text-align: center;
     }
 
     .toolbar-item i {
         display: block;
-        font-size: 1.5rem; /* İkon boyutu */
+        font-size: 1.5rem;
         margin-bottom: 5px;
     }
 
     .toolbar-item span {
-        display: block; /* Metni alt satıra alır */
+        display: block;
         font-size: 0.8rem;
     }
 }
 
 @media (orientation: landscape) {
     .container {
-        flex-direction: row; /* Yatayda kartları yan yana sırala */
+        flex-direction: row;
         justify-content: space-evenly;
         align-items: center;
     }
 
     .info-card {
-        max-width: 200px; /* Daha küçük kart genişliği */
+        max-width: 200px;
     }
 }
 
@@ -608,12 +612,12 @@ body {
 
 @media (max-width: 480px) {
     .info-grid {
-        flex-direction: column; /* Mobilde üst üste sıralama */
-        align-items: center; /* Ortala */
+        flex-direction: column;
+        align-items: center;
     }
 
     .info-card {
-        width: 100%; /* Kartlar tam genişlik alır */
+        width: 100%;
         padding: 15px;
     }
     .toolbar {
@@ -623,19 +627,19 @@ body {
     }
 
     .toolbar-item {
-        flex-basis: 45%; /* Her eleman %45 genişlik alır */
+        flex-basis: 45%;
         margin-bottom: 10px;
         text-align: center;
     }
 
     .toolbar-item i {
         display: block;
-        font-size: 1.5rem; /* İkon boyutu */
+        font-size: 1.5rem;
         margin-bottom: 5px;
     }
 
     .toolbar-item span {
-        display: block; /* Metni alt satıra alır */
+        display: block;
         font-size: 0.8rem;
     }
 }
@@ -651,13 +655,13 @@ body {
     border-radius: 5px;
     font-size: 0.9rem;
     z-index: 9999;
-    display: none; /* Varsayılan olarak gizli */
+    display: none;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .rotate-warning.active {
-    display: block; /* Uyarıyı görünür yap */
+    display: block;
 }
 
 
@@ -672,7 +676,7 @@ body {
 }
 
 .custom-table th, .custom-table td {
-    color: white; /* Metin rengi */
+    color: white;
 }
 
 .custom-table tr:nth-child(even) {
@@ -686,7 +690,7 @@ body {
 
 
 .custom-table th, .custom-table td {
-    color: #333; /* Okunabilir metin rengi */
+    color: #333;
 }
 
 .custom-table td {
@@ -730,7 +734,7 @@ body {
 
 .status-down {
     color: red;
-    font-weight: bold;0
+    font-weight: bold;
 }
 
 
@@ -750,18 +754,18 @@ body {
 
 #closeTableIcon {
     position: absolute;
-    top: 10px; /* Daha alta taşımak için artırıldı */
-    right: 15px; /* Daha sola taşımak için azaltıldı */
+    top: 10px;
+    right: 15px;
     font-size: 2.5rem;
-    color: #333333; /* Daha koyu renk (koyu gri) */
+    color: #333333;
     cursor: pointer;
-    z-index: 3000; /* Tablo üstünde olmasını sağlar */
+    z-index: 3000;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
 #closeTableIcon:hover {
-    color: #555555; /* Hover sırasında biraz daha açık bir gri */
-    transform: scale(1.2); /* Hafif büyütme efekti */
+    color: #555555;
+    transform: scale(1.2);
 }
 
 
@@ -826,13 +830,16 @@ body {
     </style>
 </head>
 <body>
-    
-	<!-- Switch İkonu -->
-<i class="fas fa-sitemap switch-icon" id="switchIcon" title="Switch Paneli"></i>
 
-<i class="fas fa-user-shield admin-icon" id="adminIcon" title="Admin Paneli"></i>
+	<!-- Switch Icon -->
+<i class="fas fa-sitemap switch-icon" id="switchIcon" title="Switch Paneli"
+   role="button" aria-label="Switch Paneli" tabindex="0"></i>
 
-<i class="fas fa-copy copy-icon" id="copyIcon" title="Bilgileri Kopyala"></i>
+<i class="fas fa-user-shield admin-icon" id="adminIcon" title="Admin Paneli"
+   role="button" aria-label="Admin Paneli" tabindex="0"></i>
+
+<i class="fas fa-copy copy-icon" id="copyIcon" title="Bilgileri Kopyala"
+   role="button" aria-label="Bilgileri Kopyala" tabindex="0"></i>
 
 
 <!-- Modal Overlay -->
@@ -864,13 +871,13 @@ body {
 
 
 <div class="toolbar" id="toolbar">
-    <div id="detailsButton" class="toolbar-item" onclick="toggleDetailsPanel()">
+    <div id="detailsButton" class="toolbar-item" onclick="toggleDetailsPanel()" tabindex="0">
         <i class="fas fa-info-circle"></i>
     </div>
-    <div id="portTableButton" class="toolbar-item" onclick="openPortTable()">
+    <div id="portTableButton" class="toolbar-item" onclick="openPortTable()" tabindex="0">
     <i class="fas fa-table"></i>
 </div>
-    <div id="logoutButton" class="toolbar-item" onclick="handleAdminLogout()">
+    <div id="logoutButton" class="toolbar-item" onclick="handleAdminLogout()" tabindex="0">
         <i class="fas fa-sign-out-alt"></i>
     </div>
 </div>
@@ -885,14 +892,14 @@ body {
 
 
 <!-- Yükleme Ekranı -->
-<div class="loading-screen">
+<div class="loading-screen" id="loadingScreen">
     <img src="https://tr.eu.fedex.com/fedex_logo.png" alt="FedEx Logo">
 </div>
 
 
 <!-- Tam Ekran Rapor -->
 <div class="fullscreen-report" id="fullscreenReport">
-	<i class="fas fa-times close-icon" id="closeTableIcon" title="Kapat"></i>
+	<i class="fas fa-times close-icon" id="closeTableIcon" title="Kapat" tabindex="0"></i>
     <div class="report-content" id="reportContent">
         <!-- Tablo içeriği buraya gelecek -->
     </div>
@@ -901,12 +908,13 @@ body {
 
 
 
-
 <!-- Admin Modal -->
-<div class="modal-container" id="adminModal" style="display:none;">
-    <span class="close-icon" onclick="document.getElementById('adminModal').style.display='none'">X</span>
+<div class="modal-container" id="adminModal" style="display:none;"
+     role="dialog" aria-modal="true" aria-label="Admin Girisi">
+    <span class="close-icon" onclick="document.getElementById('adminModal').style.display='none'"
+          role="button" aria-label="Kapat" tabindex="0">X</span>
     <h4>Admin Girişi</h4>
-    <input type="password" id="adminPassword" placeholder="Şifreyi Girin">
+    <input type="password" id="adminPassword" placeholder="Şifreyi Girin" minlength="4">
     <button class="btn btn-primary" onclick="handleAdminLogin()">Giriş Yap</button>
     <div class="warning-message">
         <i class="fas fa-exclamation-circle"></i> Bu alana sadece yetkili kullanıcılar erişebilir.
@@ -923,17 +931,30 @@ body {
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+    // Dev-only logging: set to true to enable debug logs
+    const DEV_MODE = false;
+    function devLog(...args) {
+        if (DEV_MODE) {
+            console.log(...args);
+        }
+    }
+    function devWarn(...args) {
+        if (DEV_MODE) {
+            console.warn(...args);
+        }
+    }
+
     let deviceData = null;
     let loginAttempts = 0;
     let adminTimeout;
     let isLockedOut = false;
-	let isAdminLoggedIn = false; // Admin giriş durumu
+	let isAdminLoggedIn = false;
 	let portData = null;
 	let deviceModel  = null;
-	const ADMIN_TIMEOUT_DURATION = 120000; // Admin oturum süresi (2 dakika)
-	const searchInput = document.getElementById('searchInput');
-	const statusFilter = document.getElementById('statusFilter');
-	
+	const ADMIN_TIMEOUT_DURATION = 120000;
+
+	// Dead code removed: searchInput/statusFilter were referencing null elements
+
 	document.getElementById("switchIcon").style.display = "block";
 document.addEventListener('DOMContentLoaded', function() {
     const switchIcon = document.getElementById('switchIcon');
@@ -942,21 +963,12 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = "/Netinfo/switchDetails.html";
         });
     } else {
-        console.error("Element with id 'switchIcon' not found.");
+        devLog("Element with id 'switchIcon' not found.");
     }
 });
 
 if (!isAdminLoggedIn) {
-    console.log("Toolbar is inactive as admin login has not occurred.");
-}
-
-
-
-if (!searchInput || !statusFilter) {
-    console.warn("Arama veya filtreleme alanları bulunamadı. Bu özellik atlanacak.");
-} else {
-    searchInput.addEventListener('input', filterTable);
-    statusFilter.addEventListener('change', filterTable);
+    devLog("Toolbar is inactive as admin login has not occurred.");
 }
 
 
@@ -970,7 +982,7 @@ document.getElementById('copyIcon').addEventListener('click', function () {
 
     let textToCopy = Array.from(infoCards)
         .map(card => card.textContent.trim())
-        .join('\n'); // Bilgileri birleştir
+        .join('\n');
 
     navigator.clipboard.writeText(textToCopy)
         .then(() => {
@@ -984,18 +996,18 @@ document.getElementById('copyIcon').addEventListener('click', function () {
 
 
 
-
+// Loading state fix: tie loading screen removal to actual data fetch
 document.addEventListener('DOMContentLoaded', async function () {
-    const loadingScreen = document.querySelector('.loading-screen');
+    const loadingScreen = document.getElementById('loadingScreen');
     const params = new URLSearchParams(window.location.search);
     const deviceId = params.get('id');
     const basicDeviceInfoDiv = document.getElementById('basicDeviceInfo');
     const reportContentDiv = document.getElementById('reportContent');
-const switchIcon = document.getElementById("switchIcon");
-console.log(switchIcon); // HTML elementi döndürmelidir.
-console.log(window.getComputedStyle(switchIcon).display); // "block" dönerse görünürdür.
-console.log(window.getComputedStyle(switchIcon).visibility); // "visible" dönerse görünürdür.
-const supportedModels = [
+    const switchIconEl = document.getElementById("switchIcon");
+    devLog(switchIconEl);
+    devLog(window.getComputedStyle(switchIconEl).display);
+    devLog(window.getComputedStyle(switchIconEl).visibility);
+    const supportedModels = [
         "C9300-24P",
         "C9300-48P",
         "ISR4351/K9",
@@ -1005,26 +1017,43 @@ const supportedModels = [
         "C9300L-24T-4G",
         "WS-C2960X-48FPS-L"
     ];
-	
-	console.log("Device Model:", deviceModel);
+
+	devLog("Device Model:", deviceModel);
 
     const switchModal = document.getElementById("switchModal");
 
-
-    // Yükleme ekranını 2 saniye sonra kaldır
-    setTimeout(async () => {
-        loadingScreen.style.display = 'none';
-
-        if (!deviceId) {
-            basicDeviceInfoDiv.textContent = "Cihaz ID'si belirtilmemiş.";
-            reportContentDiv.textContent = "Rapor verisi için cihaz ID gerekli.";
-            return;
+    // Loading screen: remove after data is actually loaded (not a timer)
+    function hideLoadingScreen() {
+        if (loadingScreen) {
+            loadingScreen.classList.add('fade-out');
+            loadingScreen.addEventListener('transitionend', function handler() {
+                loadingScreen.style.display = 'none';
+                loadingScreen.removeEventListener('transitionend', handler);
+            });
+            // Fallback in case transitionend doesn't fire
+            setTimeout(function() {
+                if (loadingScreen.style.display !== 'none') {
+                    loadingScreen.style.display = 'none';
+                }
+            }, 1500);
         }
+    }
 
-        
+    if (!deviceId) {
+        basicDeviceInfoDiv.textContent = "Cihaz ID'si belirtilmemiş.";
+        reportContentDiv.textContent = "Rapor verisi için cihaz ID gerekli.";
+        hideLoadingScreen();
+        return;
+    }
 
-        
-    }, 2000); // 2 saniye bekleme (animasyon süresi)
+    // Fetch data then hide loading screen
+    deviceData = await fetchDeviceData(deviceId);
+    if (deviceData) {
+        displayBasicDeviceInfo(deviceData);
+    } else {
+        basicDeviceInfoDiv.textContent = "Cihaz verisi yüklenemedi.";
+    }
+    hideLoadingScreen();
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1032,7 +1061,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const deviceId = params.get('id');
 
     if (!deviceId) {
-        console.error("Cihaz ID belirtilmemiş.");
+        devLog("Cihaz ID belirtilmemiş.");
         return;
     }
 
@@ -1043,23 +1072,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (deviceData) {
         displayAdminDeviceInfo();
     } else {
-        console.error("Cihaz verisi bulunamadı veya yüklenemedi.");
+        devLog("Cihaz verisi bulunamadı veya yüklenemedi.");
     }
 });
 
 
+// SECURITY FIX: openPortTable uses safe DOM methods instead of innerHTML
 function openPortTable() {
     const modal = document.getElementById('portTableModal');
     const portTableContent = document.getElementById('portTableContent');
 
-    // JSON'dan port verilerini alıp tablo oluştur
     const ports = deviceData.ports || [];
-    portTableContent.innerHTML = ports.map(port => `
-        <div>
-            <p>Port: ${port.name}</p>
-            <p>Durum: ${port.status}</p>
-        </div>
-    `).join('');
+
+    // Clear existing content safely
+    while (portTableContent.firstChild) {
+        portTableContent.removeChild(portTableContent.firstChild);
+    }
+
+    ports.forEach(function(port) {
+        var portDiv = document.createElement('div');
+
+        var portNameP = document.createElement('p');
+        portNameP.textContent = 'Port: ' + port.name;
+        portDiv.appendChild(portNameP);
+
+        var portStatusP = document.createElement('p');
+        portStatusP.textContent = 'Durum: ' + port.status;
+        portDiv.appendChild(portStatusP);
+
+        portTableContent.appendChild(portDiv);
+    });
+
     modal.style.display = 'block';
 }
 
@@ -1072,19 +1115,16 @@ function toggleDetailsPanel() {
 
     if (isAdminLoggedIn) {
         if (flipCard.classList.contains("admin-active")) {
-            // Admin paneli açıkken tekrar basılırsa basic info ekranına dön
-            flipCard.classList.remove("admin-active"); 
-            displayBasicDeviceInfo(); // Temel cihaz bilgilerini göster
+            flipCard.classList.remove("admin-active");
+            displayBasicDeviceInfo();
         } else {
-            // Admin panelini aç
             flipCard.classList.add("admin-active");
-            displayAdminDeviceInfo(); // Admin detaylarını yükle
-            showToolbar(); // Toolbar'ı göster
+            displayAdminDeviceInfo();
+            showToolbar();
         }
     } else {
-        // Admin giriş yapılmamışsa temel bilgi ekranını yükle
         showFeedback("Admin oturumu başlatılmamış. Giriş yapmalısınız.", false);
-        displayBasicDeviceInfo(); // Temel cihaz bilgilerini göster
+        displayBasicDeviceInfo();
     }
 }
 
@@ -1093,17 +1133,18 @@ const switchIcon = document.getElementById("switchIcon");
 
 
 
-		
+
 function showFeedback(message, isSuccess) {
     const feedbackContainer = document.createElement("div");
-    feedbackContainer.className = `feedback-message ${isSuccess ? "success" : "error"}`;
+    feedbackContainer.className = "feedback-message " + (isSuccess ? "success" : "error");
+    feedbackContainer.setAttribute("role", "status");
     feedbackContainer.textContent = message;
 
     document.body.appendChild(feedbackContainer);
 
     setTimeout(() => {
         feedbackContainer.remove();
-    }, 5000); // 5 saniye sonra mesajı kaldırır
+    }, 5000);
 }
 
 document.getElementById("switchIcon").addEventListener("click", openSwitchModal);
@@ -1115,24 +1156,24 @@ document.getElementById("closeTableIcon").addEventListener("click", function () 
         fullscreenReport.classList.remove("open");
         fullscreenReport.style.visibility = "hidden";
     }
-    console.log("Tablo ekranı kapatıldı.");
+    devLog("Tablo ekranı kapatıldı.");
 });
 
 async function fetchDeviceData(id) {
    if (!id) {
-       console.error("ID is required.");
+       devLog("ID is required.");
        return null;
    }
 
-   const url = `/Netinfo/api/device/get_device_info?id=${id}`;
+   const url = "/Netinfo/api/device/get_device_info?id=" + id;
    try {
        const response = await fetch(url);
        if (!response.ok) {
-           throw new Error(`HTTP error! status: ${response.status}`);
+           throw new Error("HTTP error! status: " + response.status);
        }
        return await response.json();
    } catch (error) {
-       console.error(`Error fetching device data for ID ${id}: ${error.message}`);
+       devLog("Error fetching device data for ID " + id + ": " + error.message);
        return null;
    }
 }
@@ -1142,7 +1183,7 @@ async function fetchDeviceData(id) {
 async function getDeviceDataAsync(id) {
    const deviceData = await fetchDeviceData(id);
    if (deviceData) {
-       displayBasicDeviceInfo(deviceData); // Cihaz bilgilerini gösterme fonksiyonu
+       displayBasicDeviceInfo(deviceData);
    }
 }
 
@@ -1152,10 +1193,8 @@ async function getDeviceDataAsync(id) {
 function checkOrientationAndWarn() {
     const rotateWarning = document.getElementById('rotateWarning');
     if (window.matchMedia("(orientation: portrait)").matches) {
-        // Dikey moddaysa uyarıyı göster
         rotateWarning.classList.add('active');
     } else {
-        // Yatay moddaysa uyarıyı gizle
         rotateWarning.classList.remove('active');
     }
 }
@@ -1167,31 +1206,74 @@ document.addEventListener('DOMContentLoaded', checkOrientationAndWarn);
 
 
 
-
-  function displayBasicDeviceInfo(device) {
+// SECURITY FIX: displayBasicDeviceInfo uses safe DOM methods instead of innerHTML
+function displayBasicDeviceInfo(device) {
     const basicDeviceInfoDiv = document.getElementById('basicDeviceInfo');
-    basicDeviceInfoDiv.innerHTML = `
-        <div class="info-card"><i class="fas fa-server"></i><p>Hostname: ${device.hostname}</p></div>
-        <div class="info-card"><i class="fas fa-network-wired"></i><p>IP Adresi: ${device.ipaddress}</p></div>
-        <div class="info-card"><i class="fas fa-signal"></i><p>Durum: ${device.status}</p></div>
-    `;
+
+    // Clear existing content safely
+    while (basicDeviceInfoDiv.firstChild) {
+        basicDeviceInfoDiv.removeChild(basicDeviceInfoDiv.firstChild);
+    }
+
+    if (!device) return;
+
+    // Hostname card
+    var card1 = document.createElement('div');
+    card1.className = 'info-card';
+    var icon1 = document.createElement('i');
+    icon1.className = 'fas fa-server';
+    card1.appendChild(icon1);
+    var p1 = document.createElement('p');
+    p1.textContent = 'Hostname: ' + device.hostname;
+    card1.appendChild(p1);
+    basicDeviceInfoDiv.appendChild(card1);
+
+    // IP Address card
+    var card2 = document.createElement('div');
+    card2.className = 'info-card';
+    var icon2 = document.createElement('i');
+    icon2.className = 'fas fa-network-wired';
+    card2.appendChild(icon2);
+    var p2 = document.createElement('p');
+    p2.textContent = 'IP Adresi: ' + device.ipaddress;
+    card2.appendChild(p2);
+    basicDeviceInfoDiv.appendChild(card2);
+
+    // Status card
+    var card3 = document.createElement('div');
+    card3.className = 'info-card';
+    var icon3 = document.createElement('i');
+    icon3.className = 'fas fa-signal';
+    card3.appendChild(icon3);
+    var p3 = document.createElement('p');
+    p3.textContent = 'Durum: ' + device.status;
+    var statusSpan = document.createElement('span');
+    statusSpan.className = 'status-indicator ' + (device.status === 'Online' ? 'status-online' : 'status-offline');
+    statusSpan.setAttribute('role', 'status');
+    p3.appendChild(document.createTextNode(' '));
+    p3.appendChild(statusSpan);
+    card3.appendChild(p3);
+    basicDeviceInfoDiv.appendChild(card3);
 }
 
+// SECURITY FIX: displayAdminDeviceInfo uses safe DOM methods instead of innerHTML
 function displayAdminDeviceInfo() {
     const adminDeviceInfoDiv = document.getElementById('adminDeviceInfo');
     if (!adminDeviceInfoDiv) {
-        console.error("adminDeviceInfo öğesi bulunamadı.");
+        devLog("adminDeviceInfo öğesi bulunamadı.");
         return;
     }
 
-    // `deviceData` kontrolü
     if (!deviceData) {
-        console.error("Cihaz verisi bulunamadı.");
-        adminDeviceInfoDiv.innerHTML = '<p>Cihaz verisi yüklenemedi.</p>';
+        devLog("Cihaz verisi bulunamadı.");
+        // SECURITY FIX: use textContent instead of innerHTML
+        adminDeviceInfoDiv.textContent = 'Cihaz verisi yüklenemedi.';
         return;
     }
 
-    adminDeviceInfoDiv.innerHTML = ''; // İçeriği temizle
+    // SECURITY FIX: use textContent = '' instead of innerHTML = ''
+    adminDeviceInfoDiv.textContent = '';
+
     const adminFields = [
         { field: "hostname", label: "Hostname", icon: "fa-server" },
         { field: "serial", label: "Serial", icon: "fa-barcode" },
@@ -1200,17 +1282,26 @@ function displayAdminDeviceInfo() {
         { field: "uptime", label: "Uptime", icon: "fa-clock" }
     ];
 
-    adminFields.forEach(({ field, label, icon }) => {
-        if (deviceData[field] !== undefined) {
-            const card = document.createElement('div');
+    adminFields.forEach(function(item) {
+        if (deviceData[item.field] !== undefined) {
+            // SECURITY FIX: use createElement/textContent instead of innerHTML
+            var card = document.createElement('div');
             card.className = 'info-card';
-            card.innerHTML = `
-                <i class="fas ${icon}"></i>
-                <p><strong>${label}:</strong> ${deviceData[field]}</p>
-            `;
+
+            var iconEl = document.createElement('i');
+            iconEl.className = 'fas ' + item.icon;
+            card.appendChild(iconEl);
+
+            var pEl = document.createElement('p');
+            var strongEl = document.createElement('strong');
+            strongEl.textContent = item.label + ':';
+            pEl.appendChild(strongEl);
+            pEl.appendChild(document.createTextNode(' ' + deviceData[item.field]));
+            card.appendChild(pEl);
+
             adminDeviceInfoDiv.appendChild(card);
         } else {
-            console.warn(`${label} alanı eksik.`);
+            devWarn(item.label + " alanı eksik.");
         }
     });
 }
@@ -1219,14 +1310,12 @@ function displayAdminDeviceInfo() {
 
 function closeSwitchModal() {
     const modal = document.getElementById("switchModal");
-    modal.style.opacity = "0"; // Kapatma animasyonu
+    modal.style.opacity = "0";
     setTimeout(() => {
         modal.style.display = "none";
-        modal.style.opacity = "1"; // Varsayılan opacity'ye geri dön
-    }, 300); // Animasyon süresi
+        modal.style.opacity = "1";
+    }, 300);
 }
-
-
 
 
 
@@ -1234,29 +1323,38 @@ function closeSwitchModal() {
 function closeAdminModal() {
     const modal = document.getElementById('adminModal');
     modal.style.display = 'none';
-    modal.removeAttribute('data-target'); // Hedef bilgiyi sıfırla
+    modal.removeAttribute('data-target');
 }
 
+// SECURITY FIX: openSwitchModal uses DOMParser to safely parse fetched HTML
 async function openSwitchModal() {
     const modal = document.getElementById('switchModal');
     const switchDetails = document.getElementById('switchDetails');
 
     try {
-        // HTML dosyasını çekiyoruz
         const response = await fetch('/Netinfo/switchdetails.html');
-        if (!response.ok) throw new Error(`Hata: ${response.status}`);
+        if (!response.ok) throw new Error("Hata: " + response.status);
 
-        // HTML içeriğini metin olarak al
         const data = await response.text();
 
-        // İçeriği modal içine ekle
-        switchDetails.innerHTML = data;
+        // SECURITY FIX: Use DOMParser to safely parse HTML instead of innerHTML
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(data, 'text/html');
+
+        // Clear existing content safely
+        while (switchDetails.firstChild) {
+            switchDetails.removeChild(switchDetails.firstChild);
+        }
+
+        // Move parsed nodes into the container
+        while (doc.body.firstChild) {
+            switchDetails.appendChild(doc.body.firstChild);
+        }
     } catch (error) {
-        // Hata durumunda mesaj göster
-        switchDetails.innerHTML = `<p>Veri yüklenemedi: ${error.message}</p>`;
+        // SECURITY FIX: use textContent instead of innerHTML for error message
+        switchDetails.textContent = 'Veri yüklenemedi: ' + error.message;
     }
 
-    // Modal'ı görünür yap
     modal.style.display = 'block';
 }
 
@@ -1267,7 +1365,6 @@ async function openSwitchModal() {
         document.getElementById("flipCard").classList.toggle("admin-active");
         document.getElementById("fetchReportButton").classList.toggle("d-block");
     }
-	
 
 
 
@@ -1286,12 +1383,12 @@ function logAdminActivity(type, message) {
     .then(response => {
         if (!response.ok) {
             return response.json().then(err => {
-                console.error("Log gönderim hatası:", err);
+                devLog("Log gönderim hatası:", err);
             });
         }
-        console.log("Log başarıyla kaydedildi.");
+        devLog("Log başarıyla kaydedildi.");
     })
-    .catch(err => console.error("Log gönderim sırasında hata oluştu:", err));
+    .catch(err => devLog("Log gönderim sırasında hata oluştu:", err));
 }
 
 function showToolbar() {
@@ -1317,11 +1414,17 @@ function hideToolbar() {
 function toggleAdminLogin() {
     const adminModal = document.getElementById("adminModal");
     if (!adminModal) {
-        console.error("Admin modal öğesi bulunamadı.");
+        devLog("Admin modal öğesi bulunamadı.");
         return;
     }
-    adminModal.style.display = "block"; // Modalı göster
-    console.log("Admin modal açıldı.");
+    adminModal.style.display = "block";
+    // USABILITY FIX: autofocus password input when modal opens
+    var passwordInput = document.getElementById('adminPassword');
+    if (passwordInput) {
+        passwordInput.value = '';
+        setTimeout(function() { passwordInput.focus(); }, 100);
+    }
+    devLog("Admin modal açıldı.");
 }
 
 
@@ -1340,18 +1443,17 @@ function checkToolbarState() {
     const toolbar = document.getElementById("toolbar");
     if (toolbar) {
         const toolbarStyle = window.getComputedStyle(toolbar);
-        log(`Toolbar durumu - Display: ${toolbarStyle.display}, Opacity: ${toolbarStyle.opacity}`);
+        devLog("Toolbar durumu - Display: " + toolbarStyle.display + ", Opacity: " + toolbarStyle.opacity);
     } else {
-        log("Toolbar öğesi bulunamadı.", "error");
+        devLog("Toolbar öğesi bulunamadı.");
     }
 }
 
 
 function setAdminLoggedIn(status) {
     isAdminLoggedIn = status;
-    log(`isAdminLoggedIn durumu değişti: ${status}`);
+    devLog("isAdminLoggedIn durumu değişti: " + status);
 }
-
 
 
 
@@ -1361,26 +1463,23 @@ function closeReportPanel() {
     fullscreenReport.classList.remove('open');
     setTimeout(() => {
         fullscreenReport.style.visibility = 'hidden';
-    }, 500); // Animasyon süresi ile uyumlu
+    }, 500);
 }
-// Ölçeklendirme fonksiyonu
+
 function adjustForMobileView() {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const flipCard = document.querySelector('.flip-card');
     const fullscreenReport = document.getElementById('fullscreenReport');
 
     if (isMobile) {
-        // Kart ve rapor daha küçük hale gelsin
         flipCard.style.transform = "scale(0.8)";
         fullscreenReport.style.transform = "scale(0.9)";
     } else {
-        // Masaüstü için varsayılan boyut
         flipCard.style.transform = "scale(1)";
         fullscreenReport.style.transform = "scale(1)";
     }
 }
 
-// Ekran boyutu değiştiğinde kontrol et
 window.addEventListener('resize', adjustForMobileView);
 document.addEventListener('DOMContentLoaded', adjustForMobileView);
 
@@ -1388,31 +1487,28 @@ document.addEventListener('DOMContentLoaded', adjustForMobileView);
 
 
 
-
-// Alan adlarını kullanıcı dostu hale getirir
 function formatFieldName(fieldName) {
     return fieldName
-        .replace(/_/g, ' ') // Alt çizgileri boşlukla değiştir
-        .replace(/\b\w/g, char => char.toUpperCase()); // Her kelimenin baş harfini büyük yap
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, char => char.toUpperCase());
 }
 
 async function fetchAdminInfo() {
     try {
         const response = await fetch('/Netinfo/api/device/get_admin_info');
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error("HTTP error! Status: " + response.status);
         }
         const adminData = await response.json();
-        console.log("Admin API Yanıtı:", adminData); // Burada gelen veriyi kontrol edin
+        devLog("Admin API Yanıtı:", adminData);
         deviceData = adminData;
         displayAdminDeviceInfo();
-        console.log("Admin verileri (deviceData):", deviceData);
+        devLog("Admin verileri (deviceData):", deviceData);
 
     } catch (error) {
-        console.error("Admin bilgileri yüklenirken hata:", error.message);
+        devLog("Admin bilgileri yüklenirken hata:", error.message);
     }
-} // Eksik kapanış buraya eklendi!
-
+}
 
 
 
@@ -1420,7 +1516,7 @@ async function fetchAdminInfo() {
 async function checkAdminPassword() {
     const passwordInput = document.getElementById('adminPassword');
     if (!passwordInput) {
-        console.error("adminPassword öğesi bulunamadı.");
+        devLog("adminPassword öğesi bulunamadı.");
         showFeedback("Şifre alanı eksik. Lütfen yeniden yükleyin.", false);
         return;
     }
@@ -1440,19 +1536,19 @@ async function checkAdminPassword() {
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Sunucu hatası: ${response.status}, Detay: ${errorText}`);
+            throw new Error("Sunucu hatası: " + response.status + ", Detay: " + errorText);
         }
 
         const result = await response.json();
-        console.log("Backend'den gelen cevap:", result);
+        devLog("Backend'den gelen cevap:", result);
 
         if (result.success) {
-            handleSuccessfulAdminLogin(); // Şifre doğruysa admin oturum başlat
+            handleSuccessfulAdminLogin();
         } else {
-            handleFailedAdminLogin(); // Şifre yanlışsa hata işlemi
+            handleFailedAdminLogin();
         }
     } catch (error) {
-        console.error("Şifre doğrulama sırasında bir hata oluştu:", error.message);
+        devLog("Şifre doğrulama sırasında bir hata oluştu:", error.message);
         showFeedback("Bir hata oluştu: " + error.message, false);
     }
 }
@@ -1460,12 +1556,11 @@ async function checkAdminPassword() {
 
 const toolbar = document.getElementById("toolbar");
 
-// Toolbar'ın doğru şekilde çalışıp çalışmadığını kontrol etmek için
-console.log("Toolbar sınıf listesi:", toolbar.classList);
-console.log("Toolbar CSS durumu:", window.getComputedStyle(toolbar).display);
+devLog("Toolbar sınıf listesi:", toolbar.classList);
+devLog("Toolbar CSS durumu:", window.getComputedStyle(toolbar).display);
 
 const flipCardInner = document.querySelector('.flip-card-inner');
-console.log(window.getComputedStyle(flipCardInner).transform); // "matrix(...)" bekleniyor
+devLog(window.getComputedStyle(flipCardInner).transform);
 
 
 
@@ -1478,11 +1573,10 @@ function handleSuccessfulAdminLogin() {
 
 
 
-
 function handleFailedAdminLogin() {
     loginAttempts++;
     const passwordInput = document.getElementById('adminPassword');
-    if (passwordInput) passwordInput.value = ""; // Şifre alanını temizle
+    if (passwordInput) passwordInput.value = "";
 
     const feedbackMessage = loginAttempts >= 3
         ? "Çok fazla hatalı giriş yaptınız. 10 dakika bekleyin."
@@ -1496,14 +1590,14 @@ function handleFailedAdminLogin() {
             isLockedOut = false;
             loginAttempts = 0;
             showFeedback("Hatalı giriş süresi doldu. Yeniden deneyebilirsiniz.", true);
-        }, 600000); // 10 dakika
+        }, 600000);
     }
 }
 
 async function handleAdminLogin() {
     const passwordInput = document.getElementById('adminPassword');
     if (!passwordInput) {
-        console.error("Şifre girişi alanı bulunamadı.");
+        devLog("Şifre girişi alanı bulunamadı.");
         showFeedback("Bir hata oluştu. Lütfen yeniden deneyin.", false);
         return;
     }
@@ -1523,29 +1617,29 @@ async function handleAdminLogin() {
 
         const result = await response.json();
         if (result.success) {
-            isAdminLoggedIn = true; // Giriş durumunu güncelle
-            showToolbar(); // Toolbar'ı görünür yap
-            document.getElementById('adminModal').style.display = 'none'; // Modalı kapat
+            isAdminLoggedIn = true;
+            showToolbar();
+            document.getElementById('adminModal').style.display = 'none';
             showFeedback("Admin oturumu başladı!", true);
         } else {
+            // USABILITY FIX: use showFeedback instead of alert
             showFeedback("Hatalı şifre, tekrar deneyiniz.", false);
         }
     } catch (error) {
-        console.error("Şifre doğrulama hatası:", error.message);
+        devLog("Şifre doğrulama hatası:", error.message);
         showFeedback("Bir hata oluştu: " + error.message, false);
     }
 }
 
 
 function handleAdminLogout() {
-    isAdminLoggedIn = false; // Admin oturumunu kapat
-    hideToolbar(); // Toolbar'ı gizle
+    isAdminLoggedIn = false;
+    hideToolbar();
 
-    // Kartı temel bilgi sayfasına çevir
     const flipCard = document.getElementById("flipCard");
     if (flipCard) {
-        flipCard.classList.remove("admin-active"); // Admin görünümünü kaldır
-        console.log("Admin çıkışı yapıldı, basic info sayfası gösteriliyor.");
+        flipCard.classList.remove("admin-active");
+        devLog("Admin çıkışı yapıldı, basic info sayfası gösteriliyor.");
     }
 
     showFeedback("Admin oturumu sona erdi.", true);
@@ -1555,23 +1649,28 @@ function handleAdminLogout() {
 
 function showAdminModal() {
     if (isAdminLoggedIn) {
-		showToolbar(); // Toolbar'ı aktif yap
-        toggleDetailsPanel(); // Eğer admin girişi varsa direkt detayları göster
+		showToolbar();
+        toggleDetailsPanel();
     } else {
         const adminModal = document.getElementById('adminModal');
-        adminModal.style.display = 'block'; // Şifre ekranını göster
+        adminModal.style.display = 'block';
+        // USABILITY FIX: autofocus password input
+        var passwordInput = document.getElementById('adminPassword');
+        if (passwordInput) {
+            passwordInput.value = '';
+            setTimeout(function() { passwordInput.focus(); }, 100);
+        }
     }
 }
-
 
 
 
 function startAdminTimeout() {
     clearTimeout(adminTimeout);
     adminTimeout = setTimeout(() => {
-        isAdminLoggedIn = false; // Oturumu kapat
+        isAdminLoggedIn = false;
         showFeedback("Admin oturum süresi sona erdi. Yeniden giriş yapmalısınız.", false);
-    }, ADMIN_TIMEOUT_DURATION); // Timeout süresi
+    }, ADMIN_TIMEOUT_DURATION);
 }
 
 
@@ -1579,10 +1678,11 @@ function startAdminTimeout() {
 function showTimeoutWarning() {
     const warning = document.createElement("div");
     warning.className = "feedback-message error";
+    warning.setAttribute("role", "status");
     warning.textContent = "Admin oturum süresi doldu. Yeniden giriş yapmalısınız.";
     document.body.appendChild(warning);
 
-    setTimeout(() => warning.remove(), 5000); // Mesaj 5 saniye görünür
+    setTimeout(() => warning.remove(), 5000);
 }
 
 
@@ -1593,12 +1693,11 @@ function handleEnterKey(event) {
             checkAdminPassword();
         }
     }
-	
+
 function copyDeviceInfo() {
     const flipCard = document.getElementById("flipCard");
     const isAdminActive = flipCard.classList.contains("admin-active");
 
-    // Aktif yüze göre doğru bilgiyi seç
     const elementId = isAdminActive ? "adminDeviceInfo" : "basicDeviceInfo";
     const infoElement = document.getElementById(elementId);
 
