@@ -1,0 +1,1627 @@
+﻿
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netinfo</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
+    <style>
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #4D148C, #FF6600);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #fefefe;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+	justify-content: flex-start; /* İçeriği yukarı taşı */
+    padding-top: 50px; /* İstenirse ek bir üst boşluk */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Kartı yatay olarak ortala */
+    padding: 20px;
+    margin-top: 10px; /* Üstten ikonların hizasından biraz aşağıda olacak şekilde ayarlayın */
+}
+
+.flip-card {
+    margin: 0 auto; /* Kartı yatayda ortalamak için */
+    width: 80%; /* Daha esnek boyut */
+    max-width: 400px; /* Kartın ekranı taşmasını engeller */
+    perspective: 1200px; /* 3D perspektif */
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.flip-card.admin-active .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card.admin-active .admin-icon {
+    display: none;
+}
+
+.flip-card.admin-active .report-icon {
+    display: flex;
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.flip-card-front {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotateY(0deg);
+}
+
+.flip-card-back {
+    background: rgba(0, 0, 0, 0.8);
+    transform: rotateY(180deg);
+}
+
+.info-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+.info-card {
+    width: 100%; /* Tam genişlik al */
+    max-width: 250px; /* Sabit maksimum genişlik */
+    height: 100px; /* Sabit yükseklik */
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex; /* İçeriği ortala */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.info-card i {
+    font-size: 1.5rem;
+    color: #FFD700;
+    margin-bottom: 5px;
+}
+
+.info-card p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.info-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.copy-icon {
+    position: fixed;
+    top: 15px;
+    right: 140px; /* Admin ve Switch ikonlarının solunda */
+    font-size: 1.5rem;
+    background: rgba(123, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    border-radius: 50%;
+    padding: 12px;
+    color: #FFD700;
+    cursor: pointer;
+    z-index: 1500; /* Diğer elemanların üstünde */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.copy-icon:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.admin-icon {
+    position: fixed;
+    top: 15px;
+    right: 80px; /* Switch ikonuyla çakışmaması için sağdan boşluk */
+    font-size: 1.5rem;
+    background: rgba(123, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    border-radius: 50%;
+    padding: 12px;
+    color: #FFD700;
+    cursor: pointer;
+    z-index: 1500; /* Toolbar ve diğer elemanların üstünde */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.admin-icon:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.switch-icon {
+    position: fixed;
+    top: 15px;
+    right: 20px; /* Admin ikonunun solunda */
+    font-size: 1.5rem;
+    background: rgba(123, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    border-radius: 50%;
+    padding: 12px;
+    color: #FFD700;
+    cursor: pointer;
+    z-index: 1500;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.switch-icon:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.report-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    background: rgba(255, 0, 0, 0.2); /* Saydam kırmızı arka plan */
+    border-radius: 50%;
+    padding: 12px;
+    color: #FFD700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.report-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFA500;
+    transform: scale(1.1);
+}
+
+.modal-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    color: #333;
+    z-index: 2000;
+    text-align: center;
+}
+
+.modal-container input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.modal-container .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #FFD700;
+    transition: transform 0.3s ease;
+}
+
+.modal-container .close-icon:hover {
+    transform: scale(1.2);
+}
+
+.modal-container .warning-message {
+    background: #FFD700;
+    border-radius: 5px;
+    padding: 10px;
+    color: #333;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#switchModal {
+    width: 80%;
+    height: 80%;
+    padding: 20px;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    z-index: 2000;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+#switchModal .close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #FFD700;
+}
+
+#switchDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+#switchDetails img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-container input:focus {
+    outline: none;
+    border: 2px solid #FF4500;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 8px rgba(255, 69, 0, 0.5);
+}
+
+
+
+.report-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    background: linear-gradient(135deg, #24292e, #0366d6);
+    color: #fefefe;
+    padding: 20px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease-in-out;
+    overflow-y: auto;
+    z-index: 1100;
+}
+
+.report-panel.open {
+    right: 0;
+}
+
+.report-panel h3 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #f0db4f;
+    margin-bottom: 20px;
+}
+
+#reportFilters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.table {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#adminModal {
+    filter: none;
+	background: #fff;
+    pointer-events: auto;
+    z-index: 2000;
+}
+
+.feedback-message {
+    position: fixed;
+	bottom: calc(60px + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(50, 50, 50, 0.9); /* Uyumlu bir koyu renk */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1500;
+    animation: feedbackAppear 0.3s ease-out, feedbackDisappear 0.5s ease-in 4.5s; /* Geçiş efektleri */
+}
+
+.feedback-message.success {
+    background: rgba(34, 139, 34, 0.9); /* Yeşil ton */
+}
+
+.feedback-message.error {
+    background: rgba(178, 34, 34, 0.9); /* Kırmızı ton */
+}
+
+.feedback-message:before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgba(50, 50, 50, 0.9);
+}
+
+.feedback-message.success:before {
+    border-top-color: rgba(34, 139, 34, 0.9); /* Başarı için */
+}
+
+.feedback-message.error:before {
+    border-top-color: rgba(178, 34, 34, 0.9); /* Hata için */
+}
+
+/* Efekt */
+@keyframes feedbackAppear {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes feedbackDisappear {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+.feedback-message::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.7);
+    animation: progressBar 5s linear forwards;
+}
+
+@keyframes progressBar {
+    0% {
+        width: 100%;
+        background-color: rgba(50, 205, 50, 0.9); /* Başlangıç rengi */
+    }
+    100% {
+        width: 0;
+        background-color: rgba(255, 69, 0, 0.9); /* Bitim rengi */
+    }
+}
+
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #4D148C, #FF6600);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeOut 1s ease-out 2s forwards;
+}
+
+
+
+.toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(77, 20, 140, 0.9));
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+    padding: 8px 0;
+    border-radius: 12px 12px 0 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateY(100%);
+}
+
+.toolbar.active {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toolbar-item {
+    flex: 0 1 70px; /* Daha küçük ikonlar için */
+    text-align: center;
+    font-size: 0.8rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    padding: 5px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-item:hover {
+    transform: scale(1.1);
+    background: rgba(255, 102, 0, 0.8);
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(255, 102, 0, 0.4);
+}
+
+.toolbar-item:active {
+    transform: scale(0.95);
+    background: rgba(255, 102, 0, 0.6);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.toolbar-item i {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.toolbar-item span {
+    font-size: 0.8rem;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.status-online {
+    background: #12db22;
+}
+
+.status-offline {
+    background: #de370d;
+}
+
+.fedex-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px;
+    height: auto;
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.fedex-logo:hover {
+    transform: scale(1.1);
+}
+
+.fullscreen-report {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #24292e, #0366d6);
+    color: #fefefe;
+    z-index: 3000; /* Yeterince büyük olduğundan emin olun */
+    padding: 20px;
+    transition: visibility 0.3s ease-in-out;
+}
+
+.fullscreen-report.open {
+    visibility: visible;
+}
+
+@media (max-width: 768px) {
+	.info-grid {
+        flex-direction: column; /* Mobilde üst üste sıralama */
+        align-items: center; /* Ortala */
+    }
+
+    .info-card {
+        width: 100%; /* Kartlar tam genişlik alır */
+        padding: 15px;
+    }
+    .toolbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .toolbar-item {
+        flex-basis: 45%; /* Her eleman %45 genişlik alır */
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .toolbar-item i {
+        display: block;
+        font-size: 1.5rem; /* İkon boyutu */
+        margin-bottom: 5px;
+    }
+
+    .toolbar-item span {
+        display: block; /* Metni alt satıra alır */
+        font-size: 0.8rem;
+    }
+}
+
+@media (orientation: landscape) {
+    .container {
+        flex-direction: row; /* Yatayda kartları yan yana sırala */
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .info-card {
+        max-width: 200px; /* Daha küçük kart genişliği */
+    }
+}
+
+
+
+@media (max-width: 480px) {
+    .info-grid {
+        flex-direction: column; /* Mobilde üst üste sıralama */
+        align-items: center; /* Ortala */
+    }
+
+    .info-card {
+        width: 100%; /* Kartlar tam genişlik alır */
+        padding: 15px;
+    }
+    .toolbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .toolbar-item {
+        flex-basis: 45%; /* Her eleman %45 genişlik alır */
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .toolbar-item i {
+        display: block;
+        font-size: 1.5rem; /* İkon boyutu */
+        margin-bottom: 5px;
+    }
+
+    .toolbar-item span {
+        display: block; /* Metni alt satıra alır */
+        font-size: 0.8rem;
+    }
+}
+
+.rotate-warning {
+    position: fixed;
+    bottom: calc(120px + 40px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 69, 0, 0.9);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    z-index: 9999;
+    display: none; /* Varsayılan olarak gizli */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.rotate-warning.active {
+    display: block; /* Uyarıyı görünür yap */
+}
+
+
+
+
+.table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f4f4f4;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.custom-table th, .custom-table td {
+    color: white; /* Metin rengi */
+}
+
+.custom-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.custom-table thead {
+    background: #4D148C;
+    color: white;
+}
+
+
+.custom-table th, .custom-table td {
+    color: #333; /* Okunabilir metin rengi */
+}
+
+.custom-table td {
+    padding: 8px;
+}
+
+.custom-table thead {
+    background: #4D148C;
+    color: white;
+}
+
+.custom-table tr:hover {
+    background: #FF6600;
+    color: white;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.filter-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+
+.filter-input, .filter-select {
+    padding: 8px;
+    font-size: 1rem;
+}
+
+.status-up {
+    color: lightgreen;
+    font-weight: bold;
+}
+
+.status-down {
+    color: red;
+    font-weight: bold;0
+}
+
+
+/* Verisiz durum */
+.no-data {
+    text-align: center;
+    font-size: 1rem;
+    color: #999;
+    margin: 15px 0;
+}
+
+.no-data i {
+    font-size: 1.5rem;
+    color: #FF6600;
+    margin-bottom: 5px;
+}
+
+#closeTableIcon {
+    position: absolute;
+    top: 10px; /* Daha alta taşımak için artırıldı */
+    right: 15px; /* Daha sola taşımak için azaltıldı */
+    font-size: 2.5rem;
+    color: #333333; /* Daha koyu renk (koyu gri) */
+    cursor: pointer;
+    z-index: 3000; /* Tablo üstünde olmasını sağlar */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+#closeTableIcon:hover {
+    color: #555555; /* Hover sırasında biraz daha açık bir gri */
+    transform: scale(1.2); /* Hafif büyütme efekti */
+}
+
+
+
+/* Close button */
+.close-button {
+    font-size: 1.2rem;
+    color: #FF6600;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #FF4500;
+    transform: scale(1.2);
+}
+
+.report-header {
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+    color: #4D148C;
+    background: linear-gradient(135deg, #FF6600, #FFD700);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.device-name {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+@keyframes shine {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: 200px 0;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    
+	<!-- Switch İkonu -->
+<i class="fas fa-sitemap switch-icon" id="switchIcon" title="Switch Paneli"></i>
+
+<i class="fas fa-user-shield admin-icon" id="adminIcon" title="Admin Paneli"></i>
+
+<i class="fas fa-copy copy-icon" id="copyIcon" title="Bilgileri Kopyala"></i>
+
+
+<!-- Modal Overlay -->
+<div class="modal-overlay" id="modalOverlay"></div>
+
+
+<div class="container">
+        <div id="flipCard" class="flip-card">
+            <div class="flip-card-inner">
+                <!-- Ön Yüz -->
+                <div class="flip-card-front">
+                    <h2>Cihaz Bilgileri</h2>
+                    <div id="basicDeviceInfo" class="info-grid">
+                        <!-- Data kartları buraya gelecek -->
+                    </div>
+                </div>
+                <!-- Arka Yüz -->
+                <div class="flip-card-back">
+                    <h2>Admin Paneli</h2>
+                    <div id="adminDeviceInfo" class="info-grid">
+                        <!-- Admin dataları buraya gelecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<div class="toolbar" id="toolbar">
+    <div id="detailsButton" class="toolbar-item" onclick="toggleDetailsPanel()">
+        <i class="fas fa-info-circle"></i>
+    </div>
+    <div id="portTableButton" class="toolbar-item" onclick="openPortTable()">
+    <i class="fas fa-table"></i>
+</div>
+    <div id="logoutButton" class="toolbar-item" onclick="handleAdminLogout()">
+        <i class="fas fa-sign-out-alt"></i>
+    </div>
+</div>
+
+
+
+
+<div id="rotateWarning" class="rotate-warning">
+    Daha iyi bir deneyim için cihazınızı yatay moda çevirin.
+</div>
+
+
+
+<!-- Yükleme Ekranı -->
+<div class="loading-screen">
+    <img src="https://tr.eu.fedex.com/fedex_logo.png" alt="FedEx Logo">
+</div>
+
+
+<!-- Tam Ekran Rapor -->
+<div class="fullscreen-report" id="fullscreenReport">
+	<i class="fas fa-times close-icon" id="closeTableIcon" title="Kapat"></i>
+    <div class="report-content" id="reportContent">
+        <!-- Tablo içeriği buraya gelecek -->
+    </div>
+</div>
+
+
+
+
+
+<!-- Admin Modal -->
+<div class="modal-container" id="adminModal" style="display:none;">
+    <span class="close-icon" onclick="document.getElementById('adminModal').style.display='none'">X</span>
+    <h4>Admin Girişi</h4>
+    <input type="password" id="adminPassword" placeholder="Şifreyi Girin">
+    <button class="btn btn-primary" onclick="handleAdminLogin()">Giriş Yap</button>
+    <div class="warning-message">
+        <i class="fas fa-exclamation-circle"></i> Bu alana sadece yetkili kullanıcılar erişebilir.
+    </div>
+</div>
+
+
+
+
+<!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    let deviceData = null;
+    let loginAttempts = 0;
+    let adminTimeout;
+    let isLockedOut = false;
+	let isAdminLoggedIn = false; // Admin giriş durumu
+	let portData = null;
+	let deviceModel  = null;
+	const ADMIN_TIMEOUT_DURATION = 120000; // Admin oturum süresi (2 dakika)
+	const searchInput = document.getElementById('searchInput');
+	const statusFilter = document.getElementById('statusFilter');
+	
+	document.getElementById("switchIcon").style.display = "block";
+document.addEventListener('DOMContentLoaded', function() {
+    const switchIcon = document.getElementById('switchIcon');
+    if (switchIcon) {
+        switchIcon.addEventListener('click', function() {
+            window.location.href = "/Netinfo/switchDetails.html";
+        });
+    } else {
+        console.error("Element with id 'switchIcon' not found.");
+    }
+});
+
+if (!isAdminLoggedIn) {
+    console.log("Toolbar is inactive as admin login has not occurred.");
+}
+
+
+
+if (!searchInput || !statusFilter) {
+    console.warn("Arama veya filtreleme alanları bulunamadı. Bu özellik atlanacak.");
+} else {
+    searchInput.addEventListener('input', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+}
+
+
+
+document.getElementById('copyIcon').addEventListener('click', function () {
+    const infoCards = document.querySelectorAll('.info-card');
+    if (!infoCards.length) {
+        showFeedback("Kopyalanacak bilgi bulunamadı.", false);
+        return;
+    }
+
+    let textToCopy = Array.from(infoCards)
+        .map(card => card.textContent.trim())
+        .join('\n'); // Bilgileri birleştir
+
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            showFeedback("Bilgiler başarıyla kopyalandı!", true);
+        })
+        .catch(() => {
+            showFeedback("Bilgiler kopyalanamadı.", false);
+        });
+});
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const loadingScreen = document.querySelector('.loading-screen');
+    const params = new URLSearchParams(window.location.search);
+    const deviceId = params.get('id');
+    const basicDeviceInfoDiv = document.getElementById('basicDeviceInfo');
+    const reportContentDiv = document.getElementById('reportContent');
+const switchIcon = document.getElementById("switchIcon");
+console.log(switchIcon); // HTML elementi döndürmelidir.
+console.log(window.getComputedStyle(switchIcon).display); // "block" dönerse görünürdür.
+console.log(window.getComputedStyle(switchIcon).visibility); // "visible" dönerse görünürdür.
+const supportedModels = [
+        "C9300-24P",
+        "C9300-48P",
+        "ISR4351/K9",
+        "WS-C3850-48F-E",
+        "WS-C3850-24P-S",
+        "C9500-24Y4C",
+        "C9300L-24T-4G",
+        "WS-C2960X-48FPS-L"
+    ];
+	
+	console.log("Device Model:", deviceModel);
+
+    const switchModal = document.getElementById("switchModal");
+
+
+    // Yükleme ekranını 2 saniye sonra kaldır
+    setTimeout(async () => {
+        loadingScreen.style.display = 'none';
+
+        if (!deviceId) {
+            basicDeviceInfoDiv.textContent = "Cihaz ID'si belirtilmemiş.";
+            reportContentDiv.textContent = "Rapor verisi için cihaz ID gerekli.";
+            return;
+        }
+
+        
+
+        
+    }, 2000); // 2 saniye bekleme (animasyon süresi)
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(window.location.search);
+    const deviceId = params.get('id');
+
+    if (!deviceId) {
+        console.error("Cihaz ID belirtilmemiş.");
+        return;
+    }
+
+    // Veri çek
+    deviceData = await fetchDeviceData(deviceId);
+
+    // Veri kontrolü ve görüntüleme
+    if (deviceData) {
+        displayAdminDeviceInfo();
+    } else {
+        console.error("Cihaz verisi bulunamadı veya yüklenemedi.");
+    }
+});
+
+
+function openPortTable() {
+    const modal = document.getElementById('portTableModal');
+    const portTableContent = document.getElementById('portTableContent');
+
+    // JSON'dan port verilerini alıp tablo oluştur
+    const ports = deviceData.ports || [];
+    portTableContent.innerHTML = ports.map(port => `
+        <div>
+            <p>Port: ${port.name}</p>
+            <p>Durum: ${port.status}</p>
+        </div>
+    `).join('');
+    modal.style.display = 'block';
+}
+
+function closePortTable() {
+    document.getElementById('portTableModal').style.display = 'none';
+}
+
+function toggleDetailsPanel() {
+    const flipCard = document.getElementById("flipCard");
+
+    if (isAdminLoggedIn) {
+        if (flipCard.classList.contains("admin-active")) {
+            // Admin paneli açıkken tekrar basılırsa basic info ekranına dön
+            flipCard.classList.remove("admin-active"); 
+            displayBasicDeviceInfo(); // Temel cihaz bilgilerini göster
+        } else {
+            // Admin panelini aç
+            flipCard.classList.add("admin-active");
+            displayAdminDeviceInfo(); // Admin detaylarını yükle
+            showToolbar(); // Toolbar'ı göster
+        }
+    } else {
+        // Admin giriş yapılmamışsa temel bilgi ekranını yükle
+        showFeedback("Admin oturumu başlatılmamış. Giriş yapmalısınız.", false);
+        displayBasicDeviceInfo(); // Temel cihaz bilgilerini göster
+    }
+}
+
+const switchIcon = document.getElementById("switchIcon");
+
+
+
+
+		
+function showFeedback(message, isSuccess) {
+    const feedbackContainer = document.createElement("div");
+    feedbackContainer.className = `feedback-message ${isSuccess ? "success" : "error"}`;
+    feedbackContainer.textContent = message;
+
+    document.body.appendChild(feedbackContainer);
+
+    setTimeout(() => {
+        feedbackContainer.remove();
+    }, 5000); // 5 saniye sonra mesajı kaldırır
+}
+
+document.getElementById("switchIcon").addEventListener("click", openSwitchModal);
+document.getElementById("copyIcon").addEventListener("click", copyDeviceInfo);
+document.getElementById("adminIcon").addEventListener("click", toggleAdminLogin);
+document.getElementById("closeTableIcon").addEventListener("click", function () {
+    const fullscreenReport = document.getElementById("fullscreenReport");
+    if (fullscreenReport) {
+        fullscreenReport.classList.remove("open");
+        fullscreenReport.style.visibility = "hidden";
+    }
+    console.log("Tablo ekranı kapatıldı.");
+});
+
+async function fetchDeviceData(id) {
+   if (!id) {
+       console.error("ID is required.");
+       return null;
+   }
+
+   const url = `/Netinfo/api/device/get_device_info?id=${id}`;
+   try {
+       const response = await fetch(url);
+       if (!response.ok) {
+           throw new Error(`HTTP error! status: ${response.status}`);
+       }
+       return await response.json();
+   } catch (error) {
+       console.error(`Error fetching device data for ID ${id}: ${error.message}`);
+       return null;
+   }
+}
+
+
+
+async function getDeviceDataAsync(id) {
+   const deviceData = await fetchDeviceData(id);
+   if (deviceData) {
+       displayBasicDeviceInfo(deviceData); // Cihaz bilgilerini gösterme fonksiyonu
+   }
+}
+
+
+
+
+function checkOrientationAndWarn() {
+    const rotateWarning = document.getElementById('rotateWarning');
+    if (window.matchMedia("(orientation: portrait)").matches) {
+        // Dikey moddaysa uyarıyı göster
+        rotateWarning.classList.add('active');
+    } else {
+        // Yatay moddaysa uyarıyı gizle
+        rotateWarning.classList.remove('active');
+    }
+}
+
+// Ekran yönü değiştiğinde kontrol et
+window.addEventListener('resize', checkOrientationAndWarn);
+document.addEventListener('DOMContentLoaded', checkOrientationAndWarn);
+
+
+
+
+
+  function displayBasicDeviceInfo(device) {
+    const basicDeviceInfoDiv = document.getElementById('basicDeviceInfo');
+    basicDeviceInfoDiv.innerHTML = `
+        <div class="info-card"><i class="fas fa-server"></i><p>Hostname: ${device.hostname}</p></div>
+        <div class="info-card"><i class="fas fa-network-wired"></i><p>IP Adresi: ${device.ipaddress}</p></div>
+        <div class="info-card"><i class="fas fa-signal"></i><p>Durum: ${device.status}</p></div>
+    `;
+}
+
+function displayAdminDeviceInfo() {
+    const adminDeviceInfoDiv = document.getElementById('adminDeviceInfo');
+    if (!adminDeviceInfoDiv) {
+        console.error("adminDeviceInfo öğesi bulunamadı.");
+        return;
+    }
+
+    // `deviceData` kontrolü
+    if (!deviceData) {
+        console.error("Cihaz verisi bulunamadı.");
+        adminDeviceInfoDiv.innerHTML = '<p>Cihaz verisi yüklenemedi.</p>';
+        return;
+    }
+
+    adminDeviceInfoDiv.innerHTML = ''; // İçeriği temizle
+    const adminFields = [
+        { field: "hostname", label: "Hostname", icon: "fa-server" },
+        { field: "serial", label: "Serial", icon: "fa-barcode" },
+        { field: "ipaddress", label: "IP Adresi", icon: "fa-network-wired" },
+        { field: "model", label: "Model", icon: "fa-microchip" },
+        { field: "uptime", label: "Uptime", icon: "fa-clock" }
+    ];
+
+    adminFields.forEach(({ field, label, icon }) => {
+        if (deviceData[field] !== undefined) {
+            const card = document.createElement('div');
+            card.className = 'info-card';
+            card.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <p><strong>${label}:</strong> ${deviceData[field]}</p>
+            `;
+            adminDeviceInfoDiv.appendChild(card);
+        } else {
+            console.warn(`${label} alanı eksik.`);
+        }
+    });
+}
+
+
+
+function closeSwitchModal() {
+    const modal = document.getElementById("switchModal");
+    modal.style.opacity = "0"; // Kapatma animasyonu
+    setTimeout(() => {
+        modal.style.display = "none";
+        modal.style.opacity = "1"; // Varsayılan opacity'ye geri dön
+    }, 300); // Animasyon süresi
+}
+
+
+
+
+
+
+function closeAdminModal() {
+    const modal = document.getElementById('adminModal');
+    modal.style.display = 'none';
+    modal.removeAttribute('data-target'); // Hedef bilgiyi sıfırla
+}
+
+async function openSwitchModal() {
+    const modal = document.getElementById('switchModal');
+    const switchDetails = document.getElementById('switchDetails');
+
+    try {
+        // HTML dosyasını çekiyoruz
+        const response = await fetch('/Netinfo/switchdetails.html');
+        if (!response.ok) throw new Error(`Hata: ${response.status}`);
+
+        // HTML içeriğini metin olarak al
+        const data = await response.text();
+
+        // İçeriği modal içine ekle
+        switchDetails.innerHTML = data;
+    } catch (error) {
+        // Hata durumunda mesaj göster
+        switchDetails.innerHTML = `<p>Veri yüklenemedi: ${error.message}</p>`;
+    }
+
+    // Modal'ı görünür yap
+    modal.style.display = 'block';
+}
+
+
+
+
+    function flipCard() {
+        document.getElementById("flipCard").classList.toggle("admin-active");
+        document.getElementById("fetchReportButton").classList.toggle("d-block");
+    }
+	
+
+
+
+
+
+function logAdminActivity(type, message) {
+    fetch('/Netinfo/api/log/admin_activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            activity: type,
+            message: message,
+            timestamp: new Date().toISOString(),
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                console.error("Log gönderim hatası:", err);
+            });
+        }
+        console.log("Log başarıyla kaydedildi.");
+    })
+    .catch(err => console.error("Log gönderim sırasında hata oluştu:", err));
+}
+
+function showToolbar() {
+    const toolbar = document.getElementById('toolbar');
+    if (toolbar) {
+        toolbar.classList.add('active');
+        toolbar.style.visibility = 'visible';
+        toolbar.style.opacity = '1';
+    }
+}
+
+function hideToolbar() {
+    const toolbar = document.getElementById('toolbar');
+    if (toolbar) {
+        toolbar.classList.remove('active');
+        toolbar.style.visibility = 'hidden';
+        toolbar.style.opacity = '0';
+    }
+}
+
+
+
+function toggleAdminLogin() {
+    const adminModal = document.getElementById("adminModal");
+    if (!adminModal) {
+        console.error("Admin modal öğesi bulunamadı.");
+        return;
+    }
+    adminModal.style.display = "block"; // Modalı göster
+    console.log("Admin modal açıldı.");
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (isAdminLoggedIn) {
+        showToolbar();
+    } else {
+        hideToolbar();
+    }
+});
+
+
+function checkToolbarState() {
+    const toolbar = document.getElementById("toolbar");
+    if (toolbar) {
+        const toolbarStyle = window.getComputedStyle(toolbar);
+        log(`Toolbar durumu - Display: ${toolbarStyle.display}, Opacity: ${toolbarStyle.opacity}`);
+    } else {
+        log("Toolbar öğesi bulunamadı.", "error");
+    }
+}
+
+
+function setAdminLoggedIn(status) {
+    isAdminLoggedIn = status;
+    log(`isAdminLoggedIn durumu değişti: ${status}`);
+}
+
+
+
+
+
+function closeReportPanel() {
+    const fullscreenReport = document.getElementById('fullscreenReport');
+    fullscreenReport.classList.remove('open');
+    setTimeout(() => {
+        fullscreenReport.style.visibility = 'hidden';
+    }, 500); // Animasyon süresi ile uyumlu
+}
+// Ölçeklendirme fonksiyonu
+function adjustForMobileView() {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const flipCard = document.querySelector('.flip-card');
+    const fullscreenReport = document.getElementById('fullscreenReport');
+
+    if (isMobile) {
+        // Kart ve rapor daha küçük hale gelsin
+        flipCard.style.transform = "scale(0.8)";
+        fullscreenReport.style.transform = "scale(0.9)";
+    } else {
+        // Masaüstü için varsayılan boyut
+        flipCard.style.transform = "scale(1)";
+        fullscreenReport.style.transform = "scale(1)";
+    }
+}
+
+// Ekran boyutu değiştiğinde kontrol et
+window.addEventListener('resize', adjustForMobileView);
+document.addEventListener('DOMContentLoaded', adjustForMobileView);
+
+
+
+
+
+
+// Alan adlarını kullanıcı dostu hale getirir
+function formatFieldName(fieldName) {
+    return fieldName
+        .replace(/_/g, ' ') // Alt çizgileri boşlukla değiştir
+        .replace(/\b\w/g, char => char.toUpperCase()); // Her kelimenin baş harfini büyük yap
+}
+
+async function fetchAdminInfo() {
+    try {
+        const response = await fetch('/Netinfo/api/device/get_admin_info');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const adminData = await response.json();
+        console.log("Admin API Yanıtı:", adminData); // Burada gelen veriyi kontrol edin
+        deviceData = adminData;
+        displayAdminDeviceInfo();
+        console.log("Admin verileri (deviceData):", deviceData);
+
+    } catch (error) {
+        console.error("Admin bilgileri yüklenirken hata:", error.message);
+    }
+} // Eksik kapanış buraya eklendi!
+
+
+
+
+
+async function checkAdminPassword() {
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) {
+        console.error("adminPassword öğesi bulunamadı.");
+        showFeedback("Şifre alanı eksik. Lütfen yeniden yükleyin.", false);
+        return;
+    }
+
+    const passwordValue = passwordInput.value;
+    if (!passwordValue) {
+        showFeedback("Şifre alanı boş bırakılamaz.", false);
+        return;
+    }
+
+    try {
+        const response = await fetch('/Netinfo/api/environment/validate_admin_password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: passwordValue }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Sunucu hatası: ${response.status}, Detay: ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log("Backend'den gelen cevap:", result);
+
+        if (result.success) {
+            handleSuccessfulAdminLogin(); // Şifre doğruysa admin oturum başlat
+        } else {
+            handleFailedAdminLogin(); // Şifre yanlışsa hata işlemi
+        }
+    } catch (error) {
+        console.error("Şifre doğrulama sırasında bir hata oluştu:", error.message);
+        showFeedback("Bir hata oluştu: " + error.message, false);
+    }
+}
+
+
+const toolbar = document.getElementById("toolbar");
+
+// Toolbar'ın doğru şekilde çalışıp çalışmadığını kontrol etmek için
+console.log("Toolbar sınıf listesi:", toolbar.classList);
+console.log("Toolbar CSS durumu:", window.getComputedStyle(toolbar).display);
+
+const flipCardInner = document.querySelector('.flip-card-inner');
+console.log(window.getComputedStyle(flipCardInner).transform); // "matrix(...)" bekleniyor
+
+
+
+function handleSuccessfulAdminLogin() {
+    isAdminLoggedIn = true;
+    showToolbar();
+    showFeedback("Admin girişi başarılı!", true);
+}
+
+
+
+
+
+function handleFailedAdminLogin() {
+    loginAttempts++;
+    const passwordInput = document.getElementById('adminPassword');
+    if (passwordInput) passwordInput.value = ""; // Şifre alanını temizle
+
+    const feedbackMessage = loginAttempts >= 3
+        ? "Çok fazla hatalı giriş yaptınız. 10 dakika bekleyin."
+        : "Hatalı şifre, lütfen tekrar deneyiniz.";
+
+    showFeedback(feedbackMessage, false);
+
+    if (loginAttempts >= 3) {
+        isLockedOut = true;
+        setTimeout(() => {
+            isLockedOut = false;
+            loginAttempts = 0;
+            showFeedback("Hatalı giriş süresi doldu. Yeniden deneyebilirsiniz.", true);
+        }, 600000); // 10 dakika
+    }
+}
+
+async function handleAdminLogin() {
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) {
+        console.error("Şifre girişi alanı bulunamadı.");
+        showFeedback("Bir hata oluştu. Lütfen yeniden deneyin.", false);
+        return;
+    }
+
+    const password = passwordInput.value;
+    if (!password) {
+        showFeedback("Şifre alanı boş bırakılamaz.", false);
+        return;
+    }
+
+    try {
+        const response = await fetch('/Netinfo/api/environment/validate_admin_password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: password }),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            isAdminLoggedIn = true; // Giriş durumunu güncelle
+            showToolbar(); // Toolbar'ı görünür yap
+            document.getElementById('adminModal').style.display = 'none'; // Modalı kapat
+            showFeedback("Admin oturumu başladı!", true);
+        } else {
+            showFeedback("Hatalı şifre, tekrar deneyiniz.", false);
+        }
+    } catch (error) {
+        console.error("Şifre doğrulama hatası:", error.message);
+        showFeedback("Bir hata oluştu: " + error.message, false);
+    }
+}
+
+
+function handleAdminLogout() {
+    isAdminLoggedIn = false; // Admin oturumunu kapat
+    hideToolbar(); // Toolbar'ı gizle
+
+    // Kartı temel bilgi sayfasına çevir
+    const flipCard = document.getElementById("flipCard");
+    if (flipCard) {
+        flipCard.classList.remove("admin-active"); // Admin görünümünü kaldır
+        console.log("Admin çıkışı yapıldı, basic info sayfası gösteriliyor.");
+    }
+
+    showFeedback("Admin oturumu sona erdi.", true);
+}
+
+
+
+function showAdminModal() {
+    if (isAdminLoggedIn) {
+		showToolbar(); // Toolbar'ı aktif yap
+        toggleDetailsPanel(); // Eğer admin girişi varsa direkt detayları göster
+    } else {
+        const adminModal = document.getElementById('adminModal');
+        adminModal.style.display = 'block'; // Şifre ekranını göster
+    }
+}
+
+
+
+
+function startAdminTimeout() {
+    clearTimeout(adminTimeout);
+    adminTimeout = setTimeout(() => {
+        isAdminLoggedIn = false; // Oturumu kapat
+        showFeedback("Admin oturum süresi sona erdi. Yeniden giriş yapmalısınız.", false);
+    }, ADMIN_TIMEOUT_DURATION); // Timeout süresi
+}
+
+
+
+function showTimeoutWarning() {
+    const warning = document.createElement("div");
+    warning.className = "feedback-message error";
+    warning.textContent = "Admin oturum süresi doldu. Yeniden giriş yapmalısınız.";
+    document.body.appendChild(warning);
+
+    setTimeout(() => warning.remove(), 5000); // Mesaj 5 saniye görünür
+}
+
+
+
+
+function handleEnterKey(event) {
+        if (event.key === "Enter") {
+            checkAdminPassword();
+        }
+    }
+	
+function copyDeviceInfo() {
+    const flipCard = document.getElementById("flipCard");
+    const isAdminActive = flipCard.classList.contains("admin-active");
+
+    // Aktif yüze göre doğru bilgiyi seç
+    const elementId = isAdminActive ? "adminDeviceInfo" : "basicDeviceInfo";
+    const infoElement = document.getElementById(elementId);
+
+    if (!infoElement || !infoElement.children.length) {
+        showFeedback("Kopyalanacak bilgi bulunamadı.", false);
+        return;
+    }
+
+    let textToCopy = Array.from(infoElement.querySelectorAll(".info-card"))
+        .map(card => card.textContent.trim())
+        .join("\n");
+
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            showFeedback("Bilgiler başarıyla kopyalandı!", true);
+        })
+        .catch(() => {
+            showFeedback("Bilgiler kopyalanamadı.", false);
+        });
+}
+
+</script>
+
+
+</body>
+</html>

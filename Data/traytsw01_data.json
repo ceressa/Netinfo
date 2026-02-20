@@ -1,0 +1,1179 @@
+{
+  "device_info": {
+    "vendor": "Cisco",
+    "uptime": 10743780,
+    "uptime_string": "17 weeks, 5 days, 8 hours, 23 minutes",
+    "model": "C9300-24P",
+    "hostname": "TrASR1117sw01",
+    "fqdn": "TrASR1117sw01.netdb.fedex.com",
+    "os_version": "17.3.6",
+    "serial_number": "FOC2345X17K",
+    "operation_mode": "autonomous",
+    "interface_list": [
+      "Vlan1",
+      "GigabitEthernet0/0",
+      "GigabitEthernet1/0/1",
+      "GigabitEthernet1/0/2",
+      "GigabitEthernet1/0/3",
+      "GigabitEthernet1/0/4",
+      "GigabitEthernet1/0/5",
+      "GigabitEthernet1/0/6",
+      "GigabitEthernet1/0/7",
+      "GigabitEthernet1/0/8",
+      "GigabitEthernet1/0/9",
+      "GigabitEthernet1/0/10",
+      "GigabitEthernet1/0/11",
+      "GigabitEthernet1/0/12",
+      "GigabitEthernet1/0/13",
+      "GigabitEthernet1/0/14",
+      "GigabitEthernet1/0/15",
+      "GigabitEthernet1/0/16",
+      "GigabitEthernet1/0/17",
+      "GigabitEthernet1/0/18",
+      "GigabitEthernet1/0/19",
+      "GigabitEthernet1/0/20",
+      "GigabitEthernet1/0/21",
+      "GigabitEthernet1/0/22",
+      "GigabitEthernet1/0/23",
+      "GigabitEthernet1/0/24",
+      "GigabitEthernet1/1/1",
+      "GigabitEthernet1/1/2",
+      "GigabitEthernet1/1/3",
+      "GigabitEthernet1/1/4",
+      "TenGigabitEthernet1/1/1",
+      "TenGigabitEthernet1/1/2",
+      "TenGigabitEthernet1/1/3",
+      "TenGigabitEthernet1/1/4",
+      "TenGigabitEthernet1/1/5",
+      "TenGigabitEthernet1/1/6",
+      "TenGigabitEthernet1/1/7",
+      "TenGigabitEthernet1/1/8",
+      "FortyGigabitEthernet1/1/1",
+      "FortyGigabitEthernet1/1/2",
+      "TwentyFiveGigE1/1/1",
+      "TwentyFiveGigE1/1/2",
+      "AppGigabitEthernet1/0/1"
+    ]
+  },
+  "last_updated": "2024-12-25 16:59:40",
+  "ports": [
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "Vlan1",
+      "description": "trasre01 Management LAN",
+      "connected_macs": "",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up , Autostate Enabled",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.06,
+      "input_packets": 2331113,
+      "output_packets": 185468145
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet0/0",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "administratively down",
+      "is_up": false,
+      "protocol_status": "down",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mbps",
+      "duplex": "Full Duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 16
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/1",
+      "description": "Uplink to trasrr01 router",
+      "connected_macs": "68:87:c6:e3:3c:51 (Cisco Systems, Inc), 68:87:c6:e3:3c:51 (Cisco Systems, Inc), 68:87:c6:e3:3c:51 (Cisco Systems, Inc)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.8,
+      "output_rate_mbps": 0.18,
+      "input_packets": 438262793,
+      "output_packets": 396822512
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/2",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/3",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "10Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.01,
+      "output_rate_mbps": 0.03,
+      "input_packets": 64151788,
+      "output_packets": 73146488
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/4",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "e4:54:e8:66:c8:2c (Dell Inc.)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.01,
+      "output_rate_mbps": 0.06,
+      "input_packets": 65923632,
+      "output_packets": 77651042
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/5",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "6c:2b:59:f5:0b:62 (Dell Inc.)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.01,
+      "output_rate_mbps": 0.05,
+      "input_packets": 74124003,
+      "output_packets": 86745836
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/6",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "100Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 1180105,
+      "output_packets": 14598307
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/7",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "00:03:2d:28:4b:90 (IBASE Technology, Inc.)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 4823434,
+      "output_packets": 13452881
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/8",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 51335726,
+      "output_packets": 58231976
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/9",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "58:38:79:4e:4b:74 (RICOH COMPANY, LTD.)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "100Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 2369103,
+      "output_packets": 15496495
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/10",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/11",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 82,
+      "output_packets": 1002
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/12",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/13",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/14",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/15",
+      "description": "### LAN ORANGE ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/16",
+      "description": "### LAN Purple ###",
+      "connected_macs": "78:b8:d6:26:8b:9d (Zebra Technologies Inc.), 78:b8:d6:26:8b:9e (Zebra Technologies Inc.), 78:b8:d6:26:8b:9f (Zebra Technologies Inc.), 78:b8:d6:26:8b:a0 (Zebra Technologies Inc.)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 25160839,
+      "output_packets": 26722543
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/17",
+      "description": "### LAN Purple ###",
+      "connected_macs": "10:e7:c6:4e:b5:01 (Hewlett Packard)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "100Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.01,
+      "input_packets": 33400493,
+      "output_packets": 45231874
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/18",
+      "description": "### LAN Purple ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/19",
+      "description": "### LAN Purple ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/20",
+      "description": "### LAN Purple ###",
+      "connected_macs": "",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 139988,
+      "output_packets": 9650023
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/21",
+      "description": "### LAN Purple ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/22",
+      "description": "### LAN Purple ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 11154,
+      "output_packets": 12738
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/23",
+      "description": "### AP ###",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/0/24",
+      "description": "### AP ###",
+      "connected_macs": "48:9b:d5:b2:39:24 (Extreme Networks, Inc.), c8:1c:fe:17:8b:3f (Zebra Technologies Inc.), c8:1c:fe:17:8c:27 (Zebra Technologies Inc.), c8:1c:fe:17:8d:e5 (Zebra Technologies Inc.), c8:1c:fe:17:8e:1d (Zebra Technologies Inc.), c8:1c:fe:27:46:89 (Zebra Technologies Inc.), c8:1c:fe:27:4b:f9 (Zebra Technologies Inc.), c8:1c:fe:27:50:39 (Zebra Technologies Inc.), c8:1c:fe:27:51:ff (Zebra Technologies Inc.), c8:1c:fe:27:52:c1 (Zebra Technologies Inc.), c8:1c:fe:27:55:29 (Zebra Technologies Inc.)",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.1,
+      "output_rate_mbps": 0.63,
+      "input_packets": 139755131,
+      "output_packets": 242266663
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/1/1",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/1/2",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/1/3",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "GigabitEthernetgabitEthernet1/1/4",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "Auto-speed",
+      "duplex": "Auto-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/1",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/2",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/3",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/4",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/5",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/6",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/7",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TenGigabitEthernet1/1/8",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "FortyGigabitEthernet1/1/1",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "FortyGigabitEthernet1/1/2",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TwentyFiveGigE1/1/1",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "TwentyFiveGigE1/1/2",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "down",
+      "is_up": false,
+      "protocol_status": "down (notconnect)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": null,
+      "duplex": null,
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 0
+    },
+    {
+      "deviceid": "N/A",
+      "hostname": "TrASR1117sw01",
+      "interface_name": "AppGigabitEthernet1/0/1",
+      "description": "",
+      "connected_macs": "",
+      "link_status": "up",
+      "is_up": true,
+      "protocol_status": "up (connected)",
+      "vlans": [
+        {
+          "vlan_id": "N/A",
+          "vlan_name": "N/A",
+          "status": "N/A"
+        }
+      ],
+      "speed": "1000Mb/s",
+      "duplex": "Full-duplex",
+      "neighbor_hostname": "N/A",
+      "neighbor_port": "N/A",
+      "neighbor_relation": "Alt",
+      "input_rate_mbps": 0.0,
+      "output_rate_mbps": 0.0,
+      "input_packets": 0,
+      "output_packets": 13597675
+    }
+  ]
+}

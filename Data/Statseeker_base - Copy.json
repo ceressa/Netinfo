@@ -1,0 +1,802 @@
+[
+  {
+    "id":7205307,
+    "deviceid":7205307,
+    "hostname":"TrIST-1104vz01",
+    "ipaddress":"10.43.79.86",
+    "ping_state":"up",
+    "serial":"FDO2546M016",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998891,
+    "deviceid":21998891,
+    "hostname":"TrISTT8sw03",
+    "ipaddress":"10.200.33.43",
+    "ping_state":"up",
+    "serial":"FCW2415D01R",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998892,
+    "deviceid":21998892,
+    "hostname":"TrCHO1104sw06",
+    "ipaddress":"10.206.132.75",
+    "ping_state":"up",
+    "serial":"FOC1920X0UW",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998893,
+    "deviceid":21998893,
+    "hostname":"TrCHO1104sw05",
+    "ipaddress":"10.206.132.74",
+    "ping_state":"up",
+    "serial":"FOC1920X17T",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998894,
+    "deviceid":21998894,
+    "hostname":"TrCHO1104sw03",
+    "ipaddress":"10.206.132.72",
+    "ping_state":"up",
+    "serial":"FCW1929C096",
+    "model":"WS-C3850-24P-S",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998899,
+    "deviceid":21998899,
+    "hostname":"TrCHO1104sw07",
+    "ipaddress":"10.206.132.76",
+    "ping_state":"up",
+    "serial":"FOC1921U00T",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998899,
+    "deviceid":21998899,
+    "hostname":"TrCHO1104sw07",
+    "ipaddress":"10.206.132.76",
+    "ping_state":"up",
+    "serial":"FOC1920X0V6",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998902,
+    "deviceid":21998902,
+    "hostname":"TrISTT8csw02",
+    "ipaddress":"10.200.33.3",
+    "ping_state":"up",
+    "serial":"CAT2424L0YY",
+    "model":"C9500-24Y4C",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998904,
+    "deviceid":21998904,
+    "hostname":"TrSAW1105sw02",
+    "ipaddress":"10.206.155.2",
+    "ping_state":"up",
+    "serial":"FCW2345G11U",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998908,
+    "deviceid":21998908,
+    "hostname":"TrCHO1104csw02",
+    "ipaddress":"10.206.132.3",
+    "ping_state":"up",
+    "serial":"FOC1920X17R",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998910,
+    "deviceid":21998910,
+    "hostname":"TrSAW1105sw05",
+    "ipaddress":"10.206.155.5",
+    "ping_state":"up",
+    "serial":"FOC2350X0JN",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998911,
+    "deviceid":21998911,
+    "hostname":"TrCHO1104sw13",
+    "ipaddress":"10.206.132.82",
+    "ping_state":"up",
+    "serial":"FCW2350C0WM",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998912,
+    "deviceid":21998912,
+    "hostname":"TrCHO1104sw09",
+    "ipaddress":"10.206.132.78",
+    "ping_state":"up",
+    "serial":"FOC1920X17F",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998912,
+    "deviceid":21998912,
+    "hostname":"TrCHO1104sw09",
+    "ipaddress":"10.206.132.78",
+    "ping_state":"up",
+    "serial":"FOC1920X0V8",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998913,
+    "deviceid":21998913,
+    "hostname":"TrCHO1104sw04",
+    "ipaddress":"10.206.132.73",
+    "ping_state":"up",
+    "serial":"FCW1929D01N",
+    "model":"WS-C3850-24P-S",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998914,
+    "deviceid":21998914,
+    "hostname":"TrSAW1105sw04",
+    "ipaddress":"10.206.155.4",
+    "ping_state":"up",
+    "serial":"FCW2350C0QS",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998916,
+    "deviceid":21998916,
+    "hostname":"TrCHO1104sw08",
+    "ipaddress":"10.206.132.77",
+    "ping_state":"up",
+    "serial":"FOC1920X0UP",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998916,
+    "deviceid":21998916,
+    "hostname":"TrCHO1104sw08",
+    "ipaddress":"10.206.132.77",
+    "ping_state":"up",
+    "serial":"FOC1920X0UT",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998916,
+    "deviceid":21998916,
+    "hostname":"TrCHO1104sw08",
+    "ipaddress":"10.206.132.77",
+    "ping_state":"up",
+    "serial":"FCW1920C10S",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998917,
+    "deviceid":21998917,
+    "hostname":"TrSAW1105csw01",
+    "ipaddress":"10.206.155.1",
+    "ping_state":"up",
+    "serial":"FCW2350DH0P",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998917,
+    "deviceid":21998917,
+    "hostname":"TrSAW1105csw01",
+    "ipaddress":"10.206.155.1",
+    "ping_state":"up",
+    "serial":"FCW2343C0CZ",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998920,
+    "deviceid":21998920,
+    "hostname":"TrSAW1105sw06",
+    "ipaddress":"10.206.155.6",
+    "ping_state":"up",
+    "serial":"FCW2345C101",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":21998921,
+    "deviceid":21998921,
+    "hostname":"TrISTT8csw01",
+    "ipaddress":"10.200.33.2",
+    "ping_state":"up",
+    "serial":"CAT2425L6WT",
+    "model":"C9500-24Y4C",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042252,
+    "deviceid":22042252,
+    "hostname":"TrANKcsw01",
+    "ipaddress":"10.206.163.65",
+    "ping_state":"up",
+    "serial":"FCW2345D10E",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042252,
+    "deviceid":22042252,
+    "hostname":"TrANKcsw01",
+    "ipaddress":"10.206.163.65",
+    "ping_state":"up",
+    "serial":"FCW2345C0ZY",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042253,
+    "deviceid":22042253,
+    "hostname":"TrANKsw02",
+    "ipaddress":"10.206.63.4",
+    "ping_state":"up",
+    "serial":"FOC2347L1UJ",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042256,
+    "deviceid":22042256,
+    "hostname":"TrAOEA1128sw01",
+    "ipaddress":"10.206.154.68",
+    "ping_state":"up",
+    "serial":"FCW2345DH73",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042257,
+    "deviceid":22042257,
+    "hostname":"TrBTZ1109sw04",
+    "ipaddress":"10.201.200.208",
+    "ping_state":"up",
+    "serial":"FCW1929B5YD",
+    "model":"WS-C2960X-48FPS-L",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042258,
+    "deviceid":22042258,
+    "hostname":"TrIZM1108sw03",
+    "ipaddress":"10.206.62.19",
+    "ping_state":"up",
+    "serial":"FCW2345DH74",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042260,
+    "deviceid":22042260,
+    "hostname":"TrASR1117sw01",
+    "ipaddress":"10.206.63.66",
+    "ping_state":"up",
+    "serial":"FOC2345X17K",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042262,
+    "deviceid":22042262,
+    "hostname":"TrBTZ1109sw02",
+    "ipaddress":"10.201.200.206",
+    "ping_state":"up",
+    "serial":"FCW2345D137",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042263,
+    "deviceid":22042263,
+    "hostname":"TrISTRT93400csw01",
+    "ipaddress":"10.206.136.90",
+    "ping_state":"up",
+    "serial":"FOC2152U10C",
+    "model":"WS-C3850-24P-S",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042263,
+    "deviceid":22042263,
+    "hostname":"TrISTRT93400csw01",
+    "ipaddress":"10.206.136.90",
+    "ping_state":"up",
+    "serial":"FCW2152F1D9",
+    "model":"WS-C3850-24P-S",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042266,
+    "deviceid":22042266,
+    "hostname":"TrBTZ1109csw01",
+    "ipaddress":"10.201.200.193",
+    "ping_state":"up",
+    "serial":"FCW2345C10X",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042266,
+    "deviceid":22042266,
+    "hostname":"TrBTZ1109csw01",
+    "ipaddress":"10.201.200.193",
+    "ping_state":"up",
+    "serial":"FCW2345G11V",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042267,
+    "deviceid":22042267,
+    "hostname":"TrIZM1108csw01",
+    "ipaddress":"10.206.62.1",
+    "ping_state":"up",
+    "serial":"FCW2345C103",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042267,
+    "deviceid":22042267,
+    "hostname":"TrIZM1108csw01",
+    "ipaddress":"10.206.62.1",
+    "ping_state":"up",
+    "serial":"FOC2345X13T",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042269,
+    "deviceid":22042269,
+    "hostname":"TrBTZ1109sw03",
+    "ipaddress":"10.201.200.207",
+    "ping_state":"up",
+    "serial":"FCW2345BH8J",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042272,
+    "deviceid":22042272,
+    "hostname":"TrKYA1115sw01",
+    "ipaddress":"10.201.200.4",
+    "ping_state":"up",
+    "serial":"FOC2345X17R",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":22042274,
+    "deviceid":22042274,
+    "hostname":"TrIZM1108sw02",
+    "ipaddress":"10.206.62.2",
+    "ping_state":"up",
+    "serial":"FCW2350DH0V",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":23843162,
+    "deviceid":23843162,
+    "hostname":"TrBDMAsw01",
+    "ipaddress":"10.200.192.52",
+    "ping_state":"up",
+    "serial":"FOC2603YQC3",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734610,
+    "deviceid":24734610,
+    "hostname":"TrOPStt01",
+    "ipaddress":"10.32.3.100",
+    "ping_state":"up",
+    "serial":"FDO2546M018",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734611,
+    "deviceid":24734611,
+    "hostname":"TrADBAttr01",
+    "ipaddress":"10.32.3.123",
+    "ping_state":"up",
+    "serial":"FDO2546M00W",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734612,
+    "deviceid":24734612,
+    "hostname":"TrAOEttr01",
+    "ipaddress":"10.32.3.112",
+    "ping_state":"up",
+    "serial":"FDO2546M017",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734613,
+    "deviceid":24734613,
+    "hostname":"TrAYTttr01",
+    "ipaddress":"10.32.3.116",
+    "ping_state":"up",
+    "serial":"FDO2546M01X",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734614,
+    "deviceid":24734614,
+    "hostname":"TrBTZttr01",
+    "ipaddress":"10.32.3.105",
+    "ping_state":"up",
+    "serial":"FDO2546M00X",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734615,
+    "deviceid":24734615,
+    "hostname":"TrIZMttr01",
+    "ipaddress":"10.32.3.103",
+    "ping_state":"up",
+    "serial":"FDO2546M01A",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734616,
+    "deviceid":24734616,
+    "hostname":"TrTEQHttr01",
+    "ipaddress":"10.32.3.125",
+    "ping_state":"up",
+    "serial":"FDO2546M00Z",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734617,
+    "deviceid":24734617,
+    "hostname":"TrBDMAttr01",
+    "ipaddress":"10.32.3.126",
+    "ping_state":"up",
+    "serial":"FDO2546M01U",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734621,
+    "deviceid":24734621,
+    "hostname":"TrASRttr01",
+    "ipaddress":"10.32.3.115",
+    "ping_state":"up",
+    "serial":"FDO2546M011",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734622,
+    "deviceid":24734622,
+    "hostname":"TrSAWttr01",
+    "ipaddress":"10.32.3.98",
+    "ping_state":"up",
+    "serial":"FDO2546M022",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734624,
+    "deviceid":24734624,
+    "hostname":"TrHADttr01",
+    "ipaddress":"10.32.3.124",
+    "ping_state":"up",
+    "serial":"FDO2546M025",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734627,
+    "deviceid":24734627,
+    "hostname":"TrKYAttr01",
+    "ipaddress":"10.32.3.113",
+    "ping_state":"up",
+    "serial":"FDO2546M023",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734629,
+    "deviceid":24734629,
+    "hostname":"TrDNZttr01",
+    "ipaddress":"10.32.3.109",
+    "ping_state":"up",
+    "serial":"FDO2546M01Y",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24734631,
+    "deviceid":24734631,
+    "hostname":"TrANKttr01",
+    "ipaddress":"10.32.3.107",
+    "ping_state":"up",
+    "serial":"FDO2546M013",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":24771460,
+    "deviceid":24771460,
+    "hostname":"TrMN9tt01",
+    "ipaddress":"10.32.3.127",
+    "ping_state":"up",
+    "serial":"FDO2546M021",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25117567,
+    "deviceid":25117567,
+    "hostname":"TrCHO1104csw01",
+    "ipaddress":"10.206.132.2",
+    "ping_state":"up",
+    "serial":"FOC1920X17H",
+    "model":"WS-C3850-48F-E",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25134887,
+    "deviceid":25134887,
+    "hostname":"TRISTVGW01",
+    "ipaddress":"10.200.139.116",
+    "ping_state":"up",
+    "serial":"FCZ194061V6",
+    "model":"CISCO3925-CHASSIS",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25236843,
+    "deviceid":25236843,
+    "hostname":"TrCHOttr04",
+    "ipaddress":"10.32.3.108",
+    "ping_state":"up",
+    "serial":"FGL2552L6WS",
+    "model":"ISR4451-X\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25236844,
+    "deviceid":25236844,
+    "hostname":"TrCHOttr03",
+    "ipaddress":"10.32.3.102",
+    "ping_state":"up",
+    "serial":"FGL2552L6VQ",
+    "model":"ISR4451-X\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25255624,
+    "deviceid":25255624,
+    "hostname":"TrAJIAsw01",
+    "ipaddress":"10.206.134.226",
+    "ping_state":"up",
+    "serial":"FOC2617ZBFE",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25255625,
+    "deviceid":25255625,
+    "hostname":"TrAJIAttr01",
+    "ipaddress":"10.32.3.122",
+    "ping_state":"up",
+    "serial":"FDO2546M01W",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25255844,
+    "deviceid":25255844,
+    "hostname":"TrDNZsw01",
+    "ipaddress":"10.206.62.132",
+    "ping_state":"up",
+    "serial":"FOC2617ZBRE",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25258291,
+    "deviceid":25258291,
+    "hostname":"TrAYTsw01",
+    "ipaddress":"10.201.200.66",
+    "ping_state":"unknown",
+    "serial":"FOC2617ZAMY",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25261702,
+    "deviceid":25261702,
+    "hostname":"TrADAcsw01",
+    "ipaddress":"10.206.62.193",
+    "ping_state":"up",
+    "serial":"FCW2345DH71",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25261702,
+    "deviceid":25261702,
+    "hostname":"TrADAcsw01",
+    "ipaddress":"10.206.62.193",
+    "ping_state":"up",
+    "serial":"FOC2345X13X",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25261704,
+    "deviceid":25261704,
+    "hostname":"TrADAttr01",
+    "ipaddress":"10.32.3.101",
+    "ping_state":"up",
+    "serial":"FDO2546M01Z",
+    "model":"ISR4351\/K9",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25266072,
+    "deviceid":25266072,
+    "hostname":"TrAOET8sw01",
+    "ipaddress":"10.206.189.242",
+    "ping_state":"up",
+    "serial":"FOC2617ZBLF",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25266211,
+    "deviceid":25266211,
+    "hostname":"TrADBAsw01",
+    "ipaddress":"10.206.134.196",
+    "ping_state":"up",
+    "serial":"FOC2617ZBRD",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25309668,
+    "deviceid":25309668,
+    "hostname":"TrISTT8sw04",
+    "ipaddress":"10.200.33.44",
+    "ping_state":"up",
+    "serial":"FCW2415C00K",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25309669,
+    "deviceid":25309669,
+    "hostname":"TrISTT8sw07",
+    "ipaddress":"10.200.33.47",
+    "ping_state":"up",
+    "serial":"FOC2403LDMD",
+    "model":"C9300L-24T-4G",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25309670,
+    "deviceid":25309670,
+    "hostname":"TrISTT8sw09",
+    "ipaddress":"10.200.33.49",
+    "ping_state":"up",
+    "serial":"FOC2616YVHK",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25309671,
+    "deviceid":25309671,
+    "hostname":"TrISTT8sw08",
+    "ipaddress":"10.200.33.48",
+    "ping_state":"up",
+    "serial":"FOC2616YV2M",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25309672,
+    "deviceid":25309672,
+    "hostname":"TrISTT8sw05",
+    "ipaddress":"10.200.33.45",
+    "ping_state":"up",
+    "serial":"FCW2415C00L",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25312173,
+    "deviceid":25312173,
+    "hostname":"TrISTHQsw03",
+    "ipaddress":"10.206.132.71",
+    "ping_state":"up",
+    "serial":"FCW2352D0GJ",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25379016,
+    "deviceid":25379016,
+    "hostname":"TrTEQHsw02",
+    "ipaddress":"10.207.60.135",
+    "ping_state":"up",
+    "serial":"FOC2603YQC5",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25379017,
+    "deviceid":25379017,
+    "hostname":"TrTEQHsw03",
+    "ipaddress":"10.207.60.133",
+    "ping_state":"up",
+    "serial":"FCW1933B3ST",
+    "model":"WS-C2960X-48FPS-L",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25379019,
+    "deviceid":25379019,
+    "hostname":"TrTEQHcsw01",
+    "ipaddress":"10.207.60.134",
+    "ping_state":"up",
+    "serial":"FOC2549YE8J",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25526549,
+    "deviceid":25526549,
+    "hostname":"TrISTRTsw03",
+    "ipaddress":"10.206.136.91",
+    "ping_state":"up",
+    "serial":"FOC2603YQB7",
+    "model":"C9300-48P",
+    "last_updated":"23 December 2024 23:53"
+  },
+  {
+    "id":25526555,
+    "deviceid":25526555,
+    "hostname":"TrISTRTsw04",
+    "ipaddress":"10.206.136.92",
+    "ping_state":"up",
+    "serial":"FCW2345D10B",
+    "model":"C9300-24P",
+    "last_updated":"23 December 2024 23:53"
+  }
+]

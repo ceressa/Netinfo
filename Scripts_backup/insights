@@ -1,0 +1,166 @@
+import os
+import json
+import datetime
+
+# 📍 Dosya yolları
+DATA_DIR = "D:\\INTRANET\\Netinfo\\Data"
+LOGS_DIR = "D:\\INTRANET\\Netinfo\\logs\\Latest_Logs"
+OUTPUT_PATH = "D:\\INTRANET\\Netinfo\\data\\insight_summary.json"
+
+# 📍 Bugünün tarihini formatla
+today = datetime.date.today().strftime("%Y-%m-%d")
+rush_hour_file = f"network_rush_hour_{today}.json"
+
+# 📍 Dosyaları oku
+def load_json(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"⚠️ Dosya okunamadı: {file_path} → {e}")
+        return None
+
+main_data = load_json(os.path.join(DATA_DIR, "main_data.json"))
+inventory = load_json(os.path.join(DATA_DIR, "network_device_inventory.json"))
+device_logs = load_json(os.path.join(LOGS_DIR, "device_status_changes.json"))
+rush_hour_data = load_json(os.path.join(DATA_DIR, rush_hour_file))
+
+# 📍 Daha önceki özetleri yükle
+def load_previous_summary():
+    if os.path.exists(OUTPUT_PATH):
+        try:
+            with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+                existing = json.load(f)
+                if isinstance(existing, list) and existing:
+                    return existing[-1]
+        except Exception:
+            return None
+    return None
+
+# 📍 Özet veriyi oluştur
+def generate_insight():
+    previous = load_previous_summary()
+    summary = {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "total_devices": 0,
+        "online_devices": 0,
+        "offline_devices": 0,
+        "top_usage_devices": [],
+        "recent_status_changes": [],
+        "rush_hour": {},
+        "insights": []
+    }
+
+    # 🟢 Cihaz durumu özeti
+    if inventory:
+        total = len(inventory)
+        online = sum(1 for d in inventory if d.get("ping_state") == "up")
+        offline = sum(1 for d in inventory if d.get("ping_state") == "down")
+        summary.update({"total_devices": total, "online_devices": online, "offline_devices": offline})
+        if previous:
+            delta_online = online - previous.get("online_devices", 0)
+            delta_offline = offline - previous.get("offline_devices", 0)
+            if delta_online > 0:
+                summary["insights"].append(f"{delta_online} more devices came online compared to last summary.")
+            elif delta_online < 0:
+                summary["insights"].append(f"{-delta_online} devices went offline since last check.")
+
+    # 🟡 En çok trafik kullanan 5 cihaz
+    if main_data:
+        top_level_devices = {
+            k: v for k, v in main_data.items()
+            if isinstance(v, dict) and "input_mbps" in v and "output_mbps" in v
+        }
+        sorted_devices = sorted(
+            top_level_devices.items(),
+            key=lambda item: item[1]["input_mbps"] + item[1]["output_mbps"],
+            reverse=True
+        )
+        summary["top_usage_devices"] = [
+            {
+                "hostname": host,
+                "input_mbps": round(data["input_mbps"], 2),
+                "output_mbps": round(data["output_mbps"], 2),
+                "total_mbps": round(data["input_mbps"] + data["output_mbps"], 2)
+            }
+            for host, data in sorted_devices[:5]
+        ]
+        if previous and previous.get("top_usage_devices"):
+            prev_hosts = {d["hostname"]: d["total_mbps"] for d in previous["top_usage_devices"]}
+            for current in summary["top_usage_devices"]:
+                old_value = prev_hosts.get(current["hostname"])
+                if old_value:
+                    change = current["total_mbps"] - old_value
+                    if abs(change) > 5:
+                        direction = "increased" if change > 0 else "decreased"
+                        summary["insights"].append(
+                            f"Traffic on {current['hostname']} {direction} by {abs(change)} Mbps compared to previous summary."
+                        )
+
+    # 🔴 En son 5 durum değişikliği (sadece bugünkü olaylar varsa yaz)
+    if device_logs:
+        today_logs = [
+            log for log in device_logs
+            if log["timestamp"].startswith(today)
+        ]
+        if today_logs:
+            sorted_logs = sorted(today_logs, key=lambda log: log["timestamp"], reverse=True)
+            summary["recent_status_changes"] = [
+                {
+                    "hostname": log["hostname"],
+                    "serial": log["serial"],
+                    "timestamp": log["timestamp"],
+                    "status_change": f"{log['old_status'].upper()} → {log['new_status'].upper()}"
+                }
+                for log in sorted_logs[:5]
+            ]
+            summary["insights"].append(f"{len(today_logs)} status changes recorded today.")
+
+    # ⏱️ Rush Hour bilgisi + kıyaslama
+    if rush_hour_data:
+        min_hour = min(rush_hour_data, key=lambda h: h["input_traffic_mbps"] + h["output_traffic_mbps"])
+        max_hour = max(rush_hour_data, key=lambda h: h["input_traffic_mbps"] + h["output_traffic_mbps"])
+        summary["rush_hour"] = {
+            "min": {
+                "hour_range": min_hour["hour_range"],
+                "input": round(min_hour["input_traffic_mbps"], 2),
+                "output": round(min_hour["output_traffic_mbps"], 2),
+            },
+            "max": {
+                "hour_range": max_hour["hour_range"],
+                "input": round(max_hour["input_traffic_mbps"], 2),
+                "output": round(max_hour["output_traffic_mbps"], 2),
+            }
+        }
+        if previous and previous.get("rush_hour"):
+            prev_max = previous["rush_hour"].get("max", {})
+            if prev_max:
+                diff = (
+                    summary["rush_hour"]["max"]["input"] + summary["rush_hour"]["max"]["output"]
+                    - prev_max.get("input", 0) - prev_max.get("output", 0)
+                )
+                direction = "increased" if diff > 0 else "decreased"
+                summary["insights"].append(
+                    f"Peak traffic hour changed by {abs(diff):.2f} Mbps ({direction}) since last summary."
+                )
+
+    return summary
+
+# 📍 JSON çıktısını kaydet
+insight = generate_insight()
+try:
+    if os.path.exists(OUTPUT_PATH):
+        with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+            existing = json.load(f)
+        if isinstance(existing, list):
+            existing.append(insight)
+        else:
+            existing = [existing, insight]
+    else:
+        existing = [insight]
+
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(existing, f, ensure_ascii=False, indent=4)
+    print(f"✅ Zengin özet başarıyla eklendi → {OUTPUT_PATH}")
+except Exception as e:
+    print(f"❌ Özet kaydedilirken hata oluştu: {e}")

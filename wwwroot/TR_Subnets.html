@@ -1,0 +1,1337 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Subnet Information</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4C1595 0%, #662D91 25%, #FF6600 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+  position: relative;
+  background: linear-gradient(135deg, #4d148c 0%, #ff6600 100%);
+  color: white;
+  padding: 20px 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.1" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+        }
+
+
+        .logo-title {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.fedex-logo {
+  display: inline-block;
+  background: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  border: 2px solid rgba(255,255,255,0.25);
+}
+
+.logo-img {
+  height: 56px;
+  width: auto;
+}
+
+
+        h1 {
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        .search-container {
+            background: rgba(255,255,255,0.98);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            color: #4C1595;
+            font-weight: 600;
+        }
+
+        .search-icon {
+            font-size: 1.2rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            border: 2px solid #e8ecf4;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #4C1595;
+            box-shadow: 0 0 20px rgba(76, 21, 149, 0.15);
+            background: white;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            color: #666;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.4rem;
+            border: 2px solid #4C1595;
+            background: transparent;
+            color: #4C1595;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .filter-btn:hover::before {
+            left: 100%;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #4C1595;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 21, 149, 0.3);
+        }
+
+        .subnet-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        }
+
+        .subnet-card {
+            background: rgba(255,255,255,0.98);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            backdrop-filter: blur(20px);
+            border-left: 6px solid #4C1595;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .subnet-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(76, 21, 149, 0.08), transparent);
+            border-radius: 0 20px 0 100px;
+        }
+
+        .subnet-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .subnet-card:hover::after {
+            opacity: 1;
+            transform: rotate(30deg) translate(50%, 50%);
+        }
+
+        .subnet-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border-left-color: #FF6600;
+        }
+
+        .subnet-card.orange {
+            border-left-color: #FF6600;
+        }
+
+        .subnet-card.orange::before {
+            background: linear-gradient(135deg, rgba(255, 102, 0, 0.08), transparent);
+        }
+
+        .subnet-card.mixed {
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(45deg, #4C1595, #FF6600) 1;
+        }
+
+        .location-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .location-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #4C1595;
+            letter-spacing: -0.3px;
+        }
+
+        .station-name {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .location-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .badge-purple {
+            background: linear-gradient(45deg, #4C1595, #662D91);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 21, 149, 0.3);
+        }
+
+        .badge-orange {
+            background: linear-gradient(45deg, #FF6600, #ff8533);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+        }
+
+        .badge-mixed {
+            background: linear-gradient(45deg, #4C1595, #FF6600);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 21, 149, 0.2);
+        }
+
+        .subnet-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .subnet-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.2rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(76, 21, 149, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subnet-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, #4C1595, #FF6600);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .subnet-row:hover {
+            background: linear-gradient(135deg, rgba(76, 21, 149, 0.05), rgba(255, 102, 0, 0.02));
+            transform: translateX(8px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .subnet-row:hover::before {
+            transform: scaleY(1);
+        }
+
+        .subnet-address {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            padding: 0.3rem;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .copy-icon:hover {
+            opacity: 1;
+            background: rgba(76, 21, 149, 0.1);
+            transform: scale(1.1);
+        }
+
+        .vlan-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .vlan-tag {
+            background: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #34495e;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(52, 73, 94, 0.1);
+        }
+
+        .type-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .type-indicator::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .purple-indicator {
+            background: linear-gradient(45deg, #4C1595, #662D91);
+            box-shadow: 0 0 12px rgba(76, 21, 149, 0.4);
+        }
+
+        .orange-indicator {
+            background: linear-gradient(45deg, #FF6600, #ff8533);
+            box-shadow: 0 0 12px rgba(255, 102, 0, 0.4);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.98);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4C1595, #FF6600);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #4C1595, #FF6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            color: #666;
+            text-transform: uppercase;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+		
+		.filter-btn:focus-visible {
+  outline: 3px solid rgba(77,20,140,0.5);
+  outline-offset: 2px;
+}
+
+
+        .copy-feedback {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #4C1595, #662D91);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .copy-feedback.show {
+            transform: translateX(0);
+        }
+
+        .copy-feedback::before {
+            content: '✓';
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #4C1595, #662D91);
+            color: white;
+            text-align: center;
+            padding: 3rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footerGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" stroke-width="0.1" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23footerGrid)"/></svg>') repeat;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            text-align: center;
+        }
+
+        .footer-info p:first-child {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .footer-info p:last-child {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .footer-disclaimer {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-disclaimer p:first-child {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .footer-disclaimer p {
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .footer-disclaimer p:last-child {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #FFB6C1;
+        }
+
+        .footer-version {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 4rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4C1595;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+
+        .no-results h3 {
+            color: #4C1595;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subnet-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-btn {
+                text-align: center;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .search-container {
+                padding: 1.5rem;
+            }
+            
+            .subnet-card {
+                padding: 1.5rem;
+            }
+            
+            .location-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .footer-disclaimer {
+                padding: 1rem;
+            }
+            
+            .footer-disclaimer p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .subnet-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            
+            .vlan-info {
+                align-self: flex-end;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4C1595, #FF6600);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #662D91, #ff8533);
+        }
+		
+		.title-section {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+    color: white;
+    font-size: 3.2rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.subtitle-container {
+  margin-top: 5px;
+}
+
+.subtitle-main {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+.subtitle-location {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.4rem;
+    }
+    
+    .subtitle-main {
+        font-size: 1.1rem;
+    }
+    
+    .subtitle-location {
+        font-size: 1rem;
+        padding: 0.4rem 1.2rem;
+    }
+}
+
+.main-title {
+  font-weight: 800;
+  text-align: center;
+  flex: 1; /* ortalama için */
+  margin: 0 40px;
+  letter-spacing: -0.5px;
+  font-size: clamp(2.8rem, 4vw + 1rem, 4.2rem); /* Daha büyük puntolu */
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.35);
+}
+
+.legend-box {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    font-size: 0.95rem;
+}
+
+.legend-title {
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: #4C1595;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.3rem 0;
+}
+
+.legend-indicator {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+
+.legend-indicator.purple {
+    background: linear-gradient(45deg, #4C1595, #662D91);
+}
+
+.legend-indicator.orange {
+    background: linear-gradient(45deg, #FF6600, #ff8533);
+}
+
+
+    </style>
+</head>
+<body>
+<header class="header">
+  <div class="header-content">
+    <!-- Sol: Logo -->
+    <a class="fedex-logo" href="/" aria-label="FedEx Home">
+      <img src="https://tr.eu.fedex.com/Netinfo/FedEx_logo.png" alt="FedEx Logo" class="logo-img">
+    </a>
+
+    <!-- Orta: Başlık -->
+    <h1 class="main-title">Türkiye Network Infrastructure</h1>
+  </div>
+</header>
+
+<!-- Legend Box -->
+<div class="legend-box">
+    <p class="legend-title">VLAN Legend (for Mehmetcan and those unfamiliar with VLANs):</p>
+    <div class="legend-item">
+        <span class="legend-indicator purple"></span>
+        <span><strong>vlan20</strong>: Purple data</span>
+    </div>
+    <div class="legend-item">
+        <span class="legend-indicator orange"></span>
+        <span><strong>vlan1120</strong>: Orange data</span>
+    </div>
+</div>
+
+
+
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalLocations">0</div>
+                <div class="stat-label">Total Stations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalSubnets">0</div>
+                <div class="stat-label">Total Subnets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="purpleNetworks">0</div>
+                <div class="stat-label">Purple Network</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="orangeNetworks">0</div>
+                <div class="stat-label">Orange Network</div>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-header">
+                <span class="search-icon">🔍</span>
+                <span>Search and Filter</span>
+            </div>
+            <input type="text" id="searchBox" class="search-box" placeholder="Search by station, subnet address, or VLAN...">
+            <div class="filters">
+                <span class="filter-label">Filters:</span>
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="purple">Purple Network</button>
+                <button class="filter-btn" data-filter="orange">Orange Network</button>
+                <button class="filter-btn" data-filter="vlan20">VLAN 20</button>
+                <button class="filter-btn" data-filter="vlan40">VLAN 40</button>
+                <button class="filter-btn" data-filter="vlan1120">VLAN 1120</button>
+                <button class="filter-btn" data-filter="vlan1140">VLAN 1140</button>
+                <button class="filter-btn" data-filter="other">Other VLANs</button>
+            </div>
+        </div>
+
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading network information...</p>
+        </div>
+
+        <div class="subnet-grid" id="subnetGrid">
+            <!-- Subnet cards will be generated dynamically by JavaScript -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <p><strong>Network Subnet Information System</strong></p>
+                <p>Developed by <strong>Ufuk Celikeloglu</strong></p>
+            </div>
+            <div class="footer-disclaimer">
+                <p>⚠️ <strong>CONFIDENTIAL INFORMATION</strong></p>
+                <p>This system contains sensitive network infrastructure data.</p>
+                <p>For internal use only. External sharing is strictly prohibited.</p>
+                <p>Unauthorized access or distribution may result in disciplinary action.</p>
+            </div>
+            <div class="footer-version">
+                <p>Version 2.1 | Last Updated: 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const subnetData = [
+            {subnet: "10.47.39.128/26", location: "ADAT8", vlan: "vlan20", type: "Purple", station: "Adana"},
+            {subnet: "10.33.125.0/27", location: "ADAT8", vlan: "vlan40", type: "Purple", station: "Adana"},
+            {subnet: "10.206.62.192/26", location: "ADAT8", vlan: "vlan1120", type: "Orange", station: "Adana"},
+            {subnet: "10.206.189.80/28", location: "ADAT8", vlan: "vlan1133", type: "Orange", station: "Adana"},
+            {subnet: "10.206.157.192/26", location: "ADAT8", vlan: "vlan1140", type: "Orange", station: "Adana"},
+            {subnet: "170.86.69.160/27", location: "ADBA", vlan: "vlan20", type: "Purple", station: "Afyon"},
+            {subnet: "10.33.124.232/29", location: "ADBA", vlan: "vlan40", type: "Purple", station: "Afyon"},
+            {subnet: "10.206.134.192/27", location: "ADBA", vlan: "vlan1120", type: "Orange", station: "Afyon"},
+            {subnet: "170.86.69.224/27", location: "AJIA", vlan: "vlan20", type: "Purple", station: "Balikesir"},
+            {subnet: "10.33.124.224/27", location: "AJIA", vlan: "vlan40", type: "Purple", station: "Balikesir"},
+            {subnet: "10.206.134.224/27", location: "AJIA", vlan: "vlan1120", type: "Orange", station: "Balikesir"},
+            {subnet: "10.206.161.192/28", location: "AJIA", vlan: "vlan1140", type: "Orange", station: "Balikesir"},
+            {subnet: "10.47.38.192/26", location: "ANKT8", vlan: "vlan20", type: "Purple", station: "Ankara"},
+            {subnet: "10.33.254.224/27", location: "ANKT8", vlan: "vlan40", type: "Purple", station: "Ankara"},
+            {subnet: "10.206.63.0/26", location: "ANKT8", vlan: "vlan1120", type: "Orange", station: "Ankara"},
+            {subnet: "10.206.189.176/28", location: "ANKT8", vlan: "vlan1133", type: "Orange", station: "Ankara"},
+            {subnet: "10.206.53.64/26", location: "ANKT8", vlan: "vlan1140", type: "Orange", station: "Ankara"},
+            {subnet: "170.86.69.128/27", location: "AOEA", vlan: "vlan20", type: "Purple", station: "Hadimkoy"},
+            {subnet: "10.34.231.0/26", location: "AOEA", vlan: "vlan40", type: "Purple", station: "Hadimkoy"},
+            {subnet: "10.206.154.64/26", location: "AOEA", vlan: "vlan1120", type: "Orange", station: "Hadimkoy"},
+            {subnet: "10.206.189.64/28", location: "AOEA", vlan: "vlan1133", type: "Orange", station: "Hadimkoy"},
+            {subnet: "10.206.162.64/26", location: "AOEA", vlan: "vlan1140", type: "Orange", station: "Hadimkoy"},
+            {subnet: "10.47.40.192/26", location: "AOET8", vlan: "vlan20", type: "Purple", station: "Eskisehir"},
+            {subnet: "10.33.124.208/28", location: "AOET8", vlan: "vlan40", type: "Purple", station: "Eskisehir"},
+            {subnet: "10.206.189.240/28", location: "AOET8", vlan: "vlan1120", type: "Orange", station: "Eskisehir"},
+            {subnet: "10.47.40.64/26", location: "ASRT8", vlan: "vlan20", type: "Purple", station: "Kayseri"},
+            {subnet: "10.33.124.64/27", location: "ASRT8", vlan: "vlan40", type: "Purple", station: "Kayseri"},
+            {subnet: "10.206.63.64/27", location: "ASRT8", vlan: "vlan1120", type: "Orange", station: "Kayseri"},
+            {subnet: "10.206.189.192/28", location: "ASRT8", vlan: "vlan1133", type: "Orange", station: "Kayseri"},
+            {subnet: "10.206.161.224/28", location: "ASRT8", vlan: "vlan1140", type: "Orange", station: "Kayseri"},
+            {subnet: "10.47.39.192/26", location: "AYTT8", vlan: "vlan20", type: "Purple", station: "Antalya"},
+            {subnet: "10.33.124.32/27", location: "AYTT8", vlan: "vlan40", type: "Purple", station: "Antalya"},
+            {subnet: "10.201.200.64/27", location: "AYTT8", vlan: "vlan1120", type: "Orange", station: "Antalya"},
+            {subnet: "10.206.161.32/27", location: "AYTT8", vlan: "vlan1140", type: "Orange", station: "Antalya"},
+            {subnet: "172.24.150.64/27", location: "BDMA", vlan: "vlan20", type: "Purple", station: "Serifali"},
+            {subnet: "10.34.231.128/26", location: "BDMA", vlan: "vlan40", type: "Purple", station: "Serifali"},
+            {subnet: "10.200.222.0/24", location: "BDMA", vlan: "Not in use", type: "Orange", station: "Serifali"},
+            {subnet: "10.200.33.128/26", location: "BDMA", vlan: "vlan1120", type: "Orange", station: "Serifali"},
+            {subnet: "10.200.192.56/29", location: "BDMA", vlan: "vlan1133", type: "Orange", station: "Serifali"},
+            {subnet: "10.206.157.0/27", location: "BDMA", vlan: "vlan1140", type: "Orange", station: "Serifali"},
+            {subnet: "10.47.39.0/26", location: "BTZT8", vlan: "vlan20", type: "Purple", station: "Bursa"},
+            {subnet: "10.34.231.64/26", location: "BTZT8", vlan: "vlan40", type: "Purple", station: "Bursa"},
+            {subnet: "10.206.189.224/28", location: "BTZT8", vlan: "vlan1133", type: "Orange", station: "Bursa"},
+            {subnet: "10.206.157.128/26", location: "BTZT8", vlan: "vlan1140", type: "Orange", station: "Bursa"},
+            {subnet: "10.201.200.192/26", location: "BTZT8", vlan: "vlan1120", type: "Orange", station: "Bursa"},
+            {subnet: "10.47.39.64/26", location: "DNZT8", vlan: "vlan20", type: "Purple", station: "Denizli"},
+            {subnet: "10.33.124.0/27", location: "DNZT8", vlan: "vlan40", type: "Purple", station: "Denizli"},
+            {subnet: "10.206.62.128/27", location: "DNZT8", vlan: "vlan1120", type: "Orange", station: "Denizli"},
+            {subnet: "10.206.189.144/28", location: "DNZT8", vlan: "vlan1133", type: "Orange", station: "Denizli"},
+            {subnet: "10.207.60.64/27", location: "DNZT8", vlan: "vlan1140", type: "Orange", station: "Denizli"},
+            {subnet: "10.47.40.0/26", location: "GZTT8", vlan: "vlan20", type: "Purple", station: "Gaziantep"},
+            {subnet: "10.47.41.192/27", location: "GZTT8", vlan: "vlan40", type: "Purple", station: "Gaziantep"},
+            {subnet: "10.206.156.160/27", location: "GZTT8", vlan: "vlan1120", type: "Orange", station: "Gaziantep"},
+            {subnet: "10.207.60.96/27", location: "GZTT8", vlan: "vlan1140", type: "Orange", station: "Gaziantep"},
+            {subnet: "10.47.38.0/26", location: "IGA - OLD", vlan: "vlan20", type: "Purple", station: "IGA - OLD"},
+            {subnet: "10.33.169.192/26", location: "IGA - OLD", vlan: "vlan40", type: "Purple", station: "IGA - OLD"},
+            {subnet: "10.200.33.192/26", location: "IGA - OLD", vlan: "Not in use", type: "Orange", station: "IGA - OLD"},
+            {subnet: "10.200.32.0/26", location: "IGA - OLD", vlan: "vlan1120", type: "Orange", station: "IGA - OLD"},
+            {subnet: "10.200.32.64/26", location: "IGA - OLD", vlan: "vlan1140", type: "Orange", station: "IGA - OLD"},
+            {subnet: "172.24.233.192/26", location: "ISTHQ", vlan: "vlan20", type: "Purple", station: "ISTHQ"},
+            {subnet: "10.34.135.192/26", location: "ISTHQ", vlan: "vlan40", type: "Purple", station: "ISTHQ"},
+            {subnet: "10.206.159.0/28", location: "ISTHQ", vlan: "Not in use", type: "Orange", station: "ISTHQ"},
+            {subnet: "10.206.160.0/26", location: "ISTHQ", vlan: "Not in use", type: "Orange", station: "ISTHQ"},
+            {subnet: "10.206.132.0/23", location: "ISTHQ", vlan: "vlan1120", type: "Orange", station: "ISTHQ"},
+            {subnet: "10.206.63.192/26", location: "ISTHQ", vlan: "vlan1140", type: "Orange", station: "ISTHQ"},
+            {subnet: "10.206.194.0/26", location: "ISTHQ", vlan: "vlan1140", type: "Orange", station: "ISTHQ"},
+            {subnet: "10.200.220.0/24", location: "ISTHQ", vlan: "Voice", type: "Orange", station: "ISTHQ"},
+            {subnet: "172.24.217.64/26", location: "ISTRT", vlan: "HUB Seg", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "10.34.253.128/26", location: "ISTRT", vlan: "vlan10", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "10.40.226.0/24", location: "ISTRT", vlan: "vlan20", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "172.24.217.48/29", location: "ISTRT", vlan: "vlan2991", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "172.24.217.32/28", location: "ISTRT", vlan: "vlan2997", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "10.34.29.0/24", location: "ISTRT", vlan: "vlan40", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "10.34.254.0/23", location: "ISTRT", vlan: "vlan50", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "172.24.217.128/25", location: "ISTRT", vlan: "vlan55", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "172.24.217.0/27", location: "ISTRT", vlan: "vlan56", type: "Purple", station: "Istanbul Airport"},
+            {subnet: "10.201.202.0/26", location: "ISTRT", vlan: "vlan1120", type: "Orange", station: "Istanbul Airport"},
+            {subnet: "10.200.147.192/26", location: "ISTRT", vlan: "vlan1140", type: "Orange", station: "Istanbul Airport"},
+            {subnet: "10.34.135.0/25", location: "ISTT8", vlan: "vlan20", type: "Purple", station: "Gunesli"},
+            {subnet: "172.24.235.128/26", location: "ISTT8", vlan: "vlan20", type: "Purple", station: "Gunesli"},
+            {subnet: "10.34.230.0/25", location: "ISTT8", vlan: "vlan40", type: "Purple", station: "Gunesli"},
+            {subnet: "10.206.159.64/27", location: "ISTT8", vlan: "Not in use", type: "Orange", station: "Gunesli"},
+            {subnet: "10.206.162.0/26", location: "ISTT8", vlan: "Not in use", type: "Orange", station: "Gunesli"},
+            {subnet: "10.200.33.0/25", location: "ISTT8", vlan: "vlan1120", type: "Orange", station: "Gunesli"},
+            {subnet: "10.206.189.0/28", location: "ISTT8", vlan: "vlan1133", type: "Orange", station: "Gunesli"},
+            {subnet: "10.206.162.128/25", location: "ISTT8", vlan: "vlan1140", type: "Orange", station: "Gunesli"},
+            {subnet: "10.47.38.128/26", location: "IZMT8", vlan: "vlan20", type: "Purple", station: "Izmir"},
+            {subnet: "10.34.231.192/26", location: "IZMT8", vlan: "vlan40", type: "Purple", station: "Izmir"},
+            {subnet: "10.206.159.96/28", location: "IZMT8", vlan: "Not in use", type: "Orange", station: "Izmir"},
+            {subnet: "10.206.163.0/26", location: "IZMT8", vlan: "Not in use", type: "Orange", station: "Izmir"},
+            {subnet: "10.206.62.0/26", location: "IZMT8", vlan: "vlan1120", type: "Orange", station: "Izmir"},
+            {subnet: "10.206.189.128/28", location: "IZMT8", vlan: "vlan1133", type: "Orange", station: "Izmir"},
+            {subnet: "10.206.62.64/26", location: "IZMT8", vlan: "vlan1140", type: "Orange", station: "Izmir"},
+            {subnet: "10.47.40.128/26", location: "KYAT8", vlan: "vlan20", type: "Purple", station: "Konya"},
+            {subnet: "10.33.124.96/27", location: "KYAT8", vlan: "vlan40", type: "Purple", station: "Konya"},
+            {subnet: "10.201.200.0/27", location: "KYAT8", vlan: "vlan1120", type: "Orange", station: "Konya"},
+            {subnet: "10.206.189.208/28", location: "KYAT8", vlan: "vlan1133", type: "Orange", station: "Konya"},
+            {subnet: "10.206.161.0/27", location: "KYAT8", vlan: "vlan1140", type: "Orange", station: "Konya"},
+            {subnet: "172.24.234.160/27", location: "SAWT8", vlan: "vlan20", type: "Purple", station: "SAW"},
+            {subnet: "10.34.135.128/26", location: "SAWT8", vlan: "vlan20", type: "Purple", station: "SAW"},
+            {subnet: "10.34.230.128/25", location: "SAWT8", vlan: "vlan40", type: "Purple", station: "SAW"},
+            {subnet: "10.206.158.0/26", location: "SAWT8", vlan: "Not in use", type: "Orange", station: "SAW"},
+            {subnet: "10.206.155.0/24", location: "SAWT8", vlan: "vlan1120", type: "Orange", station: "SAW"},
+            {subnet: "10.206.189.16/28", location: "SAWT8", vlan: "vlan1133", type: "Orange", station: "SAW"},
+            {subnet: "10.32.3.128/25", location: "SAWT8", vlan: "vlan1140", type: "Orange", station: "SAW"},
+            {subnet: "10.206.158.128/25", location: "SAWT8", vlan: "vlan1140", type: "Orange", station: "SAW"},
+            {subnet: "10.33.82.224/27", location: "TEQH", vlan: "vlan20", type: "Purple", station: "Catalca"},
+            {subnet: "10.33.124.160/27", location: "TEQH", vlan: "vlan40", type: "Purple", station: "Catalca"},
+            {subnet: "10.207.60.128/25", location: "TEQH", vlan: "vlan1120", type: "Orange", station: "Catalca"},
+            {subnet: "10.32.13.128/26", location: "TEQH", vlan: "vlan1140", type: "Orange", station: "Catalca"}
+        ];
+
+        function groupDataByLocation() {
+            const grouped = {};
+            subnetData.forEach(item => {
+                if (!grouped[item.location]) {
+                    grouped[item.location] = [];
+                }
+                grouped[item.location].push(item);
+            });
+            return grouped;
+        }
+
+        function getLocationBadgeClass(subnets) {
+            const types = [...new Set(subnets.map(s => s.type))];
+            if (types.length === 1) {
+                return types[0].toLowerCase() === 'purple' ? 'badge-purple' : 'badge-orange';
+            }
+            return 'badge-mixed';
+        }
+
+        function createSubnetCard(location, subnets) {
+            const hasOrange = subnets.some(s => s.type === 'Orange');
+            const hasPurple = subnets.some(s => s.type === 'Purple');
+            const cardClass = hasOrange && hasPurple ? 'mixed' : (hasOrange ? 'orange' : 'purple');
+            const stationName = subnets[0].station;
+            
+            return `
+                <div class="subnet-card ${cardClass}" data-location="${location}" data-types="${subnets.map(s => s.type).join(',')}" data-station="${stationName}">
+                    <div class="location-header">
+                        <div class="location-info">
+                            <div class="location-name">${location}</div>
+                            <div class="station-name">${stationName}</div>
+                        </div>
+                        <div class="location-badge ${getLocationBadgeClass(subnets)}">
+                            ${subnets.length} Subnet${subnets.length > 1 ? 's' : ''}
+                        </div>
+                    </div>
+                    <div class="subnet-info">
+                        ${subnets.map(subnet => `
+                            <div class="subnet-row" data-vlan="${subnet.vlan}" data-type="${subnet.type}">
+                                <div class="subnet-address">
+                                    ${subnet.subnet}
+                                    <span class="copy-icon" onclick="copySubnet('${subnet.subnet}')" title="Copy">
+                                        📋
+                                    </span>
+                                </div>
+                                <div class="vlan-info">
+                                    <div class="type-indicator ${subnet.type.toLowerCase()}-indicator"></div>
+                                    <div class="vlan-tag">${subnet.vlan}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSubnets(data = null) {
+            const dataToRender = data || groupDataByLocation();
+            const grid = document.getElementById('subnetGrid');
+            
+            if (Object.keys(dataToRender).length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <h3>🔍 No subnets found matching your criteria</h3>
+                        <p>Please check your search criteria or try different filters.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = Object.entries(dataToRender)
+                .sort(([,sa],[,sb]) => sa[0].station.localeCompare(sb[0].station))
+                .map(([location, subnets]) => createSubnetCard(location, subnets))
+                .join('');
+        }
+
+        function updateStats() {
+            const grouped = groupDataByLocation();
+            const totalLocations = Object.keys(grouped).length;
+            const totalSubnets = subnetData.length;
+            const purpleNetworks = subnetData.filter(s => s.type === 'Purple').length;
+            const orangeNetworks = subnetData.filter(s => s.type === 'Orange').length;
+
+            document.getElementById('totalLocations').textContent = totalLocations;
+            document.getElementById('totalSubnets').textContent = totalSubnets;
+            document.getElementById('purpleNetworks').textContent = purpleNetworks;
+            document.getElementById('orangeNetworks').textContent = orangeNetworks;
+        }
+
+        function filterData(searchTerm, typeFilter) {
+            let filtered = subnetData;
+
+            // Type filter
+            if (typeFilter !== 'all') {
+                if (typeFilter === 'purple') {
+                    filtered = filtered.filter(s => s.type === 'Purple');
+                } else if (typeFilter === 'orange') {
+                    filtered = filtered.filter(s => s.type === 'Orange');
+                } else if (typeFilter === 'other') {
+                    filtered = filtered.filter(s => !['vlan20', 'vlan40', 'vlan1120', 'vlan1140'].includes(s.vlan));
+                } else if (typeFilter.startsWith('vlan')) {
+                    filtered = filtered.filter(s => s.vlan === typeFilter);
+                }
+            }
+
+            // Search term filter
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(s =>
+                    s.location.toLowerCase().includes(term) ||
+                    s.subnet.toLowerCase().includes(term) ||
+                    s.vlan.toLowerCase().includes(term) ||
+                    s.station.toLowerCase().includes(term)
+                );
+            }
+
+            // Group by location
+            const grouped = {};
+            filtered.forEach(item => {
+                if (!grouped[item.location]) {
+                    grouped[item.location] = [];
+                }
+                grouped[item.location].push(item);
+            });
+
+            return grouped;
+        }
+
+        function setupEventListeners() {
+            const searchBox = document.getElementById('searchBox');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            let currentFilter = 'all';
+
+            searchBox.addEventListener('input', (e) => {
+                const searchTerm = e.target.value;
+                const filteredData = filterData(searchTerm, currentFilter);
+                renderSubnets(filteredData);
+            });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Update active button
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    // Update current filter
+                    currentFilter = e.target.dataset.filter;
+                    
+                    // Apply filters
+                    const searchTerm = searchBox.value;
+                    const filteredData = filterData(searchTerm, currentFilter);
+                    renderSubnets(filteredData);
+                });
+            });
+        }
+
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach((stat, index) => {
+                const targetValue = parseInt(stat.textContent);
+                stat.textContent = '0';
+                
+                setTimeout(() => {
+                    let current = 0;
+                    const increment = targetValue / 40;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= targetValue) {
+                            current = targetValue;
+                            clearInterval(timer);
+                        }
+                        stat.textContent = Math.floor(current);
+                    }, 40);
+                }, index * 150);
+            });
+        }
+
+        function showLoading() {
+            document.querySelector('.loading').style.display = 'block';
+            document.getElementById('subnetGrid').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.querySelector('.loading').style.display = 'none';
+            document.getElementById('subnetGrid').style.display = 'grid';
+        }
+
+        function copySubnet(subnet) {
+            navigator.clipboard.writeText(subnet).then(() => {
+                showCopyFeedback(subnet);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = subnet;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyFeedback(subnet);
+            });
+        }
+
+        function showCopyFeedback(subnet) {
+            // Remove existing feedback
+            const existing = document.querySelector('.copy-feedback');
+            if (existing) existing.remove();
+            
+            // Create feedback element
+            const feedback = document.createElement('div');
+            feedback.className = 'copy-feedback';
+            feedback.textContent = `${subnet} copied!`;
+            document.body.appendChild(feedback);
+            
+            // Show feedback
+            setTimeout(() => feedback.classList.add('show'), 100);
+            
+            // Hide feedback after 3 seconds
+            setTimeout(() => {
+                feedback.classList.remove('show');
+                setTimeout(() => feedback.remove(), 400);
+            }, 3000);
+        }
+
+        // Initialize the application
+        function init() {
+    // Anında yükle ama kartları gizli başlat
+    updateStats();
+    renderSubnets();
+    setupEventListeners();
+    
+    // Kartlara fade-in efekti ekle
+    const cards = document.querySelectorAll('.subnet-card');
+    const stats = document.querySelectorAll('.stat-card');
+    
+    // Başlangıçta kartları gizle
+    [...cards, ...stats].forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+    });
+    
+    // Anında görünür yap ama animasyonlu
+    setTimeout(() => {
+        [...cards, ...stats].forEach((card, index) => {
+            card.style.transition = 'all 0.4s ease';
+            card.style.transitionDelay = `${index * 0.05}s`;
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        });
+        
+        animateStats();
+    }, 50); // Çok minimal gecikme, sadece DOM'un hazır olması için
+}
+
+        // Start the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Kullanıcı hareketi azalt seçeneğini işaretlediyse paralaksı kapat
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reduceMotion) {
+        const header = document.querySelector('.header');
+        let ticking = false;
+
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.3;
+            header.style.transform = `translate3d(0, ${rate}px, 0)`;
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick, { passive: true });
+    }
+
+    // Intersection Observer for card animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    const originalRenderSubnets = renderSubnets;
+    renderSubnets = function(data) {
+        originalRenderSubnets(data);
+        setTimeout(() => {
+            const cards = document.querySelectorAll('.subnet-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(card);
+            });
+        }, 50);
+    };
+});
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türkiye Haritası - Şehir Durumları</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        // Haritayı oluşturma
+        var map = L.map('map').setView([39.92077, 32.85411], 6); // Türkiye merkez (Ankara)
+
+        // OpenStreetMap katmanını ekleme
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Şehirler ve durumları
+        var cities = [
+            { name: "Konya", coords: [37.8715, 32.4846], active: true },
+            { name: "İzmir", coords: [38.4192, 27.1287], active: true },
+            { name: "Ankara", coords: [39.92077, 32.85411], active: false },
+            { name: "Kayseri", coords: [38.7202, 35.4828], active: false }
+        ];
+
+        // Şehirleri haritaya ekleme
+        cities.forEach(city => {
+            var iconColor = city.active ? 'green' : 'red';
+            var circle = L.circleMarker(city.coords, {
+                color: iconColor,
+                radius: 10,
+                fillOpacity: 0.8
+            }).addTo(map);
+
+            circle.bindPopup(`<b>${city.name}</b><br>Durum: ${city.active ? 'Aktif' : 'Pasif'}`);
+            circle.bindTooltip(`${city.name}`, { permanent: true, direction: 'top' });
+        });
+    </script>
+</body>
+</html>

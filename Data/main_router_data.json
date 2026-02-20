@@ -1,0 +1,2561 @@
+[
+  {
+    "hostname": "TrADBAttr01",
+    "deviceid": 24734611,
+    "ports": [
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrADBAsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "Loopback98",
+        "description": "#### Management ####",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADBAttr01",
+        "deviceid": 24734611,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrAOET8ttr01",
+    "deviceid": 24734612,
+    "ports": [
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrAOET8sw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "Loopback98",
+        "description": "### MNGM ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOET8ttr01",
+        "deviceid": 24734612,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrAYTttr01",
+    "deviceid": 24734613,
+    "ports": [
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrAYTsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "Loopback98",
+        "description": "#### Management ####",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAYTttr01",
+        "deviceid": 24734613,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrIZMttr01",
+    "deviceid": 24734615,
+    "ports": [
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## to LAN vlan 14 ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrIZMT8csw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## Wireless Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrIZMttr01",
+        "deviceid": 24734615,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrBDMAttr01",
+    "deviceid": 24734617,
+    "ports": [
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrBDMAsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1.33",
+        "description": "## CWC VLAN ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## Wireless Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1.980",
+        "description": "## Orange LAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/1.2994",
+        "description": "### Management VLAN ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBDMAttr01",
+        "deviceid": 24734617,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrTEQHttr01",
+    "deviceid": 24734616,
+    "ports": [
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrTEQHcsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## WiFi Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrTEQHttr01",
+        "deviceid": 24734616,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrASRttr01",
+    "deviceid": 24734621,
+    "ports": [
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrASRT8sw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrASRttr01",
+        "deviceid": 24734621,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrSAWttr01",
+    "deviceid": 24734622,
+    "ports": [
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## LAN vlan 14 to Core Switch 1 ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrSAWT8csw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## Wireless Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrSAWttr01",
+        "deviceid": 24734622,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrAOEAttr01",
+    "deviceid": 24734624,
+    "ports": [
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrAOEAsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## Wireless Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAOEAttr01",
+        "deviceid": 24734624,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrKYAttr01",
+    "deviceid": 24734627,
+    "ports": [
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrKYAT8sw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrKYAttr01",
+        "deviceid": 24734627,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrDNZttr01",
+    "deviceid": 24734629,
+    "ports": [
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/0.200",
+        "description": "### WAN TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrDNZsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "Loopback98",
+        "description": "#### Management ####",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrDNZttr01",
+        "deviceid": 24734629,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrANKttr01",
+    "deviceid": 24734631,
+    "ports": [
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "### TO LAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrANKcsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/1.33",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## Wireless Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/1.1110",
+        "description": "## Management Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrANKttr01",
+        "deviceid": 24734631,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrISTHQttr04",
+    "deviceid": 25236843,
+    "ports": [
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "Backup WAN TT",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### TT FVRF WAN ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "### LAN to TrCHO1104csw02 on Gi1/0/3 ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrISTHQcsw02",
+        "neighbor_port": "GigabitEthernet1/0/3"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/1.2998",
+        "description": "## Orange P2P to TrCHO1104csw02 ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/1.2999",
+        "description": "## Purple P2P to TrCHO1104csw02 ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0/0/3",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "Loopback98",
+        "description": "### MNGM interface ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "Tunnel11",
+        "description": "## Backup Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr04",
+        "deviceid": 25236843,
+        "interface_name": "Tunnel21",
+        "description": "## Backup Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrISTHQttr03",
+    "deviceid": 25236844,
+    "ports": [
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### WAN MAIN TT ####",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "#### WAN Interface ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "### LAN to TrCHO1104csw01 on Gi1/0/3 ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrISTHQcsw01",
+        "neighbor_port": "GigabitEthernet1/0/3"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/1.2993",
+        "description": "## Orange P2P to TrCHO1104csw01 ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/1.2995",
+        "description": "## Purple P2P to TrCHO1104csw01 ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0/0/3",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "Loopback98",
+        "description": "### MNGM interface ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTHQttr03",
+        "deviceid": 25236844,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrAJIAttr01",
+    "deviceid": 25255625,
+    "ports": [
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/0.200",
+        "description": "### WAN TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrAJIAsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "GigabitEthernet0",
+        "description": "### OOB MGMT ###",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "Loopback98",
+        "description": "#### Management ####",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrAJIAttr01",
+        "deviceid": 25255625,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrADAttr01",
+    "deviceid": 25261704,
+    "ports": [
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## to LAN vlan 14 ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrADAcsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## WLAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrADAttr01",
+        "deviceid": 25261704,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrGZTttr01",
+    "deviceid": 25766255,
+    "ports": [
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "TrGZTsw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/1.20",
+        "description": "## LAN Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/1.40",
+        "description": "## Wireless Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## Wireless-TNT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrGZTttr01",
+        "deviceid": 25766255,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrISTRTttr02",
+    "deviceid": 25944055,
+    "ports": [
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "### B2B ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrISTRTttr03",
+        "neighbor_port": "GigabitEthernet0/0/2"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/2.100",
+        "description": "### B2B Purple ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/2.200",
+        "description": "### B2B Orange ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/3",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/4",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/5",
+        "description": "### TO LAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrISTRTcsw02",
+        "neighbor_port": "TwentyFiveGigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/5.1120",
+        "description": "## Orange Data ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/5.1140",
+        "description": "## Orange WiFi ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/5.2991",
+        "description": "### FW DIRTY ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "GigabitEthernet0/0/5.2997",
+        "description": "### FW MANAGEMENT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr02",
+        "deviceid": 25944055,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrISTRTttr03",
+    "deviceid": 25944056,
+    "ports": [
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "### B2B ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrISTRTttr02",
+        "neighbor_port": "GigabitEthernet0/0/2"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/2.100",
+        "description": "### B2B Purple ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/2.200",
+        "description": "### B2B Orange ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/3",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/4",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/5",
+        "description": "### TO LAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "TrISTRTcsw03",
+        "neighbor_port": "TwentyFiveGigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/5.1120",
+        "description": "## Orange Data ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/5.1140",
+        "description": "## Orange WiFi ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/5.2991",
+        "description": "### FW DIRTY ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "GigabitEthernet0/0/5.2997",
+        "description": "### FW MANAGEMENT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "Loopback98",
+        "description": "",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrISTRTttr03",
+        "deviceid": 25944056,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  },
+  {
+    "hostname": "TrBTZttr01",
+    "deviceid": 27835278,
+    "ports": [
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/0",
+        "description": "### TO TT ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/0.500",
+        "description": "### WAN ###",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/1",
+        "description": "## LAN L3 Core ##",
+        "link_status": "up",
+        "neighbor_hostname": "TrBTZT8csw01",
+        "neighbor_port": "GigabitEthernet1/0/1"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/1.1120",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/1.1133",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/1.1140",
+        "description": "## LAN Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0/0/2",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "GigabitEthernet0",
+        "description": "",
+        "link_status": "administratively down",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "Loopback98",
+        "description": "#### Management ####",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "Tunnel10",
+        "description": "## Primary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "Tunnel11",
+        "description": "## Secondary Purple ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "Tunnel20",
+        "description": "## Primary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      },
+      {
+        "hostname": "TrBTZttr01",
+        "deviceid": 27835278,
+        "interface_name": "Tunnel21",
+        "description": "## Secondary Orange ##",
+        "link_status": "up",
+        "neighbor_hostname": "N/A",
+        "neighbor_port": "N/A"
+      }
+    ]
+  }
+]

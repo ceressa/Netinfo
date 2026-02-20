@@ -1,0 +1,1015 @@
+ Volume in drive D is DATA
+ Volume Serial Number is 224B-ECD8
+
+ Directory of D:\INTRANET\Netinfo
+
+12/02/2024  09:40 PM    <DIR>          .
+12/02/2024  09:40 PM    <DIR>          ..
+12/02/2024  11:22 AM               278 .env
+11/25/2024  09:35 PM             1,619 app.py
+11/19/2024  04:14 PM               127 appsettings.Development.json
+11/26/2024  04:42 PM               859 appsettings.json
+03/03/2022  07:10 PM            23,040 BCrypt.Net-Next.dll
+11/30/2024  05:18 PM    <DIR>          bin
+12/01/2024  05:42 PM    <DIR>          Controllers
+11/30/2024  04:45 PM    <DIR>          Data
+12/01/2024  05:40 PM             1,887 device_map.html
+11/30/2024  04:41 PM            15,045 directory_structure.txt
+08/20/2024  07:02 PM            37,888 DotNetEnv.dll
+05/02/2019  07:39 AM             9,728 ExcelDataReader.DataSet.dll
+05/02/2019  07:39 AM           161,280 ExcelDataReader.dll
+11/27/2024  01:48 PM             7,319 FedEx_logo.png
+12/02/2024  09:40 PM                 0 filelist.txt
+12/02/2024  09:34 PM    <DIR>          logs
+11/05/2024  09:32 AM            11,339 merged_statseeker_data.xlsx
+09/13/2019  06:12 PM            67,960 Microsoft.Extensions.DependencyModel.dll
+11/19/2024  04:14 PM    <DIR>          Models
+12/02/2024  04:14 PM             2,036 Netinfo.csproj
+12/01/2024  05:56 PM            58,880 Netinfo.dll
+12/01/2024  05:56 PM           151,040 Netinfo.exe
+11/22/2024  11:40 PM             3,416 Netinfo.js
+12/01/2024  05:56 PM            35,344 Netinfo.pdb
+12/02/2024  09:30 PM    <DIR>          obj
+11/19/2024  04:14 PM               127 package.json
+11/26/2024  12:05 AM             2,749 port_data.py
+11/28/2024  03:26 PM           348,872 port_data.xlsx
+12/02/2024  09:36 PM             1,229 Program.cs
+11/19/2024  04:14 PM    <DIR>          Properties
+12/02/2024  04:14 PM    <DIR>          publish
+07/15/2022  02:18 AM            15,872 Serilog.AspNetCore.dll
+10/22/2024  06:31 AM           166,400 Serilog.dll
+07/09/2022  01:26 AM            28,672 Serilog.Extensions.Hosting.dll
+11/02/2021  12:38 AM            17,408 Serilog.Extensions.Logging.dll
+10/17/2019  08:18 AM             8,704 Serilog.Formatting.Compact.dll
+10/07/2021  11:46 AM            64,512 Serilog.Settings.Configuration.dll
+11/19/2021  03:04 AM            34,304 Serilog.Sinks.Console.dll
+02/14/2021  10:47 AM             7,168 Serilog.Sinks.Debug.dll
+06/25/2021  11:00 AM            31,232 Serilog.Sinks.File.dll
+11/30/2024  04:21 PM    <DIR>          Server
+12/02/2024  01:44 PM    <DIR>          Services
+09/05/2020  01:06 AM            61,952 Sprache.dll
+11/29/2024  01:15 PM             6,450 switchdetails.html
+11/19/2024  04:14 PM    <DIR>          Views
+12/02/2024  09:34 PM               612 web.config
+11/30/2024  05:49 PM    <DIR>          wwwroot
+              35 File(s)      1,385,348 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin
+
+11/30/2024  05:18 PM    <DIR>          .
+11/30/2024  05:18 PM    <DIR>          ..
+11/30/2024  05:05 PM    <DIR>          Debug
+11/30/2024  05:18 PM    <DIR>          Release
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug
+
+11/30/2024  05:05 PM    <DIR>          .
+11/30/2024  05:05 PM    <DIR>          ..
+12/02/2024  09:30 PM    <DIR>          net6.0
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0
+
+12/02/2024  09:30 PM    <DIR>          .
+12/02/2024  09:30 PM    <DIR>          ..
+12/02/2024  11:22 AM               278 .env
+03/03/2022  07:10 PM            23,040 BCrypt.Net-Next.dll
+08/20/2024  07:02 PM            37,888 DotNetEnv.dll
+05/02/2019  07:39 AM             9,728 ExcelDataReader.DataSet.dll
+05/02/2019  07:39 AM           161,280 ExcelDataReader.dll
+09/13/2019  06:12 PM            67,960 Microsoft.Extensions.DependencyModel.dll
+12/02/2024  09:30 PM            74,981 Netinfo.deps.json
+12/02/2024  09:30 PM            27,136 Netinfo.dll
+12/02/2024  09:30 PM           151,040 Netinfo.exe
+12/02/2024  09:30 PM            23,532 Netinfo.pdb
+12/02/2024  09:30 PM               416 Netinfo.runtimeconfig.json
+12/02/2024  09:30 PM               367 Netinfo.staticwebassets.runtime.json
+12/02/2024  03:42 PM    <DIR>          publish
+07/15/2022  02:18 AM            15,872 Serilog.AspNetCore.dll
+10/22/2024  06:31 AM           166,400 Serilog.dll
+07/09/2022  01:26 AM            28,672 Serilog.Extensions.Hosting.dll
+11/02/2021  12:38 AM            17,408 Serilog.Extensions.Logging.dll
+10/17/2019  08:18 AM             8,704 Serilog.Formatting.Compact.dll
+10/07/2021  11:46 AM            64,512 Serilog.Settings.Configuration.dll
+11/19/2021  03:04 AM            34,304 Serilog.Sinks.Console.dll
+02/14/2021  10:47 AM             7,168 Serilog.Sinks.Debug.dll
+06/25/2021  11:00 AM            31,232 Serilog.Sinks.File.dll
+09/05/2020  01:06 AM            61,952 Sprache.dll
+12/02/2024  09:30 PM    <DIR>          wwwroot
+              22 File(s)      1,013,870 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish
+
+12/02/2024  03:42 PM    <DIR>          .
+12/02/2024  03:42 PM    <DIR>          ..
+12/02/2024  03:42 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish
+
+12/02/2024  03:42 PM    <DIR>          .
+12/02/2024  03:42 PM    <DIR>          ..
+12/02/2024  02:54 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish
+
+12/02/2024  02:54 PM    <DIR>          .
+12/02/2024  02:54 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+12/02/2024  02:40 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:40 PM    <DIR>          .
+12/02/2024  02:40 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Debug\net6.0\wwwroot
+
+12/02/2024  09:30 PM    <DIR>          .
+12/02/2024  09:30 PM    <DIR>          ..
+12/02/2024  12:34 PM            43,568 index.html
+11/30/2024  05:46 PM             1,124 Netinfo.styles.css
+               2 File(s)         44,692 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release
+
+11/30/2024  05:18 PM    <DIR>          .
+11/30/2024  05:18 PM    <DIR>          ..
+12/02/2024  04:14 PM    <DIR>          net6.0
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0
+
+12/02/2024  04:14 PM    <DIR>          .
+12/02/2024  04:14 PM    <DIR>          ..
+12/02/2024  11:22 AM               278 .env
+03/03/2022  07:10 PM            23,040 BCrypt.Net-Next.dll
+08/20/2024  07:02 PM            37,888 DotNetEnv.dll
+05/02/2019  07:39 AM             9,728 ExcelDataReader.DataSet.dll
+05/02/2019  07:39 AM           161,280 ExcelDataReader.dll
+09/13/2019  06:12 PM            67,960 Microsoft.Extensions.DependencyModel.dll
+12/02/2024  09:34 PM            74,981 Netinfo.deps.json
+12/02/2024  09:36 PM            24,576 Netinfo.dll
+12/02/2024  09:36 PM           151,040 Netinfo.exe
+12/02/2024  09:36 PM            22,936 Netinfo.pdb
+12/02/2024  09:34 PM               488 Netinfo.runtimeconfig.json
+12/02/2024  04:14 PM               367 Netinfo.staticwebassets.runtime.json
+12/02/2024  03:47 PM    <DIR>          publish
+07/15/2022  02:18 AM            15,872 Serilog.AspNetCore.dll
+10/22/2024  06:31 AM           166,400 Serilog.dll
+07/09/2022  01:26 AM            28,672 Serilog.Extensions.Hosting.dll
+11/02/2021  12:38 AM            17,408 Serilog.Extensions.Logging.dll
+10/17/2019  08:18 AM             8,704 Serilog.Formatting.Compact.dll
+10/07/2021  11:46 AM            64,512 Serilog.Settings.Configuration.dll
+11/19/2021  03:04 AM            34,304 Serilog.Sinks.Console.dll
+02/14/2021  10:47 AM             7,168 Serilog.Sinks.Debug.dll
+06/25/2021  11:00 AM            31,232 Serilog.Sinks.File.dll
+09/05/2020  01:06 AM            61,952 Sprache.dll
+12/02/2024  04:14 PM    <DIR>          wwwroot
+              22 File(s)      1,010,786 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+12/02/2024  03:47 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+12/02/2024  03:47 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+12/02/2024  03:47 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+12/02/2024  03:47 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+12/02/2024  02:24 PM    <DIR>          publish
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish\publish
+
+12/02/2024  02:24 PM    <DIR>          .
+12/02/2024  02:24 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\bin\Release\net6.0\wwwroot
+
+12/02/2024  04:14 PM    <DIR>          .
+12/02/2024  04:14 PM    <DIR>          ..
+12/02/2024  12:34 PM            43,568 index.html
+11/30/2024  05:46 PM             1,124 Netinfo.styles.css
+               2 File(s)         44,692 bytes
+
+ Directory of D:\INTRANET\Netinfo\Controllers
+
+12/01/2024  05:42 PM    <DIR>          .
+12/01/2024  05:42 PM    <DIR>          ..
+12/02/2024  10:41 AM             1,709 AdminController.cs
+12/02/2024  01:06 PM             2,068 DeviceController.cs
+               2 File(s)          3,777 bytes
+
+ Directory of D:\INTRANET\Netinfo\Data
+
+11/30/2024  04:45 PM    <DIR>          .
+11/30/2024  04:45 PM    <DIR>          ..
+11/05/2024  09:32 AM            11,339 merged_statseeker_data.xlsx
+11/28/2024  03:26 PM           348,872 port_data.xlsx
+               2 File(s)        360,211 bytes
+
+ Directory of D:\INTRANET\Netinfo\logs
+
+12/02/2024  09:34 PM    <DIR>          .
+12/02/2024  09:34 PM    <DIR>          ..
+12/02/2024  02:40 PM            21,749 log-20241202_005.txt
+12/02/2024  02:22 PM               469 log-20241202_006.txt
+12/02/2024  03:44 PM            16,931 log-20241202_007.txt
+12/02/2024  04:37 PM            23,767 log-20241202_008.txt
+12/02/2024  04:45 PM             4,050 log-20241202_009.txt
+12/02/2024  09:31 PM             4,719 log-20241202_010.txt
+12/02/2024  09:36 PM             2,140 log-20241202_011.txt
+               7 File(s)         73,825 bytes
+
+ Directory of D:\INTRANET\Netinfo\Models
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/30/2024  04:49 PM               348 ErrorViewModel.cs
+               1 File(s)            348 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj
+
+12/02/2024  09:30 PM    <DIR>          .
+12/02/2024  09:30 PM    <DIR>          ..
+11/30/2024  05:05 PM    <DIR>          Debug
+12/02/2024  09:30 PM             3,028 Netinfo.csproj.nuget.dgspec.json
+12/02/2024  09:30 PM             1,153 Netinfo.csproj.nuget.g.props
+11/30/2024  04:57 PM               150 Netinfo.csproj.nuget.g.targets
+12/02/2024  09:30 PM           251,200 project.assets.json
+12/02/2024  09:30 PM            15,947 project.nuget.cache
+11/30/2024  05:18 PM    <DIR>          Release
+12/02/2024  09:36 PM               850 staticwebassets.pack.sentinel
+               6 File(s)        272,328 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug
+
+11/30/2024  05:05 PM    <DIR>          .
+11/30/2024  05:05 PM    <DIR>          ..
+12/02/2024  09:30 PM    <DIR>          net6.0
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0
+
+12/02/2024  09:30 PM    <DIR>          .
+12/02/2024  09:30 PM    <DIR>          ..
+11/30/2024  05:05 PM               190 .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+12/02/2024  09:30 PM           151,040 apphost.exe
+12/02/2024  04:06 PM               954 Netinfo.AssemblyInfo.cs
+12/02/2024  04:06 PM                42 Netinfo.AssemblyInfoInputs.cache
+12/02/2024  09:30 PM            48,851 Netinfo.assets.cache
+12/02/2024  04:06 PM           146,810 Netinfo.csproj.AssemblyReference.cache
+12/02/2024  04:06 PM                 0 Netinfo.csproj.CopyComplete
+12/02/2024  04:06 PM                42 Netinfo.csproj.CoreCompileInputs.cache
+12/02/2024  09:30 PM             2,467 Netinfo.csproj.FileListAbsolute.txt
+12/02/2024  09:30 PM            27,136 Netinfo.dll
+12/02/2024  04:06 PM               724 Netinfo.GeneratedMSBuildEditorConfig.editorconfig
+12/02/2024  04:06 PM                42 Netinfo.genruntimeconfig.cache
+11/30/2024  05:05 PM               770 Netinfo.GlobalUsings.g.cs
+12/02/2024  09:30 PM                 0 Netinfo.MvcApplicationPartsAssemblyInfo.cache
+12/02/2024  09:30 PM            23,532 Netinfo.pdb
+12/02/2024  04:06 PM    <DIR>          ref
+12/02/2024  04:06 PM    <DIR>          refint
+11/30/2024  05:07 PM    <DIR>          scopedcss
+11/30/2024  05:05 PM    <DIR>          staticwebassets
+12/02/2024  09:30 PM             1,703 staticwebassets.build.json
+12/02/2024  09:30 PM               367 staticwebassets.development.json
+              17 File(s)        404,670 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\ref
+
+12/02/2024  04:06 PM    <DIR>          .
+12/02/2024  04:06 PM    <DIR>          ..
+12/02/2024  09:30 PM             8,704 Netinfo.dll
+               1 File(s)          8,704 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\refint
+
+12/02/2024  04:06 PM    <DIR>          .
+12/02/2024  04:06 PM    <DIR>          ..
+12/02/2024  09:30 PM             8,704 Netinfo.dll
+               1 File(s)          8,704 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\scopedcss
+
+11/30/2024  05:07 PM    <DIR>          .
+11/30/2024  05:07 PM    <DIR>          ..
+12/02/2024  03:42 PM    <DIR>          bundle
+12/02/2024  03:42 PM    <DIR>          projectbundle
+11/30/2024  05:07 PM    <DIR>          Views
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\scopedcss\bundle
+
+12/02/2024  03:42 PM    <DIR>          .
+12/02/2024  03:42 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\scopedcss\projectbundle
+
+12/02/2024  03:42 PM    <DIR>          .
+12/02/2024  03:42 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\scopedcss\Views
+
+11/30/2024  05:07 PM    <DIR>          .
+11/30/2024  05:07 PM    <DIR>          ..
+12/02/2024  03:42 PM    <DIR>          Shared
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\scopedcss\Views\Shared
+
+12/02/2024  03:42 PM    <DIR>          .
+12/02/2024  03:42 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Debug\net6.0\staticwebassets
+
+11/30/2024  05:05 PM    <DIR>          .
+11/30/2024  05:05 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release
+
+11/30/2024  05:18 PM    <DIR>          .
+11/30/2024  05:18 PM    <DIR>          ..
+12/02/2024  09:36 PM    <DIR>          net6.0
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0
+
+12/02/2024  09:36 PM    <DIR>          .
+12/02/2024  09:36 PM    <DIR>          ..
+11/30/2024  05:18 PM               190 .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+12/02/2024  09:36 PM           151,040 apphost.exe
+11/30/2024  05:18 PM               956 Netinfo.AssemblyInfo.cs
+11/30/2024  05:18 PM                42 Netinfo.AssemblyInfoInputs.cache
+12/02/2024  09:33 PM            48,851 Netinfo.assets.cache
+11/30/2024  05:18 PM           146,810 Netinfo.csproj.AssemblyReference.cache
+11/30/2024  05:46 PM                 0 Netinfo.csproj.CopyComplete
+12/02/2024  01:49 PM                42 Netinfo.csproj.CoreCompileInputs.cache
+12/02/2024  04:14 PM             2,545 Netinfo.csproj.FileListAbsolute.txt
+12/02/2024  09:36 PM            24,576 Netinfo.dll
+12/02/2024  03:47 PM               724 Netinfo.GeneratedMSBuildEditorConfig.editorconfig
+11/30/2024  05:46 PM                42 Netinfo.genruntimeconfig.cache
+11/30/2024  05:18 PM               770 Netinfo.GlobalUsings.g.cs
+12/02/2024  09:34 PM                 0 Netinfo.MvcApplicationPartsAssemblyInfo.cache
+12/02/2024  09:36 PM            22,936 Netinfo.pdb
+12/01/2024  06:00 PM             1,200 PublishOutputs.05d0750ade.txt
+12/02/2024  09:36 PM             1,066 PublishOutputs.78a8a715f1.txt
+12/01/2024  05:58 PM             1,355 PublishOutputs.9cf5594e79.txt
+11/30/2024  05:46 PM    <DIR>          ref
+11/30/2024  05:46 PM    <DIR>          refint
+11/30/2024  05:46 PM    <DIR>          scopedcss
+11/30/2024  05:18 PM    <DIR>          staticwebassets
+12/02/2024  04:14 PM             1,703 staticwebassets.build.json
+12/02/2024  04:14 PM               367 staticwebassets.development.json
+12/02/2024  04:14 PM             1,705 staticwebassets.publish.json
+              21 File(s)        406,920 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\ref
+
+11/30/2024  05:46 PM    <DIR>          .
+11/30/2024  05:46 PM    <DIR>          ..
+12/02/2024  09:36 PM             8,704 Netinfo.dll
+               1 File(s)          8,704 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\refint
+
+11/30/2024  05:46 PM    <DIR>          .
+11/30/2024  05:46 PM    <DIR>          ..
+12/02/2024  09:36 PM             8,704 Netinfo.dll
+               1 File(s)          8,704 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\scopedcss
+
+11/30/2024  05:46 PM    <DIR>          .
+11/30/2024  05:46 PM    <DIR>          ..
+11/30/2024  05:46 PM    <DIR>          bundle
+12/02/2024  03:47 PM    <DIR>          projectbundle
+11/30/2024  05:46 PM    <DIR>          Views
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\scopedcss\bundle
+
+11/30/2024  05:46 PM    <DIR>          .
+11/30/2024  05:46 PM    <DIR>          ..
+11/30/2024  05:46 PM             1,124 Netinfo.styles.css
+               1 File(s)          1,124 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\scopedcss\projectbundle
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\scopedcss\Views
+
+11/30/2024  05:46 PM    <DIR>          .
+11/30/2024  05:46 PM    <DIR>          ..
+12/02/2024  03:47 PM    <DIR>          Shared
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\scopedcss\Views\Shared
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\obj\Release\net6.0\staticwebassets
+
+11/30/2024  05:18 PM    <DIR>          .
+11/30/2024  05:18 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\Properties
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+12/02/2024  04:04 PM               707 launchSettings.json
+               1 File(s)            707 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish
+
+12/02/2024  04:14 PM    <DIR>          .
+12/02/2024  04:14 PM    <DIR>          ..
+12/02/2024  11:22 AM               278 .env
+03/03/2022  07:10 PM            23,040 BCrypt.Net-Next.dll
+08/20/2024  07:02 PM            37,888 DotNetEnv.dll
+05/02/2019  07:39 AM             9,728 ExcelDataReader.DataSet.dll
+05/02/2019  07:39 AM           161,280 ExcelDataReader.dll
+12/02/2024  09:37 PM    <DIR>          logs
+09/13/2019  06:12 PM            67,960 Microsoft.Extensions.DependencyModel.dll
+12/02/2024  09:34 PM            74,981 Netinfo.deps.json
+12/02/2024  09:36 PM            24,576 Netinfo.dll
+12/02/2024  09:36 PM           151,040 Netinfo.exe
+12/02/2024  09:36 PM            22,936 Netinfo.pdb
+12/02/2024  09:34 PM               488 Netinfo.runtimeconfig.json
+07/15/2022  02:18 AM            15,872 Serilog.AspNetCore.dll
+10/22/2024  06:31 AM           166,400 Serilog.dll
+07/09/2022  01:26 AM            28,672 Serilog.Extensions.Hosting.dll
+11/02/2021  12:38 AM            17,408 Serilog.Extensions.Logging.dll
+10/17/2019  08:18 AM             8,704 Serilog.Formatting.Compact.dll
+10/07/2021  11:46 AM            64,512 Serilog.Settings.Configuration.dll
+11/19/2021  03:04 AM            34,304 Serilog.Sinks.Console.dll
+02/14/2021  10:47 AM             7,168 Serilog.Sinks.Debug.dll
+06/25/2021  11:00 AM            31,232 Serilog.Sinks.File.dll
+09/05/2020  01:06 AM            61,952 Sprache.dll
+12/02/2024  09:36 PM               548 web.config
+11/29/2024  01:10 PM    <DIR>          wwwroot
+              22 File(s)      1,010,967 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\logs
+
+12/02/2024  09:37 PM    <DIR>          .
+12/02/2024  09:37 PM    <DIR>          ..
+11/27/2024  08:59 PM           654,708 log-20241127.txt
+11/28/2024  05:43 PM           276,966 log-20241128.txt
+11/29/2024  06:07 PM           450,954 log-20241129.txt
+11/30/2024  07:41 PM           113,313 log-20241130.txt
+12/01/2024  05:56 PM            26,673 log-20241201.txt
+12/02/2024  03:21 PM             8,997 log-20241202.txt
+12/02/2024  03:55 PM             1,499 stdout.log_20241202125346_10844.log
+12/02/2024  03:57 PM             1,240 stdout.log_20241202125555_16772.log
+12/02/2024  03:59 PM             1,240 stdout.log_20241202125744_7336.log
+12/02/2024  04:01 PM               754 stdout.log_20241202125954_15004.log
+12/02/2024  09:34 PM               719 stdout.log_20241202183412_7284.log
+11/19/2024  04:40 PM               336 stdout_20241119132616_14992.log
+11/19/2024  05:00 PM               336 stdout_20241119134100_10584.log
+11/19/2024  05:12 PM               336 stdout_20241119140008_18212.log
+11/19/2024  05:36 PM               336 stdout_20241119141236_5868.log
+11/20/2024  08:44 AM               336 stdout_20241120051748_9648.log
+11/20/2024  08:51 AM               336 stdout_20241120054440_16756.log
+11/20/2024  09:09 AM               336 stdout_20241120055106_17964.log
+11/20/2024  09:35 AM               336 stdout_20241120060953_15572.log
+11/20/2024  10:00 AM               336 stdout_20241120064504_15876.log
+11/20/2024  10:03 AM               336 stdout_20241120070023_3196.log
+11/20/2024  10:42 AM               336 stdout_20241120070314_11364.log
+11/20/2024  11:22 AM               336 stdout_20241120074217_2044.log
+11/20/2024  11:44 AM               336 stdout_20241120082219_8552.log
+11/20/2024  12:05 PM               336 stdout_20241120084454_14320.log
+11/20/2024  02:13 PM               336 stdout_20241120104604_16496.log
+11/22/2024  10:05 AM               336 stdout_20241122063628_5688.log
+12/02/2024  02:24 PM               754 stdout_20241202112336_18816.log
+12/02/2024  02:36 PM             2,261 stdout_20241202112439_18816.log
+12/02/2024  02:44 PM             1,234 stdout_20241202114003_16824.log
+12/02/2024  02:49 PM             1,764 stdout_20241202114448_19168.log
+12/02/2024  02:49 PM             2,896 stdout_20241202114941_10052.log
+12/02/2024  02:50 PM             2,896 stdout_20241202115005_10052.log
+12/02/2024  02:50 PM             2,896 stdout_20241202115022_10052.log
+12/02/2024  02:52 PM             2,896 stdout_20241202115211_10052.log
+12/02/2024  02:55 PM             2,896 stdout_20241202115537_10052.log
+12/02/2024  03:14 PM             1,284 stdout_20241202115712_11744.log
+12/02/2024  03:21 PM             1,281 stdout_20241202121434_11744.log
+12/02/2024  03:31 PM               841 stdout_20241202122133_15352.log
+12/02/2024  03:53 PM               838 stdout_20241202125024_15656.log
+12/02/2024  04:21 PM               776 stdout_20241202132112_2556.log
+12/02/2024  04:24 PM               776 stdout_20241202132358_5300.log
+12/02/2024  04:29 PM             1,550 stdout_20241202132924_17200.log
+12/02/2024  04:30 PM             1,550 stdout_20241202133037_17200.log
+12/02/2024  05:16 PM             1,464 stdout_20241202133704_17200.log
+12/02/2024  09:36 PM               981 stdout_20241202183521_7284.log
+12/02/2024  09:37 PM               976 stdout_20241202183708_10492.log
+              47 File(s)      1,575,249 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot
+
+11/29/2024  01:10 PM    <DIR>          .
+11/29/2024  01:10 PM    <DIR>          ..
+11/19/2024  04:21 PM    <DIR>          css
+11/19/2024  04:14 PM             5,430 favicon.ico
+12/02/2024  01:54 PM            43,456 index.html
+11/19/2024  04:21 PM    <DIR>          js
+11/19/2024  04:21 PM    <DIR>          lib
+11/30/2024  05:46 PM             1,124 Netinfo.styles.css
+11/29/2024  01:02 PM             5,503 switchDetails.html
+               4 File(s)         55,513 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\css
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM               194 site.css
+               1 File(s)            194 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\js
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM               230 site.js
+               1 File(s)            230 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:21 PM    <DIR>          bootstrap
+11/19/2024  04:21 PM    <DIR>          jquery
+11/19/2024  04:21 PM    <DIR>          jquery-validation
+11/19/2024  04:21 PM    <DIR>          jquery-validation-unobtrusive
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\bootstrap
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:21 PM    <DIR>          dist
+11/19/2024  04:14 PM             1,153 LICENSE
+               1 File(s)          1,153 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\bootstrap\dist
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:21 PM    <DIR>          css
+11/19/2024  04:21 PM    <DIR>          js
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\bootstrap\dist\css
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM            70,538 bootstrap-grid.css
+11/19/2024  04:14 PM           196,535 bootstrap-grid.css.map
+11/19/2024  04:14 PM            51,319 bootstrap-grid.min.css
+11/19/2024  04:14 PM           117,439 bootstrap-grid.min.css.map
+11/19/2024  04:14 PM            70,612 bootstrap-grid.rtl.css
+11/19/2024  04:14 PM           196,539 bootstrap-grid.rtl.css.map
+11/19/2024  04:14 PM            51,394 bootstrap-grid.rtl.min.css
+11/19/2024  04:14 PM           117,516 bootstrap-grid.rtl.min.css.map
+11/19/2024  04:14 PM             5,850 bootstrap-reboot.css
+11/19/2024  04:14 PM           105,138 bootstrap-reboot.css.map
+11/19/2024  04:14 PM             4,646 bootstrap-reboot.min.css
+11/19/2024  04:14 PM            35,330 bootstrap-reboot.min.css.map
+11/19/2024  04:14 PM             5,827 bootstrap-reboot.rtl.css
+11/19/2024  04:14 PM           105,151 bootstrap-reboot.rtl.css.map
+11/19/2024  04:14 PM             4,718 bootstrap-reboot.rtl.min.css
+11/19/2024  04:14 PM            41,570 bootstrap-reboot.rtl.min.css.map
+11/19/2024  04:14 PM            71,584 bootstrap-utilities.css
+11/19/2024  04:14 PM           192,271 bootstrap-utilities.css.map
+11/19/2024  04:14 PM            53,479 bootstrap-utilities.min.css
+11/19/2024  04:14 PM           111,875 bootstrap-utilities.min.css.map
+11/19/2024  04:14 PM            71,451 bootstrap-utilities.rtl.css
+11/19/2024  04:14 PM           192,214 bootstrap-utilities.rtl.css.map
+11/19/2024  04:14 PM            53,407 bootstrap-utilities.rtl.min.css
+11/19/2024  04:14 PM           111,710 bootstrap-utilities.rtl.min.css.map
+11/19/2024  04:14 PM           204,136 bootstrap.css
+11/19/2024  04:14 PM           536,547 bootstrap.css.map
+11/19/2024  04:14 PM           162,720 bootstrap.min.css
+11/19/2024  04:14 PM           449,111 bootstrap.min.css.map
+11/19/2024  04:14 PM           203,803 bootstrap.rtl.css
+11/19/2024  04:14 PM           536,461 bootstrap.rtl.css.map
+11/19/2024  04:14 PM           162,825 bootstrap.rtl.min.css
+11/19/2024  04:14 PM           661,035 bootstrap.rtl.min.css.map
+              32 File(s)      4,954,751 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\bootstrap\dist\js
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM           208,492 bootstrap.bundle.js
+11/19/2024  04:14 PM           425,643 bootstrap.bundle.js.map
+11/19/2024  04:14 PM            78,468 bootstrap.bundle.min.js
+11/19/2024  04:14 PM           327,261 bootstrap.bundle.min.js.map
+11/19/2024  04:14 PM           139,019 bootstrap.esm.js
+11/19/2024  04:14 PM           288,320 bootstrap.esm.js.map
+11/19/2024  04:14 PM            72,016 bootstrap.esm.min.js
+11/19/2024  04:14 PM           222,508 bootstrap.esm.min.js.map
+11/19/2024  04:14 PM           148,168 bootstrap.js
+11/19/2024  04:14 PM           289,522 bootstrap.js.map
+11/19/2024  04:14 PM            59,511 bootstrap.min.js
+11/19/2024  04:14 PM           217,145 bootstrap.min.js.map
+              12 File(s)      2,476,073 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\jquery
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:21 PM    <DIR>          dist
+11/19/2024  04:14 PM             1,641 LICENSE.txt
+               1 File(s)          1,641 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\jquery\dist
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM           287,630 jquery.js
+11/19/2024  04:14 PM            89,476 jquery.min.js
+11/19/2024  04:14 PM           137,974 jquery.min.map
+               3 File(s)        515,080 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\jquery-validation
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:21 PM    <DIR>          dist
+11/19/2024  04:14 PM             1,117 LICENSE.md
+               1 File(s)          1,117 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\jquery-validation\dist
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM            52,977 additional-methods.js
+11/19/2024  04:14 PM            22,177 additional-methods.min.js
+11/19/2024  04:14 PM            51,171 jquery.validate.js
+11/19/2024  04:14 PM            24,601 jquery.validate.min.js
+               4 File(s)        150,926 bytes
+
+ Directory of D:\INTRANET\Netinfo\publish\wwwroot\lib\jquery-validation-unobtrusive
+
+11/19/2024  04:21 PM    <DIR>          .
+11/19/2024  04:21 PM    <DIR>          ..
+11/19/2024  04:14 PM            19,366 jquery.validate.unobtrusive.js
+11/19/2024  04:14 PM             5,868 jquery.validate.unobtrusive.min.js
+11/19/2024  04:14 PM               587 LICENSE.txt
+               3 File(s)         25,821 bytes
+
+ Directory of D:\INTRANET\Netinfo\Server
+
+11/30/2024  04:21 PM    <DIR>          .
+11/30/2024  04:21 PM    <DIR>          ..
+11/30/2024  04:22 PM               665 app.js
+11/30/2024  04:22 PM             1,156 auth.js
+11/30/2024  04:23 PM               554 csrf.js
+11/30/2024  04:23 PM               651 middlewares.js
+11/30/2024  04:20 PM    <DIR>          routes
+11/30/2024  04:20 PM    <DIR>          utils
+               4 File(s)          3,026 bytes
+
+ Directory of D:\INTRANET\Netinfo\Server\routes
+
+11/30/2024  04:20 PM    <DIR>          .
+11/30/2024  04:20 PM    <DIR>          ..
+11/30/2024  04:23 PM               195 authRoutes.js
+11/30/2024  04:23 PM               292 protectedRoutes.js
+               2 File(s)            487 bytes
+
+ Directory of D:\INTRANET\Netinfo\Server\utils
+
+11/30/2024  04:20 PM    <DIR>          .
+11/30/2024  04:20 PM    <DIR>          ..
+11/30/2024  04:24 PM               277 jwt.js
+11/30/2024  04:24 PM               600 limiter.js
+11/30/2024  04:23 PM               335 logger.js
+               3 File(s)          1,212 bytes
+
+ Directory of D:\INTRANET\Netinfo\Services
+
+12/02/2024  01:44 PM    <DIR>          .
+12/02/2024  01:44 PM    <DIR>          ..
+12/02/2024  11:10 AM             1,635 AdminAuthService.cs
+12/02/2024  02:43 PM             3,629 DeviceDataService.cs
+12/02/2024  10:49 AM               137 IAdminAuthService.cs
+               3 File(s)          5,401 bytes
+
+ Directory of D:\INTRANET\Netinfo\Views
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          Home
+12/02/2024  03:47 PM    <DIR>          Shared
+11/19/2024  04:14 PM                96 _ViewImports.cshtml
+11/19/2024  04:14 PM                35 _ViewStart.cshtml
+               2 File(s)            131 bytes
+
+ Directory of D:\INTRANET\Netinfo\Views\Home
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM               239 Index.cshtml
+11/19/2024  04:14 PM               144 Privacy.cshtml
+               2 File(s)            383 bytes
+
+ Directory of D:\INTRANET\Netinfo\Views\Shared
+
+12/02/2024  03:47 PM    <DIR>          .
+12/02/2024  03:47 PM    <DIR>          ..
+11/19/2024  04:14 PM               884 Error.cshtml
+11/19/2024  04:14 PM             2,370 _Layout.cshtml
+11/19/2024  04:14 PM               176 _ValidationScriptsPartial.cshtml
+               3 File(s)          3,430 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot
+
+11/30/2024  05:49 PM    <DIR>          .
+11/30/2024  05:49 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          css
+11/19/2024  04:14 PM             5,430 favicon.ico
+12/02/2024  12:34 PM            43,568 index.html
+11/19/2024  04:14 PM    <DIR>          js
+11/19/2024  04:14 PM    <DIR>          lib
+11/30/2024  05:46 PM             1,124 Netinfo.styles.css
+11/29/2024  01:02 PM             5,503 switchDetails.html
+               4 File(s)         55,625 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\css
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM               194 site.css
+               1 File(s)            194 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\js
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM               230 site.js
+               1 File(s)            230 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          bootstrap
+11/19/2024  04:14 PM    <DIR>          jquery
+11/19/2024  04:14 PM    <DIR>          jquery-validation
+11/19/2024  04:14 PM    <DIR>          jquery-validation-unobtrusive
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\bootstrap
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          dist
+11/19/2024  04:14 PM             1,153 LICENSE
+               1 File(s)          1,153 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\bootstrap\dist
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          css
+11/19/2024  04:14 PM    <DIR>          js
+               0 File(s)              0 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\bootstrap\dist\css
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM            70,538 bootstrap-grid.css
+11/19/2024  04:14 PM           196,535 bootstrap-grid.css.map
+11/19/2024  04:14 PM            51,319 bootstrap-grid.min.css
+11/19/2024  04:14 PM           117,439 bootstrap-grid.min.css.map
+11/19/2024  04:14 PM            70,612 bootstrap-grid.rtl.css
+11/19/2024  04:14 PM           196,539 bootstrap-grid.rtl.css.map
+11/19/2024  04:14 PM            51,394 bootstrap-grid.rtl.min.css
+11/19/2024  04:14 PM           117,516 bootstrap-grid.rtl.min.css.map
+11/19/2024  04:14 PM             5,850 bootstrap-reboot.css
+11/19/2024  04:14 PM           105,138 bootstrap-reboot.css.map
+11/19/2024  04:14 PM             4,646 bootstrap-reboot.min.css
+11/19/2024  04:14 PM            35,330 bootstrap-reboot.min.css.map
+11/19/2024  04:14 PM             5,827 bootstrap-reboot.rtl.css
+11/19/2024  04:14 PM           105,151 bootstrap-reboot.rtl.css.map
+11/19/2024  04:14 PM             4,718 bootstrap-reboot.rtl.min.css
+11/19/2024  04:14 PM            41,570 bootstrap-reboot.rtl.min.css.map
+11/19/2024  04:14 PM            71,584 bootstrap-utilities.css
+11/19/2024  04:14 PM           192,271 bootstrap-utilities.css.map
+11/19/2024  04:14 PM            53,479 bootstrap-utilities.min.css
+11/19/2024  04:14 PM           111,875 bootstrap-utilities.min.css.map
+11/19/2024  04:14 PM            71,451 bootstrap-utilities.rtl.css
+11/19/2024  04:14 PM           192,214 bootstrap-utilities.rtl.css.map
+11/19/2024  04:14 PM            53,407 bootstrap-utilities.rtl.min.css
+11/19/2024  04:14 PM           111,710 bootstrap-utilities.rtl.min.css.map
+11/19/2024  04:14 PM           204,136 bootstrap.css
+11/19/2024  04:14 PM           536,547 bootstrap.css.map
+11/19/2024  04:14 PM           162,720 bootstrap.min.css
+11/19/2024  04:14 PM           449,111 bootstrap.min.css.map
+11/19/2024  04:14 PM           203,803 bootstrap.rtl.css
+11/19/2024  04:14 PM           536,461 bootstrap.rtl.css.map
+11/19/2024  04:14 PM           162,825 bootstrap.rtl.min.css
+11/19/2024  04:14 PM           661,035 bootstrap.rtl.min.css.map
+              32 File(s)      4,954,751 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\bootstrap\dist\js
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM           208,492 bootstrap.bundle.js
+11/19/2024  04:14 PM           425,643 bootstrap.bundle.js.map
+11/19/2024  04:14 PM            78,468 bootstrap.bundle.min.js
+11/19/2024  04:14 PM           327,261 bootstrap.bundle.min.js.map
+11/19/2024  04:14 PM           139,019 bootstrap.esm.js
+11/19/2024  04:14 PM           288,320 bootstrap.esm.js.map
+11/19/2024  04:14 PM            72,016 bootstrap.esm.min.js
+11/19/2024  04:14 PM           222,508 bootstrap.esm.min.js.map
+11/19/2024  04:14 PM           148,168 bootstrap.js
+11/19/2024  04:14 PM           289,522 bootstrap.js.map
+11/19/2024  04:14 PM            59,511 bootstrap.min.js
+11/19/2024  04:14 PM           217,145 bootstrap.min.js.map
+              12 File(s)      2,476,073 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\jquery
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          dist
+11/19/2024  04:14 PM             1,641 LICENSE.txt
+               1 File(s)          1,641 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\jquery\dist
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM           287,630 jquery.js
+11/19/2024  04:14 PM            89,476 jquery.min.js
+11/19/2024  04:14 PM           137,974 jquery.min.map
+               3 File(s)        515,080 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\jquery-validation
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM    <DIR>          dist
+11/19/2024  04:14 PM             1,117 LICENSE.md
+               1 File(s)          1,117 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\jquery-validation\dist
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM            52,977 additional-methods.js
+11/19/2024  04:14 PM            22,177 additional-methods.min.js
+11/19/2024  04:14 PM            51,171 jquery.validate.js
+11/19/2024  04:14 PM            24,601 jquery.validate.min.js
+               4 File(s)        150,926 bytes
+
+ Directory of D:\INTRANET\Netinfo\wwwroot\lib\jquery-validation-unobtrusive
+
+11/19/2024  04:14 PM    <DIR>          .
+11/19/2024  04:14 PM    <DIR>          ..
+11/19/2024  04:14 PM            19,366 jquery.validate.unobtrusive.js
+11/19/2024  04:14 PM             5,868 jquery.validate.unobtrusive.min.js
+11/19/2024  04:14 PM               587 LICENSE.txt
+               3 File(s)         25,821 bytes
+
+     Total Files Listed:
+             359 File(s)     24,023,510 bytes
+             278 Dir(s)  33,443,127,296 bytes free

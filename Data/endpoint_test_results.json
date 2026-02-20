@@ -1,0 +1,98 @@
+{
+  "cli_verbose": {
+    "host": "TrISTRT2-SEG15",
+    "device_type": "extreme_wing",
+    "success": true,
+    "permalink": "https://network-api-servers/v1/device/TrISTRT2-SEG15/cli?device_type=extreme_wing&commands=show%20wireless%20clients%20verbose",
+    "results": {
+      "show wireless clients verbose": "                                   ^\n% Invalid input detected 9999 at '^' marker.\n"
+    }
+  },
+  "cli_station": {
+    "host": "TrISTRT2-SEG15",
+    "device_type": "extreme_wing",
+    "success": true,
+    "permalink": "https://network-api-servers/v1/device/TrISTRT2-SEG15/cli?device_type=extreme_wing&commands=show%20station-table",
+    "results": {
+      "show station-table": "                       ^\n% Invalid input detected 9999 at '^' marker.\n"
+    }
+  },
+  "facts": {
+    "host": "TrISTRT2-SEG15",
+    "device_type": "extreme_wing",
+    "success": true,
+    "permalink": "https://network-api-servers/v1/device/TrISTRT2-SEG15/facts?device_type=extreme_wing",
+    "results": {
+      "vendor": "Extreme Networks",
+      "uptime": 1551600,
+      "uptime_string": "17 days, 23 hours 02 minutes",
+      "model": "AP410e-WR",
+      "hostname": "TrISTRT2-SEG15",
+      "fqdn": "TrISTRT2-SEG15.netdb.fedex.com",
+      "os_version": "7.9.6.0-012R",
+      "serial_number": "2251Y-14398",
+      "operation_mode": "autonomous",
+      "interface_list": [
+        "vlan1",
+        "vlan40",
+        "vlan242",
+        "ge1",
+        "ge2"
+      ]
+    }
+  },
+  "wireless_radios": {
+    "host": "TrISTRT2-SEG15",
+    "device_type": "extreme_wing",
+    "success": true,
+    "permalink": "https://network-api-servers/v1/device/TrISTRT2-SEG15/wireless-radios?device_type=extreme_wing&rf_domain=self",
+    "results": [
+      {
+        "radio": "TrISTRT2-SEG15:R1",
+        "mac_address": "24:1f:bd:ba:8b:a0",
+        "rf_mode": "2.4GHz-wlan",
+        "state": "On",
+        "channel": "1 (smt)",
+        "power": "10 dBm (Max)"
+      },
+      {
+        "radio": "TrISTRT2-SEG15:R2",
+        "mac_address": "24:1f:bd:ba:8b:b0",
+        "rf_mode": "5GHz-wlan",
+        "state": "On",
+        "channel": "136 (smt)",
+        "power": "14 dBm (Max)"
+      },
+      {
+        "radio": "TrISTRT2-SEG15:R3",
+        "mac_address": "24:1f:bd:da:d7:63",
+        "rf_mode": "sensor",
+        "state": "Off [shutdown in cfg]",
+        "channel": "N/A (smt)",
+        "power": "0 dBm (Max)"
+      }
+    ]
+  },
+  "neighbors": {
+    "host": "TrISTRT2-SEG15",
+    "device_type": "extreme_wing",
+    "success": true,
+    "permalink": "https://network-api-servers/v1/device/TrISTRT2-SEG15/neighbors?device_type=extreme_wing",
+    "results": {
+      "ge1": {
+        "hostname": "TrISTRT-Z11D-sw01",
+        "fqdn": "TrISTRT-Z11D-sw01.emea.fedex.com",
+        "management_ip": "10.34.253.132",
+        "platform": "cisco C9300-24P",
+        "remote_port": "Gi1/0/12",
+        "local_port": "ge1",
+        "software_version": "Cisco IOS Software [Dublin], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.12.4, RELEASE SOFTWARE (fc3)\nTechnical Suppo",
+        "capabilities": "Switch IGMP Capable",
+        "serial": "",
+        "learned_by": [
+          "cdp"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "hour_range": "15:00 - 16:00",
+    "input_traffic_mbps": 17859.519999999953,
+    "output_traffic_mbps": 19291.599999999948
+  },
+  {
+    "hour_range": "16:00 - 17:00",
+    "input_traffic_mbps": 20748.559999999947,
+    "output_traffic_mbps": 22412.299999999956
+  },
+  {
+    "hour_range": "13:00 - 14:00",
+    "input_traffic_mbps": 2101.119999999992,
+    "output_traffic_mbps": 2269.5999999999917
+  },
+  {
+    "hour_range": "16:00 - 17:00",
+    "input_traffic_mbps": 8630.399999999987,
+    "output_traffic_mbps": 9536.839999999958
+  }
+]

@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cihaz Bilgi Paneli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .feedback-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            animation: fadeIn 0.5s ease;
+        }
+        .feedback-message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .feedback-message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        select, input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cihaz Seçim Ekranı</h2>
+        <div id="loginSection">
+            <input type="password" id="passwordInput" placeholder="Şifre">
+            <button onclick="login()">Giriş Yap</button>
+        </div>
+        <div id="deviceSelectionSection" style="display: none;">
+            <select id="deviceDropdown">
+                <option value="">Cihaz Seçin</option>
+            </select>
+            <button onclick="getDeviceData()">Cihaz Bilgilerini Getir</button>
+        </div>
+        <div id="feedback"></div>
+    </div>
+
+    <script>
+        async function login() {
+            const password = document.getElementById("passwordInput").value;
+            const feedback = document.getElementById("feedback");
+
+            const response = await fetch("/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password }),
+            });
+            const result = await response.json();
+
+            feedback.textContent = result.message;
+            feedback.className = `feedback-message ${result.success ? "success" : "error"}`;
+
+            if (result.success) {
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("deviceSelectionSection").style.display = "block";
+                loadDevices();
+            }
+        }
+
+        async function loadDevices() {
+            const response = await fetch("/api/get_devices");
+            const result = await response.json();
+
+            if (result.success) {
+                const dropdown = document.getElementById("deviceDropdown");
+                result.devices.forEach((device) => {
+                    const option = document.createElement("option");
+                    option.value = device;
+                    option.textContent = device;
+                    dropdown.appendChild(option);
+                });
+            }
+        }
+
+        async function getDeviceData() {
+            const deviceName = document.getElementById("deviceDropdown").value;
+            const feedback = document.getElementById("feedback");
+
+            if (!deviceName) {
+                feedback.textContent = "Lütfen bir cihaz seçin.";
+                feedback.className = "feedback-message error";
+                return;
+            }
+
+            const response = await fetch(`/api/get_device_data?hostname=${encodeURIComponent(deviceName)}`);
+            const result = await response.json();
+
+            feedback.textContent = result.success
+                ? JSON.stringify(result.data, null, 2)
+                : result.message;
+            feedback.className = `feedback-message ${result.success ? "success" : "error"}`;
+        }
+    </script>
+</body>
+</html>

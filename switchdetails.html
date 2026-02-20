@@ -1,0 +1,199 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cisco 9300 Switch Port Layout</title>
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4D148C, #FF6600); /* FedEx renk geçişi */
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-container {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1); /* Hafif transparan beyaz arka plan */
+    padding: 20px;
+    border-radius: 15px; /* Daha modern yuvarlatılmış köşeler */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Daha belirgin gölge */
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px); /* Cam efekti */
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.switch-container:hover {
+    transform: scale(1.05); /* Hafif büyütme efekti */
+    background: rgba(255, 255, 255, 0.2); /* Daha belirgin transparan */
+}
+
+.port-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+
+.port {
+    width: 50px;
+    height: 30px;
+    background-color: #FF6600; /* FedEx turuncu */
+    color: #FFFFFF; /* Beyaz yazı */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Daha belirgin gölge */
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.port:hover {
+    transform: scale(1.1); /* Hafif büyütme efekti */
+    background-color: #4D148C; /* FedEx mor */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Daha yoğun gölge */
+}
+
+.group-spacing {
+    margin: 0 15px; /* Genişletilmiş grup aralığı */
+}
+
+.row-spacing {
+    margin: 20px 0;
+}
+
+h1 {
+    color: #FF6600; /* FedEx turuncu */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Hafif gölge */
+    font-size: 2rem; /* Daha büyük yazı boyutu */
+    margin-bottom: 30px;
+    animation: glow 1.5s infinite alternate; /* Hafif parlayan animasyon */
+}
+
+/* Glow Animasyonu */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #FF6600, 0 0 10px #FF6600, 0 0 15px #FF6600;
+    }
+    to {
+        text-shadow: 0 0 10px #4D148C, 0 0 20px #4D148C, 0 0 30px #4D148C;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <h1>Cisco 9300 Switch Port Layout</h1>
+
+    <!-- 24-Port Switch -->
+    <div class="switch-container">
+        <h2>24-Port Switch</h2>
+        <!-- Top Row: Odd Ports -->
+        <div class="port-row">
+            <div class="port">1</div>
+            <div class="port">3</div>
+            <div class="port">5</div>
+            <div class="port">7</div>
+            <div class="port">9</div>
+            <div class="port">11</div>
+            <div class="group-spacing"></div>
+            <div class="port">13</div>
+            <div class="port">15</div>
+            <div class="port">17</div>
+            <div class="port">19</div>
+            <div class="port">21</div>
+            <div class="port">23</div>
+        </div>
+        <!-- Bottom Row: Even Ports -->
+        <div class="port-row">
+            <div class="port">2</div>
+            <div class="port">4</div>
+            <div class="port">6</div>
+            <div class="port">8</div>
+            <div class="port">10</div>
+            <div class="port">12</div>
+            <div class="group-spacing"></div>
+            <div class="port">14</div>
+            <div class="port">16</div>
+            <div class="port">18</div>
+            <div class="port">20</div>
+            <div class="port">22</div>
+            <div class="port">24</div>
+        </div>
+    </div>
+
+    <!-- 48-Port Switch -->
+    <div class="switch-container">
+        <h2>48-Port Switch</h2>
+        <!-- Top Row: Odd Ports -->
+        <div class="port-row">
+            <div class="port">1</div>
+            <div class="port">3</div>
+            <div class="port">5</div>
+            <div class="port">7</div>
+            <div class="port">9</div>
+            <div class="port">11</div>
+            <div class="group-spacing"></div>
+            <div class="port">13</div>
+            <div class="port">15</div>
+            <div class="port">17</div>
+            <div class="port">19</div>
+            <div class="port">21</div>
+            <div class="port">23</div>
+            <div class="group-spacing"></div>
+            <div class="port">25</div>
+            <div class="port">27</div>
+            <div class="port">29</div>
+            <div class="port">31</div>
+            <div class="port">33</div>
+            <div class="port">35</div>
+            <div class="group-spacing"></div>
+            <div class="port">37</div>
+            <div class="port">39</div>
+            <div class="port">41</div>
+            <div class="port">43</div>
+            <div class="port">45</div>
+            <div class="port">47</div>
+        </div>
+        <!-- Bottom Row: Even Ports -->
+        <div class="port-row">
+            <div class="port">2</div>
+            <div class="port">4</div>
+            <div class="port">6</div>
+            <div class="port">8</div>
+            <div class="port">10</div>
+            <div class="port">12</div>
+            <div class="group-spacing"></div>
+            <div class="port">14</div>
+            <div class="port">16</div>
+            <div class="port">18</div>
+            <div class="port">20</div>
+            <div class="port">22</div>
+            <div class="port">24</div>
+            <div class="group-spacing"></div>
+            <div class="port">26</div>
+            <div class="port">28</div>
+            <div class="port">30</div>
+            <div class="port">32</div>
+            <div class="port">34</div>
+            <div class="port">36</div>
+            <div class="group-spacing"></div>
+            <div class="port">38</div>
+            <div class="port">40</div>
+            <div class="port">42</div>
+            <div class="port">44</div>
+            <div class="port">46</div>
+            <div class="port">48</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "last_updated": "29-08-2025 14:04:46",
+    "total_aps_with_enhanced_data": 8,
+    "total_clients_with_signal_data": 0,
+    "total_connection_events": 0,
+    "total_roaming_events": 0,
+    "signal_quality_distribution": {
+      "Excellent": 0,
+      "Good": 0,
+      "Fair": 0,
+      "Poor": 0,
+      "Very Poor": 0
+    }
+  },
+  "enhanced_wireless_data": {
+    "24018005": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24017932": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24018008": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24018009": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24018011": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24018019": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24018015": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    },
+    "24018023": {
+      "client_signal_data": [],
+      "connection_events": [],
+      "roaming_history": []
+    }
+  }
+}

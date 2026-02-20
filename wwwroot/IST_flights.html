@@ -1,0 +1,4230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FedEx Istanbul Flight Routes</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"/>
+
+  <style>
+:root {
+  --ist-color: #4B0082;          /* FedEx Purple for IST */
+  --saw-color: #FF6600;          /* FedEx Orange for SAW */
+  --hkg-color: #6B7280;          /* Grey for HKG */
+  --cdg-color: #059669;          /* Red for CDG */
+  --lgg-color: #EAB308;          /* Blue for LGG */
+  --live-color: #00ff41;
+  --glass: rgba(255,255,255,0.15);
+  --glass-strong: rgba(255,255,255,0.95);
+  --shadow-light: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-medium: 0 10px 30px rgba(0,0,0,0.15);
+  --shadow-heavy: 0 20px 40px rgba(0,0,0,0.2);
+  --border-radius: 15px;
+  --border-radius-large: 20px;
+  --transition: all 0.3s ease;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #2c3e50;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* ince ayırıcı çizgi */
+}
+
+.header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+  color: #f9fafb; /* neredeyse beyaz */
+  text-transform: uppercase;
+}
+
+.header h1 span {
+  color: var(--brand-color, #ff6600); /* FedEx turuncusu ya da markaya özel renk */
+}
+
+.header p {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #9ca3af; /* açık gri, secondary text */
+  margin: 0;
+}
+
+
+.live-control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000; /* harita olaylarının üstünde */
+}
+
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #111827; /* koyu gri arka plan */
+  color: #d1d5db;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.live-indicator .dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #9ca3af; /* pasif gri */
+  transition: background 0.3s ease;
+}
+
+.live-indicator.active {
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+.live-indicator.active .dot {
+  background: #22c55e;
+}
+
+.live-indicator.active .dot::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  opacity: 0;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.5); opacity: 0.6; }
+  70% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(0.5); opacity: 0; }
+}
+
+
+
+
+/* Top Controls */
+.top-controls {
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--border-radius-large);
+  padding: 20px;
+  box-shadow: var(--shadow-heavy);
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: 20px;
+  color: white;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.control-section {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.control-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.control-btn {
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  font-family: 'JetBrains Mono', monospace;
+  flex: 1;
+  min-width: calc(50% - 4px);
+  text-align: center;
+}
+
+.control-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.control-btn.active {
+  color: white;
+  font-weight: 600;
+  border-color: currentColor;
+}
+
+/* Route buttons with airport colors - güncelleme */
+.route-btn[data-route*="SAW"][data-route*="CDG"].active {
+  background: #FF6600; /* SAW-CDG rotasının rengi */
+  border-color: #FF6600;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+.route-btn[data-route*="SAW"][data-route*="LGG"].active {
+  background: #c0392b; /* SAW-LGG rotasının rengi */
+  border-color: #c0392b;
+  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+}
+
+.route-btn[data-route*="IST"][data-route*="CDG"].active {
+  background: #4B0082; /* IST-CDG rotasının rengi */
+  border-color: #4B0082;
+  box-shadow: 0 4px 12px rgba(75, 0, 130, 0.3);
+}
+
+.route-btn[data-route*="HKG"][data-route*="IST"].active {
+  background: #6B7280; /* HKG-IST rotasının rengi */
+  border-color: #6B7280;
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+/* Day filter dropdown */
+.day-filter {
+  width: 100%;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.day-filter option {
+  background: #1a1a1a;
+  color: white;
+}
+
+/* Live toggle */
+.live-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255,255,255,0.2);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  margin-top: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: var(--live-color);
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch.active .toggle-slider {
+  transform: translateX(24px);
+}
+
+.toggle-label {
+  font-weight: 500;
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Map Section */
+.map-wrapper {
+  position: relative;
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--border-radius-large);
+  padding: 15px;
+  box-shadow: var(--shadow-heavy);
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: 30px;
+}
+
+#map {
+  height: 600px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Live status panel */
+.live-status-panel {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: white;
+  border-radius: 16px;
+  min-width: 280px;
+  max-width: 350px;
+  max-height: 70vh;
+  overflow: hidden;
+  z-index: 1000;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.status-title {
+  color: var(--live-color);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.collapse-indicator {
+  color: #64748b;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.live-status-panel.collapsed .collapse-indicator {
+  transform: rotate(180deg);
+}
+
+.status-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+  padding: 15px;
+}
+
+.live-status-panel.collapsed .status-content {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.status-item {
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Info Cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 20px;
+}
+
+.info-card {
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: var(--shadow-medium);
+  transition: transform 0.3s ease;
+  color: white;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-heavy);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.card-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: var(--live-color);
+  color: black;
+}
+
+.card-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+}
+
+.detail-label {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: white;
+  font-weight: 500;
+}
+
+.flights-list {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
+.flight-item {
+  background: rgba(255,255,255,0.1);
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Custom Markers */
+.custom-airport-label,
+.custom-flight-label {
+  background: none !important;
+  border: none !important;
+}
+
+.airport-marker {
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  border: 2px solid white !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.airport-marker.ist {
+  background: var(--ist-color) !important;
+  transform: translateX(-30px); /* Sola kaydır */
+}
+
+.airport-marker.saw {
+  background: var(--saw-color) !important;
+  transform: translateX(30px); /* Sağa kaydır */
+}
+
+.airport-marker.hkg {
+  background: var(--hkg-color) !important;
+}
+
+.airport-marker.cdg {
+  background: var(--cdg-color) !important;
+}
+
+.airport-marker.lgg {
+  background: var(--lgg-color) !important;
+
+}
+
+.flight-marker {
+  color: white !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 10px !important;
+  border: 2px solid white !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+  text-align: center !important;
+  backdrop-filter: blur(5px) !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  opacity: 0.95 !important;
+}
+
+/* Footer – cam/şeffaf, kompakt */
+.fx-footer{
+  margin-top: 24px;
+  border-top: 1px solid rgba(255,255,255,.25);
+  background: radial-gradient(120% 160% at 10% -20%, rgba(255,255,255,.14) 0%, rgba(255,255,255,.06) 60%, rgba(255,255,255,.04) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.12) inset;
+  color:#eef2ff;
+}
+
+.fx-footer__content{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+
+.fx-footer__left{ display:flex; align-items:center; gap:12px; min-width:0; }
+.fx-footer__logo{ height:22px; opacity:.95; filter: drop-shadow(0 1px 0 rgba(0,0,0,.15)); }
+.fx-footer__text{ line-height:1.2; display:flex; flex-direction:column; }
+.fx-footer__text small{ color:#c7d2fe; opacity:.85; }
+
+.fx-footer__right{ color:#c7d2fe; }
+.fx-footer__credit a{
+  color:#c4b5fd; font-weight:700; text-decoration:none; border-bottom:1px dashed rgba(196,181,253,.5);
+  transition: color .2s ease, border-color .2s ease;
+}
+.fx-footer__credit a:hover{ color:#e9d5ff; border-color:#e9d5ff; }
+
+/* Easter egg: uçak animasyonu */
+.fx-footer__sky{
+  position: relative;
+  height: 0; /* normalde görünmez; animasyon için overflow alanı */
+  overflow: visible;
+}
+.fx-plane{
+  position: absolute;
+  bottom: 14px;
+  left: -60px;
+  font-size: 18px;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.3));
+  animation: fxFly 2.8s cubic-bezier(.4,.0,.2,1) forwards;
+  white-space: nowrap;
+}
+@keyframes fxFly{
+  0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity:0; }
+  10%  { opacity:1; }
+  60%  { transform: translateX(calc(100vw - 120px)) translateY(-6px) rotate(-8deg); }
+  100% { transform: translateX(calc(100vw - 60px)) translateY(-14px) rotate(-12deg); opacity:0; }
+}
+
+/* Responsive */
+@media (max-width:768px){
+  .fx-footer__content{ flex-direction:column; align-items:flex-start; gap:10px; }
+  .fx-plane{ bottom: 10px; }
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .controls-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .control-btn {
+    min-width: calc(50% - 4px);
+  }
+  
+  .live-status-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    left: 20px;
+    width: auto;
+  }
+  
+  #map {
+    height: 400px;
+  }
+  
+  .info-cards {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+}
+
+/* Custom Tooltips */
+.custom-tooltip {
+  background: rgba(45, 55, 72, 0.95);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-heavy);
+  backdrop-filter: blur(10px);
+  max-width: 280px;
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.tooltip-route {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.tooltip-aircraft {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+}
+
+.tooltip-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+}
+
+.tooltip-label {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.tooltip-value {
+  color: white;
+  font-weight: 500;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  color: #f1f1f1;
+  font-family: "Segoe UI", sans-serif;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+.leaflet-popup-tip {
+  background: rgba(20, 20, 20, 0.85);
+}
+
+.popup-content {
+  padding: 8px 4px;
+}
+
+.popup-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 4px;
+  text-align: center;
+}
+
+.popup-details {
+  font-size: 13px;
+  line-height: 1.4;
+  display: grid;
+  grid-template-columns: 24px auto;
+  gap: 4px 8px;
+  margin-top: 6px;
+}
+
+.popup-details span {
+  display: contents;
+}
+
+.popup-details .icon {
+  text-align: center;
+  opacity: 0.7;
+}
+
+
+/* Custom Leaflet tooltip styles */
+.custom-leaflet-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.custom-leaflet-tooltip:before {
+  display: none !important;
+}
+
+.live-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(220, 38, 38, 0.9);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.live-button:hover {
+  transform: scale(1.1);
+}
+
+.live-button.active {
+  background: rgba(0, 255, 65, 0.9);
+}
+
+.live-dot {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* Pill Ribbon */
+.day-ribbon {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  scroll-snap-type: x proximity;
+}
+
+/* Timezone Selector */
+.timezone-selector {
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--border-radius);
+  padding: 15px 20px;
+  box-shadow: var(--shadow-medium);
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: 20px;
+  color: white;
+  text-align: center;
+}
+
+.timezone-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timezone-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.timezone-btn {
+  padding: 8px 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timezone-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+  background: rgba(255,255,255,0.2);
+}
+
+.timezone-btn.active {
+  background: linear-gradient(135deg, #4B0082, #FF6600);
+  border-color: rgba(255,255,255,0.6);
+  box-shadow: 0 4px 12px rgba(75, 0, 130, 0.3);
+}
+
+@media (max-width: 768px) {
+  .timezone-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .timezone-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+.day-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: .2px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  box-shadow: var(--shadow-light);
+  scroll-snap-align: start;
+  outline: none;
+}
+
+.day-pill:hover { transform: translateY(-1px); box-shadow: var(--shadow-medium); }
+.day-pill:focus-visible { box-shadow: 0 0 0 3px rgba(0,255,65,0.35), var(--shadow-medium); }
+
+.day-pill.active {
+  background: linear-gradient(135deg, var(--ist-color), var(--saw-color));
+  border-color: rgba(255,255,255,0.6);
+}
+
+.pill-icon { font-size: 1rem; line-height: 1; }
+.pill-text { font-size: .9rem; }
+
+/* Yatay scrollbar estetik (opsiyonel) */
+.day-ribbon::-webkit-scrollbar { height: 8px; }
+.day-ribbon::-webkit-scrollbar-track { background: rgba(255,255,255,0.08); border-radius: 8px; }
+.day-ribbon::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 8px; }
+.day-ribbon::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }
+
+.route-btn.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(20%);
+}
+
+/* kısa sarsma animasyonu */
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+.route-btn.shake {
+  animation: shakeX 0.25s ease;
+}
+
+
+.day-segmented {
+  display: inline-grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 kolona çıkardık */
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 4px;
+  backdrop-filter: blur(10px);
+  width: fit-content;
+}
+
+.day-segment {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  text-align: center;
+  min-width: 50px;
+}
+
+.day-segment.all {
+  grid-column: 1 / -1; /* Tüm genişliği kaplasın */
+  font-weight: 600;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 2px;
+}
+
+.day-segment.all.active {
+  background: linear-gradient(135deg, #FF6600, #4B0082);
+  color: white;
+  font-weight: 700;
+}
+
+.day-segment:hover {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.95);
+}
+
+.day-segment.active {
+  background: rgba(255,255,255,0.9);
+  color: #333;
+  font-weight: 600;
+}
+
+.day-segment.has-flight {
+  background: linear-gradient(135deg, rgba(34,197,94,0.55), rgba(34,197,94,0.35));
+border-color: rgba(34,197,94,0.7);
+
+  color: rgba(255,255,255,0.95);
+  box-shadow: 0 0 8px rgba(34,197,94,0.5), inset 0 0 4px rgba(34,197,94,0.3);
+
+}
+
+.day-segment.has-flight:hover {
+  background: linear-gradient(135deg, rgba(34,197,94,0.3), rgba(34,197,94,0.15));
+  border-color: rgba(34,197,94,0.6);
+}
+
+.day-segment.has-flight.active {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: rgba(34,197,94,0.8);
+  color: white;
+  font-weight: 600;
+}
+
+/* Eski nokta stilini kaldır */
+.day-segment.has-flight::after {
+  display: none;
+}
+
+.live-filter {
+  margin-top: 6px;
+  padding: 4px 8px;
+  background: #1f2937;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #d1d5db;
+  display: flex;
+  gap: 10px;
+}
+.live-filter label {
+  cursor: pointer;
+}
+.live-filter input {
+  margin-right: 4px;
+}
+
+.live-control.leaflet-bar { background:#111827; padding:6px 8px; border-radius:8px; border:1px solid rgba(255,255,255,.1);}
+.live-filter { margin-top:6px; display:flex; gap:8px; font-size:12px; color:#d1d5db;}
+.live-filter label { display:flex; align-items:center; gap:6px; cursor:pointer; }
+
+.live-aircraft {
+  font-size: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.live-aircraft:hover {
+  transform: scale(1.2);
+}
+
+/* ==== HEADER UPGRADE ==== */
+.site-header{
+  position: sticky; top: 0; z-index:1100;
+  margin: 0 0 18px; padding:12px 18px;
+  border-radius: var(--border-radius-large);
+  background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.30);
+  box-shadow: var(--shadow-light);
+}
+.site-header.scrolled{ box-shadow: var(--shadow-heavy); border-color: rgba(255,255,255,.45); }
+
+.site-header__row{
+  display:grid; grid-template-columns: 1fr auto; gap:16px; align-items:center;
+}
+
+.brand{ display:flex; align-items:center; gap:12px; min-width:0; }
+.brand-logo{
+  width:44px; height:44px; border-radius:10px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(0,0,0,.06);
+  display:grid; place-items:center; box-shadow: var(--shadow-medium);
+  flex: 0 0 auto;
+}
+.brand-logo img{
+  width: 90%; height: 90%; object-fit: contain; display:block;
+}
+.titles{ min-width:0; }
+.titles h1{
+  margin:0; font-size:1.35rem; line-height:1.15; font-weight:800; color:#f9fafb;
+  letter-spacing:.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.titles p{
+  margin:3px 0 0; color:#cbd5e1; font-size:.92rem; font-weight:500;
+}
+
+.header-actions{ display:flex; align-items:center; gap:10px; }
+
+/* LIVE butonu (header) */
+.live-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 14px; border-radius:999px; cursor:pointer;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.22);
+  color:#e5e7eb; font-weight:700; letter-spacing:.3px;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+}
+.live-btn .dot{ width:8px; height:8px; border-radius:50%; background:#9ca3af; }
+.live-btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow-medium); }
+.live-btn.active{ color:#22c55e; border-color:#22c55e; box-shadow:0 0 0 2px rgba(34,197,94,.25) inset; }
+.live-btn.active .dot{ background:#22c55e; }
+
+/* Küçük ekran */
+@media (max-width:768px){
+  .site-header__row{ grid-template-columns: 1fr; gap:10px; }
+  .titles h1{ font-size:1.15rem; }
+  .titles p{ font-size:.85rem; }
+}
+
+/* === FILTER TOGGLE BUTTON === */
+.filter-toggle {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(15px);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-toggle:hover {
+  transform: translateY(-1px) scale(1.02);
+  background: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.12));
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.filter-toggle:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* === FILTER PANEL (SLIDE-IN) === */
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 320px;
+  height: 100%;
+  background: rgba(20,20,35,0.9);
+  backdrop-filter: blur(25px) saturate(140%);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  box-shadow: -8px 0 40px rgba(0,0,0,0.25);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px;
+  transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+  color: #fff;
+}
+
+.filter-panel.open { right: 0; }
+
+/* Header */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.filter-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.filter-close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+.filter-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+
+/* Sections */
+.filter-section {
+  margin-bottom: 25px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.filter-section .section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Overlay */
+.filter-overlay {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1150;
+  opacity: 0; visibility: hidden;
+  transition: all 0.3s ease;
+}
+.filter-overlay.show { opacity: 1; visibility: visible; }
+
+/* === FLOATING CARD VARIANT === */
+.filters-card {
+  position: absolute;
+  top: 70px; right: 20px;
+  z-index: 1100;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(20,20,35,0.75);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+  color: #fff;
+  max-width: 240px;
+}
+.filters-card h4 {
+  font-size: .95rem;
+  margin: 0 0 10px;
+  color: #f9fafb;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 6px;
+}
+.filter-option {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom: 8px;
+  font-size:.85rem;
+  color:#f0f0f0;
+}
+.filter-option input[type="checkbox"]{
+  accent-color: #FF6600;
+  transform: scale(1.1);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .filter-panel { width: 280px; padding: 20px 15px; }
+  .filter-toggle { padding: 10px 14px; font-size: 0.85rem; }
+}
+
+/* Quick Start Pulse Highlight */
+.quickstart-highlight {
+  position: relative;
+  overflow: visible;
+}
+
+.quickstart-highlight::after {
+  content: "";
+  position: absolute;
+  top: -8px; left: -8px; right: -8px; bottom: -8px;
+  border-radius: 16px;
+  border: 2px solid #FF6600;
+  animation: pulse-border 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-border {
+  0% { opacity: 0; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+
+/* Intro Banner */
+.intro-banner {
+  position: absolute;
+  top: 60px; left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg,#4B0082,#FF6600);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1500;
+}
+
+.intro-banner button {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.intro-banner button:hover { background: rgba(255,255,255,0.35); }
+
+
+
+/* Route Buttons - daha şık görünüm */
+.route-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  margin: 4px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  transition: transform .15s ease, box-shadow .2s ease, opacity .2s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+}
+
+/* Renkleri rotayla aynı tut */
+.route-btn[data-route="SAW-CDG"] { background: linear-gradient(135deg, #ff6a00, #ff8800); }
+.route-btn[data-route="SAW-LGG"] { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+.route-btn[data-route="IST-CDG"] { background: linear-gradient(135deg, #4B0082, #6a0dad); }
+.route-btn[data-route="HKG-IST"] { background: linear-gradient(135deg, #6b7280, #9ca3af); }
+
+.route-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  opacity: 0.95;
+}
+
+.route-btn.active {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 8px;
+}
+
+/* Responsive grid */
+@media (max-width: 1200px) { 
+  .day-grid { grid-template-columns: repeat(5, 1fr); } 
+}
+@media (max-width: 900px) { 
+  .day-grid { grid-template-columns: repeat(4, 1fr); } 
+}
+@media (max-width: 640px) { 
+  .day-grid { grid-template-columns: repeat(3, 1fr); } 
+}
+@media (max-width: 380px) { 
+  .day-grid { grid-template-columns: repeat(2, 1fr); } 
+}
+
+/* FedEx uçak görseli için animasyon */
+.fx-fedex-plane-svg {
+  position: fixed;
+  top: 50%;
+  right: -300px;             /* ekran dışında başlasın */
+  width: 260px;
+  height: auto;
+  transform: translateY(-50%); /* ters çevirme kaldırıldı */
+  z-index: 9999;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.3));
+  animation: fxFlyRightToLeft 4s linear forwards;
+}
+
+@keyframes fxFlyRightToLeft {
+  0%   { transform: translateY(-50%); opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translateX(-50vw) translateY(-52%); opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(-120vw) translateY(-55%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-fedex-plane-svg {
+    animation: none !important;
+    opacity: .8;
+    right: 20px;
+    transform: translateY(-50%);
+  }
+}
+
+/* Info Modal */
+.info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.info-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.info-modal-content {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #333;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.info-modal.show .info-modal-content {
+  transform: scale(1);
+}
+
+.info-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(75,0,130,0.2);
+}
+
+.info-modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #4B0082;
+  margin: 0;
+}
+
+.info-modal-close {
+  background: rgba(255,255,255,0.8);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #666;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+
+.info-modal-close:hover {
+  background: rgba(220,38,38,0.1);
+  color: #dc2626;
+  transform: scale(1.1);
+}
+
+.info-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(75,0,130,0.05);
+  border-radius: 8px;
+  border-left: 3px solid #FF6600;
+}
+
+.info-feature-icon {
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.info-feature-text {
+  flex: 1;
+}
+
+.info-feature-title {
+  font-weight: 600;
+  color: #4B0082;
+  margin-bottom: 4px;
+}
+
+.info-feature-desc {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Info Button */
+.info-button {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.info-button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+/* Schedule Modal */
+.schedule-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.schedule-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.schedule-modal-content {
+  background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px;
+  width: 900px; /* Daha geniş */
+  height: 700px; /* Daha yüksek */
+  max-width: none;
+  max-height: none;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #333;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-modal.show .schedule-modal-content {
+  transform: scale(1) translateY(0);
+}
+
+.schedule-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(75,0,130,0.2);
+}
+
+.schedule-modal-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #4B0082;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.schedule-modal-close {
+  background: rgba(220,38,38,0.1);
+  border: 1px solid rgba(220,38,38,0.2);
+  color: #dc2626;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.schedule-modal-close:hover {
+  background: rgba(220,38,38,0.2);
+  transform: scale(1.1);
+}
+
+/* Day Selector */
+.schedule-day-selector {
+  display: grid;
+  grid-template-columns: 1.2fr repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(75,0,130,0.05);
+  border-radius: 12px;
+}
+
+.schedule-day-btn {
+  padding: 10px 8px;
+  border: 1px solid rgba(75,0,130,0.2);
+  background: rgba(255,255,255,0.7);
+  color: #4B0082;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  min-width: 60px; /* Minimum genişlik ekle */
+  width: 100%; /* Grid hücresinin tamamını kullan */
+  box-sizing: border-box; /* Padding'i dahil et */
+  white-space: nowrap; /* Metni tek satırda tut */
+  overflow: hidden; /* Taşan metni gizle */
+}
+
+.schedule-day-btn.all-week {
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 80px; /* ALL WEEK için biraz daha geniş */
+}
+
+.schedule-day-btn:hover {
+  background: rgba(255,102,0,0.1);
+  border-color: #FF6600;
+}
+
+.schedule-day-btn.active {
+  background: linear-gradient(135deg, #4B0082, #FF6600);
+  color: white;
+  border-color: transparent;
+}
+
+.flight-schedule-list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 10px;
+}
+
+/* Scrollbar stilleri */
+.flight-schedule-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.flight-schedule-list::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+.flight-schedule-list::-webkit-scrollbar-thumb {
+  background: rgba(75,0,130,0.5);
+  border-radius: 3px;
+}
+
+.flight-schedule-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(75,0,130,0.7);
+}
+
+/* Mobil uyumluluk için */
+@media (max-width: 1000px) {
+  .schedule-modal-content {
+    width: 90vw;
+    height: 80vh;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-modal-content {
+    width: 95vw;
+    height: 85vh;
+    padding: 15px;
+  }
+}
+
+.schedule-day-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(75,0,130,0.1), rgba(255,102,0,0.1));
+  border-radius: 12px;
+  border-left: 4px solid #FF6600;
+}
+
+.schedule-day-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #4B0082;
+  margin: 0;
+}
+
+.schedule-flight-count {
+  background: rgba(75,0,130,0.1);
+  color: #4B0082;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.schedule-flight-item {
+  display: grid;
+  grid-template-columns: 80px 100px 1fr 120px;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+.schedule-flight-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+/* Arrival (Inbound) flights - hafif yeşil */
+.schedule-flight-item.arrival {
+  background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.05));
+  border-left: 3px solid rgba(34,197,94,0.4);
+}
+
+.schedule-flight-item.arrival:hover {
+  background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(34,197,94,0.08));
+}
+
+/* Departure (Outbound) flights - hafif mavi */
+.schedule-flight-item.departure {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(239,68,68,0.05));
+  border-left: 3px solid rgba(239,68,68,0.4);
+}
+
+.schedule-flight-item.departure:hover {
+  background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.08));
+}
+
+.flight-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4B0082;
+}
+
+.flight-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: #666;
+  background: rgba(0,0,0,0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.flight-route {
+  font-weight: 600;
+  color: #333;
+}
+
+.flight-aircraft {
+  font-size: 0.85rem;
+  color: #666;
+  text-align: right;
+}
+
+.no-flights {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Schedule Button */
+.schedule-button {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.schedule-button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .schedule-day-selector {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .schedule-flight-item {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 8px;
+  }
+}
+
+.schedule-day-selector {
+  display: grid;
+  grid-template-columns: 1.2fr repeat(7, 1fr);  /* ALL WEEK için biraz daha geniş */
+  gap: 8px;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(75,0,130,0.05);
+  border-radius: 12px;
+}
+
+.schedule-day-btn.all-week {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.schedule-info-note {
+  background: linear-gradient(135deg, rgba(255,102,0,0.1), rgba(75,0,130,0.1));
+  border: 1px solid rgba(255,102,0,0.3);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #4B0082;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.schedule-info-note .info-icon {
+  font-size: 1rem;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.schedule-info-note .info-text {
+  flex: 1;
+}
+
+/* Admin Modal Styles */
+.admin-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.admin-modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    min-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.admin-modal-content h4 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-modal-content input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 16px;
+    margin-bottom: 25px;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.admin-modal-content input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.admin-modal-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.admin-login-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.admin-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.admin-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid #ffc107;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-warning i {
+    color: #ff6b35;
+    font-size: 20px;
+}
+
+.admin-warning p {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* === META BAR + KPI === */
+.meta-bar{
+  margin: 8px 0 14px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 14px;
+  border-radius:12px;
+  background: rgba(255,255,255,.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.25);
+  color:#eef2ff; font-weight:600;
+}
+.meta-left{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.meta-pill{
+  padding:6px 10px; border-radius:999px; font-size:.85rem;
+  background: rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.2);
+}
+.meta-right{ display:flex; align-items:center; gap:12px; }
+.legend{
+  display:flex; align-items:center; gap:10px; font-size:.85rem; color:#e5e7eb;
+}
+.legend .key{ display:flex; align-items:center; gap:6px; }
+.legend .line{ width:20px; height:4px; border-radius:3px; background:#fff; opacity:.85; }
+.legend .dash{ width:20px; height:0; border-top:4px dashed #fff; opacity:.85; }
+.legend .plane{ font-size:1rem; line-height:1; }
+
+/* KPI cards */
+.kpi-bar{
+  display:grid; grid-template-columns: repeat(3, minmax(180px,1fr)); gap:12px;
+  margin: 0 0 16px;
+}
+.kpi{
+  padding:14px; border-radius:14px;
+  background: var(--glass); backdrop-filter: blur(14px);
+  border:1px solid rgba(255,255,255,.25); color:#fff; box-shadow: var(--shadow-medium);
+}
+.kpi .label{ font-size:.85rem; opacity:.9; }
+.kpi .value{ font-family:'JetBrains Mono', monospace; font-size:1.4rem; font-weight:800; }
+.kpi .sub{ font-size:.8rem; opacity:.85; }
+
+/* Schedule header compact summary */
+.schedule-header {
+  margin: 6px 0 18px;
+  padding: 10px 14px;
+  background: rgba(75,0,130,0.06);
+  border: 1px solid rgba(75,0,130,0.18);
+  border-radius: 12px;
+}
+
+.schedule-header-title {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #4B0082;
+  margin-bottom: 6px;
+}
+
+.schedule-header-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.schedule-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.06);
+  font-weight: 700;
+  font-size: .85rem;
+  color: #333;
+}
+
+.schedule-pill.emph {
+  background: linear-gradient(135deg,#4B0082,#FF6600);
+  color: #fff;
+  border: none;
+}
+
+/* Pulsing Info button */
+#infoButton.pulse-info {
+  position: relative;
+}
+#infoButton.pulse-info::after {
+  content: "";
+  position: absolute;
+  top: -6px; left: -6px; right: -6px; bottom: -6px;
+  border-radius: 50%;
+  border: 2px solid #FF6600;
+  animation: infoPulse 2s infinite;
+  opacity: 0.7;
+}
+
+@keyframes infoPulse {
+  0%   { transform: scale(0.8); opacity: 0; }
+  50%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* Pulsing highlight for Filters toggle */
+#filterToggle.pulse-filters::after {
+  content: "";
+  position: absolute;
+  top: -6px; left: -6px; right: -6px; bottom: -6px;
+  border-radius: 12px;
+  border: 2px solid #FF6600;
+  animation: filtersPulse 1.8s infinite;
+  pointer-events: none;
+}
+
+@keyframes filtersPulse {
+  0%   { opacity: 0; transform: scale(0.85); }
+  50%  { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(1.25); }
+}
+
+
+  </style>
+</head>
+<body>
+
+<div id="adminModal" class="admin-modal-overlay">
+  <div class="admin-modal-content">
+    <h4>IST Flights — Admin Login</h4>
+    <input type="password" id="adminPassword" placeholder="Enter password">
+    <div class="admin-modal-buttons">
+      <button onclick="handleAdminLogin()" class="admin-login-btn">Sign In</button>
+    </div>
+    <div class="admin-warning">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>Unauthorized access is strictly prohibited. All attempts are logged.</p>
+    </div>
+  </div>
+</div>
+
+
+<div id="contentContainer" style="display: none;">
+  <header class="site-header" id="siteHeader">
+  <div class="site-header__row">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="https://tr.eu.fedex.com/Netinfo/fedex_logo.png" alt="FedEx Logo">
+      </div>
+      <div class="titles">
+        <h1>FedEx Istanbul Flight Routes</h1>
+      </div>
+    </div>
+<div class="header-actions">
+  <button id="scheduleButton" class="schedule-button" title="Flight Schedule">📅</button>
+  <button id="infoButton" class="info-button" title="Information">ℹ</button>
+  <button id="filterToggle" class="filter-toggle">
+    <span>⚙️</span>
+    <span>Filters</span>
+  </button>
+</div>
+  </div>
+</header>
+
+<!-- META BAR -->
+<div id="metaBar" class="meta-bar" aria-live="polite">
+  <div class="meta-left">
+    <span class="meta-pill" id="metaDay">Today: —</span>
+    <span class="meta-pill" id="metaTZ">TZ: —</span>
+    <span class="meta-pill" id="metaLive">Live: Off</span>
+    <span class="meta-pill" id="metaUpdate">Last update: —</span>
+  </div>
+  <div class="meta-right">
+    <div class="legend">
+      <span class="key"><span class="line"></span> Planned</span>
+      <span class="key"><span class="dash"></span> Non Commercial</span>
+      <span class="key"><span class="plane">✈️</span> Live aircraft</span>
+    </div>
+  </div>
+</div>
+
+<!-- TODAY AT A GLANCE -->
+<div class="kpi-bar">
+  <div class="kpi">
+    <div class="label">Arrivals Today</div>
+    <div class="value" id="kpiArrivals">—</div>
+    <div class="sub">Arriving to IST/SAW</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Departures Today</div>
+    <div class="value" id="kpiDepartures">—</div>
+    <div class="sub">Departing from IST/SAW</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Next Movement</div>
+    <div class="value" id="kpiNext">—</div>
+    <div class="sub" id="kpiNextSub">Time (TR) · Flight</div>
+  </div>
+</div>
+
+
+
+
+<!-- Overlay -->
+<div id="filterOverlay" class="filter-overlay"></div>
+
+<!-- Collapsible Filter Panel -->
+<aside id="filterPanel" class="filter-panel">
+  <div class="filter-header">
+    <h2>Filters</h2>
+    <button id="filterClose" class="filter-close" aria-label="Close filters">✕</button>
+  </div>
+  <!-- Routes (öncelikli) -->
+  <div class="filter-section">
+    <div class="section-title">Routes</div>
+    <div class="control-buttons" role="group" aria-label="Select routes">
+     <button class="control-btn route-btn" data-route="SAW-CDG" aria-pressed="false">SAW ⇔ CDG</button>
+<button class="control-btn route-btn" data-route="SAW-LGG" aria-pressed="false">SAW ⇔ LGG</button>
+<button class="control-btn route-btn" data-route="IST-CDG" aria-pressed="false">IST ⇔ CDG</button>
+<button class="control-btn route-btn" data-route="HKG-IST" aria-pressed="false">HKG → IST</button>
+    </div>
+  </div>
+
+<div class="control-section">
+  <div class="section-title">Daily Schedule</div>
+  <div class="day-segmented" role="radiogroup" aria-label="Daily schedule">
+    <button class="day-segment all active" data-day="all" role="radio" aria-checked="true">All Days</button>
+    <button class="day-segment" data-day="monday" role="radio" aria-checked="false">Mon</button>
+    <button class="day-segment" data-day="tuesday" role="radio" aria-checked="false">Tue</button>
+    <button class="day-segment" data-day="wednesday" role="radio" aria-checked="false">Wed</button>
+    <button class="day-segment" data-day="thursday" role="radio" aria-checked="false">Thu</button>
+    <button class="day-segment" data-day="friday" role="radio" aria-checked="false">Fri</button>
+    <button class="day-segment" data-day="saturday" role="radio" aria-checked="false">Sat</button>
+	<button class="day-segment" data-day="sunday" role="radio" aria-checked="false">Sun</button>
+  </div>
+</div>
+
+  <!-- Timezone (sonda, kompakt) -->
+  <div class="filter-section">
+    <div class="section-title">Timezone</div>
+    <div class="timezone-buttons" role="group" aria-label="Timezone">
+      <button class="timezone-btn active" data-tz="TR">TR (Istanbul)</button>
+      <button class="timezone-btn" data-tz="CET">CET (Central Europe)</button>
+      <button class="timezone-btn" data-tz="GMT">GMT (London)</button>
+      <button class="timezone-btn" data-tz="CST">CST (US Central)</button>
+    </div>
+  </div>
+</aside>
+
+
+    
+  <!-- Map -->
+  <div class="map-wrapper">
+    <div id="map"></div>
+	
+    
+    <div class="live-status-panel" id="liveStatus" style="display: none;">
+      <div class="status-header" onclick="toggleStatusPanel()">
+        <span class="status-title">Live Operations</span>
+        <span class="collapse-indicator">▼</span>
+      </div>
+      <div class="status-content" id="statusContent">
+        <div class="status-item">Loading flight data...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Cards -->
+  <div class="info-cards" id="infoCards">
+    <!-- Dynamic content will be inserted here -->
+  </div>
+
+<footer class="footer fx-footer">
+  <div class="fx-footer__content">
+    <div class="fx-footer__left">
+      <img src="https://tr.eu.fedex.com/Netinfo/fedex_logo.png" alt="FedEx" class="fx-footer__logo">
+      <div class="fx-footer__text">
+        <strong>Istanbul Hub Flight Dashboard</strong>
+        <small>For informational purposes only · Simulated data</small>
+      </div>
+    </div>
+
+    <div class="fx-footer__right">
+      <small class="fx-footer__credit">
+        Developed by
+        <a href="#" id="fxAuthor">Ufuk Celikeloglu</a>
+      </small>
+    </div>
+  </div>
+  <!-- Uçuş animasyonu kapsayıcısı -->
+  <div class="fx-footer__sky" aria-hidden="true"></div>
+</footer>
+
+<!-- Info Modal -->
+<div id="infoModal" class="info-modal">
+  <div class="info-modal-content">
+    <div class="info-modal-header">
+  <h3 class="info-modal-title">Dashboard Information</h3>
+  <button id="infoModalClose" class="info-modal-close">×</button>
+</div>
+
+<!-- FAQ -->
+<div class="info-feature quickstart-highlight">
+  <div class="info-feature-icon">⚡</div>
+  <div class="info-feature-text">
+    <div class="info-feature-title">Quick Start</div>
+    <div class="info-feature-desc">
+      • <strong>Open Filters</strong> from the top-right menu.<br>
+      • <strong>Select routes</strong> you want to display.<br>
+      • <strong>Enable Live</strong> to track ✈️ real-time aircraft.<br>
+      • <strong>Explore the map</strong> — zoom and click routes for details.
+    </div>
+  </div>
+</div>
+
+
+
+<div class="info-feature">
+  <div class="info-feature-icon">❓</div>
+  <div class="info-feature-text">
+    <div class="info-feature-title">What am I looking at?</div>
+    <div class="info-feature-desc">Planned FedEx routes centered on Istanbul (IST/SAW) plus live aircraft across the Europe–TR coverage box.</div>
+  </div>
+</div>
+<div class="info-feature">
+  <div class="info-feature-icon">🎨</div>
+  <div class="info-feature-text">
+    <div class="info-feature-title">Colors & lines</div>
+    <div class="info-feature-desc">Solid: planned segment · Dashed: long-haul (HKG) · ✈️: live FedEx aircraft (FDX/FX).</div>
+  </div>
+</div>
+<div class="info-feature">
+  <div class="info-feature-icon">🕐</div>
+  <div class="info-feature-text">
+    <div class="info-feature-title">Days & timezones</div>
+    <div class="info-feature-desc">Pick a day from the strip and a timezone from the buttons. Times are converted from TR.</div>
+  </div>
+</div>
+
+<!-- Data note -->
+<div class="info-feature">
+  <div class="info-feature-icon">📡</div>
+  <div class="info-feature-text">
+    <div class="info-feature-title">Data scope</div>
+    <div class="info-feature-desc">Live data comes from OpenSky Network; coverage is limited to a Europe–TR bounding box. Planned times are based on TR.</div>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+<!-- Schedule Modal -->
+<div id="scheduleModal" class="schedule-modal">
+  <div class="schedule-modal-content">
+    <div class="schedule-modal-header">
+      <h3 class="schedule-modal-title">
+        <span>📅</span>
+        Flight Schedule
+      </h3>
+      <button id="scheduleModalClose" class="schedule-modal-close">×</button>
+    </div>
+
+    <!-- Compact header with summary -->
+    <div class="schedule-header" id="scheduleHeader">
+      <div class="schedule-header-title">Today’s Summary</div>
+      <div class="schedule-header-pills" id="scheduleSummary"></div>
+    </div>
+    
+    <div class="schedule-day-selector">
+  <button class="schedule-day-btn all-week" data-schedule-day="all">ALL WEEK</button>
+  <button class="schedule-day-btn" data-schedule-day="monday">MON</button>
+  <button class="schedule-day-btn" data-schedule-day="tuesday">TUE</button>
+  <button class="schedule-day-btn" data-schedule-day="wednesday">WED</button>
+  <button class="schedule-day-btn" data-schedule-day="thursday">THU</button>
+  <button class="schedule-day-btn" data-schedule-day="friday">FRI</button>
+  <button class="schedule-day-btn" data-schedule-day="saturday">SAT</button>
+  <button class="schedule-day-btn" data-schedule-day="sunday">SUN</button>
+</div>
+
+    
+    <div class="flight-schedule-list" id="scheduleFlightList">
+      <!-- Dynamic content -->
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+let activeDay = 'all';
+let activeRoutes = new Set();
+let routeLayers = {};
+let isLiveMode = false;
+const displayedLayers = {};
+let liveInterval;
+
+let flightFilter = "all"; // default
+const liveFlights = new Map(); // uçuş kayıtları
+let liveEnabled = false;
+let liveMode = 'all'; // 'all' | 'istanbul'
+let liveTimer = null;
+let liveIntervalMs = 30000;
+let backoffIntervalMs = 30000; // 429 sonrası geçici interval
+let lastUsedInterval = liveIntervalMs;
+let activeTimezone = 'TR';
+let selectedScheduleDay = getCurrentDay();
+
+const OPENSKY_USER = ''; // Boş bırakabilirsiniz
+const OPENSKY_PASS = ''; // Boş bırakabilirsiniz
+
+// Initialize map
+const map = L.map('map').setView([45.0, 15.0], 5);
+
+// Add tile layer
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap contributors, © CartoDB',
+  maxZoom: 19
+}).addTo(map);
+
+// Airport data with colors
+const airports = {
+  SAW: { lat: 40.898, lng: 29.309, name: 'Sabiha Gökçen Airport', city: 'Istanbul', color: '#FF6600' },
+  IST: { lat: 41.262, lng: 28.742, name: 'Istanbul Airport', city: 'Istanbul', color: '#4B0082' },
+  CDG: { lat: 49.013, lng: 2.550, name: 'Charles de Gaulle Airport', city: 'Paris', color: '#059669' },
+  LGG: { lat: 50.637, lng: 5.443, name: 'Liège Airport', city: 'Liège', color: '#EAB308' },
+  HKG: { lat: 22.309, lng: 113.915, name: 'Hong Kong International Airport', city: 'Hong Kong', color: '#6B7280' }
+};
+
+// Avrupa + Türkiye bounding box
+const EU_TR_BBOX = { 
+  lamin: 35.0,  // Güney sınırı (Türkiye güneyi)
+  lomin: -10.0, // Batı sınırı (İrlanda/Portekiz)
+  lamax: 71.0,  // Kuzey sınırı (Norveç)
+  lomax: 45.0   // Doğu sınırı (Türkiye doğusu)
+};
+
+// Sadece Istanbul bölgesi (mevcut)
+const IST_BBOX = { 
+  lamin: 40.0, 
+  lomin: 27.0, 
+  lamax: 42.0, 
+  lomax: 31.0 
+};
+
+// Toggle panel
+document.getElementById('filterToggle').addEventListener('click', () => {
+  document.getElementById('filterPanel').classList.add('open');
+});
+document.getElementById('filterClose').addEventListener('click', () => {
+  document.getElementById('filterPanel').classList.remove('open');
+});
+
+// Info modal handlers
+document.getElementById('infoButton').addEventListener('click', () => {
+  document.getElementById('infoModal').classList.add('show');
+});
+
+document.getElementById('infoModalClose').addEventListener('click', () => {
+  document.getElementById('infoModal').classList.remove('show');
+});
+
+// Click outside to close
+document.getElementById('infoModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    document.getElementById('infoModal').classList.remove('show');
+  }
+});
+
+// Modal kapatma handlers - düzeltilmiş versiyon
+document.getElementById('scheduleModalClose').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('scheduleModal').classList.remove('show');
+});
+
+// Click outside to close - event propagation düzeltmesi
+document.getElementById('scheduleModal').addEventListener('click', (e) => {
+  // Sadece modal arka planına tıklandığında kapat
+  if (e.target.id === 'scheduleModal') {
+    document.getElementById('scheduleModal').classList.remove('show');
+  }
+});
+
+// Escape tuşu ile kapama
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const scheduleModal = document.getElementById('scheduleModal');
+    if (scheduleModal && scheduleModal.classList.contains('show')) {
+      scheduleModal.classList.remove('show');
+    }
+  }
+});
+
+// === TIME HELPERS (TR bazlı karşılaştırma) ===
+function nowInTR() {
+  // TR = UTC+3 (sabitlenen basit yaklaşım)
+  const nowUtc = new Date();
+  return new Date(nowUtc.getTime() + 3 * 3600 * 1000);
+}
+function parseTRTimeToTodayDate(timeStr) {
+  const [hh, mm] = timeStr.split(':').map(Number);
+  const d = nowInTR();
+  d.setHours(hh, mm, 0, 0);
+  return d;
+}
+function fmt(t){ return String(t).padStart(2,'0'); }
+
+// === KPI HESABI ===
+function computeKpis() {
+  const todayKey = getCurrentDay();
+  let arrivals = 0, departures = 0;
+  const todayFlights = [];
+
+  Object.entries(flightSchedules).forEach(([code, s]) => {
+    if (!s.days || !s.days.includes(todayKey)) return;
+    const [from, to] = s.route.split('-');
+    const isArrival = (to === 'IST' || to === 'SAW');
+    const isDeparture = (from === 'IST' || from === 'SAW');
+
+    s.times.forEach(trTime => {
+      if (isArrival) arrivals++;
+      if (isDeparture) departures++;
+      const whenTR = parseTRTimeToTodayDate(trTime);
+      todayFlights.push({ 
+        code, 
+        trTime, 
+        whenTR, 
+        route: s.route, 
+        isArrival, 
+        isDeparture, 
+        aircraft: s.aircraft 
+      });
+    });
+  });
+
+  // En yakın gelecek hareket
+  const nowTR = nowInTR();
+  const future = todayFlights.filter(f => f.whenTR.getTime() >= nowTR.getTime());
+  future.sort((a,b)=> a.whenTR - b.whenTR);
+  const next = future[0] || null;
+
+  return { arrivals, departures, next };
+}
+
+// When Info modal is closed, highlight Filters
+const infoModal = document.getElementById("infoModal");
+const infoCloseBtn = document.getElementById("infoModalClose");
+
+function pulseFiltersAfterInfo() {
+  const filterBtn = document.getElementById("filterToggle");
+  if (filterBtn) {
+    filterBtn.classList.add("pulse-filters");
+    // 12s sonra otomatik durdur
+    setTimeout(() => {
+      filterBtn.classList.remove("pulse-filters");
+    }, 12000);
+  }
+}
+
+// Modal close -> trigger filter pulse
+if (infoCloseBtn && infoModal) {
+  infoCloseBtn.addEventListener("click", () => {
+    pulseFiltersAfterInfo();
+  });
+}
+
+
+function renderKpis() {
+  const { arrivals, departures, next } = computeKpis();
+  const elA = document.getElementById('kpiArrivals');
+  const elD = document.getElementById('kpiDepartures');
+  const elN = document.getElementById('kpiNext');
+  const elNs = document.getElementById('kpiNextSub');
+
+  if (elA) elA.textContent = arrivals;
+  if (elD) elD.textContent = departures;
+
+  if (next) {
+    const shown = convertTime(next.trTime, 'TR', activeTimezone);
+    elN.textContent = shown;
+
+    // countdown hesapla
+    const now = new Date();
+    const diffMs = next.whenTR.getTime() - now.getTime();
+    if (diffMs > 0) {
+      const diffMin = Math.floor(diffMs / 60000);
+      const hours = Math.floor(diffMin / 60);
+      const minutes = diffMin % 60;
+      let countdown = '';
+      if (hours > 0) countdown += `${hours}h `;
+      countdown += `${minutes}m`;
+      elNs.textContent = `${next.isDeparture ? 'DEP' : 'ARR'} · ${next.code} · ${next.route} · in ${countdown}`;
+    } else {
+      elNs.textContent = `${next.isDeparture ? 'DEP' : 'ARR'} · ${next.code} · ${next.route} · Departed`;
+    }
+  } else {
+    elN.textContent = '—';
+    elNs.textContent = 'No remaining movements today';
+  }
+}
+
+
+function renderScheduleSummary() {
+  const box = document.getElementById('scheduleSummary');
+  if (!box) return;
+  const tzName = { TR:'TR', CET:'CET', GMT:'GMT', CST:'CST' }[activeTimezone] || 'TR';
+  const { arrivals, departures, next } = computeKpis();
+  const nextTxt = next ? `${convertTime(next.trTime, 'TR', activeTimezone)} (${next.code})` : '—';
+
+  box.innerHTML = `
+    <span class="schedule-pill">Arrivals: ${arrivals}</span>
+    <span class="schedule-pill">Departures: ${departures}</span>
+    <span class="schedule-pill emph">Next: ${nextTxt}</span>
+    <span class="schedule-pill">TZ: ${tzName}</span>
+  `;
+}
+
+
+
+function updateMetaBar() {
+  const dayMap = {
+    sunday:'Sun', monday:'Mon', tuesday:'Tue',
+    wednesday:'Wed', thursday:'Thu', friday:'Fri', saturday:'Sat'
+  };
+  const tzMap = {
+    TR:'TR (UTC+3)', CET:'CET (UTC+1)',
+    GMT:'GMT (UTC+0)', CST:'CST (UTC-6)'
+  };
+  const tzIana = {
+    TR:'Europe/Istanbul', CET:'Europe/Berlin',
+    GMT:'Etc/GMT', CST:'America/Chicago'
+  };
+
+  const live = (window._liveCount && window._liveCount>0)
+    ? `On (${window._liveCount})` : 'Off';
+
+  const d = document.getElementById('metaDay');
+  const z = document.getElementById('metaTZ');
+  const l = document.getElementById('metaLive');
+  const u = document.getElementById('metaUpdate');
+
+  if (d) d.textContent = `Today: ${dayMap[getCurrentDay()] || '—'}`;
+  if (z) z.textContent = `TZ: ${tzMap[activeTimezone] || 'TR (UTC+3)'}`;
+  if (l) l.textContent = `Live: ${live}`;
+
+  if (u) {
+    const now = new Date();
+    const hhmm = formatHHMMInTZ(now, tzIana[activeTimezone] || 'Europe/Istanbul');
+    u.textContent = `Last update: ${hhmm} (${activeTimezone})`;
+  }
+}
+
+
+
+// === Schedule başlık mini meta ===
+function updateScheduleMeta() {
+  const tzName = { TR:'TR', CET:'CET', GMT:'GMT', CST:'CST' }[activeTimezone] || 'TR';
+  const { arrivals, departures, next } = computeKpis();
+  const meta = document.getElementById('scheduleMeta');
+  if (!meta) return;
+  const nextTxt = next ? `${convertTime(next.trTime, 'TR', activeTimezone)} (${next.code})` : '—';
+  meta.textContent = `Today · Arr: ${arrivals} · Dep: ${departures} · Next: ${nextTxt} · TZ: ${tzName}`;
+}
+
+
+function convertTime(timeStr, fromTz, toTz) {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  
+  const offsets = {
+    'TR': 3,   // UTC+3 (Istanbul)
+    'CET': 1,  // UTC+1 (Central Europe)
+    'GMT': 0,  // UTC+0 (Greenwich Mean Time)
+    'CST': -6  // UTC-6 (US Central Standard Time)
+  };
+  
+  // TR saatinden UTC'ye çevir
+  let utcHours = hours - offsets[fromTz];
+  
+  // UTC'den hedef timezone'a çevir  
+  let targetHours = utcHours + offsets[toTz];
+  
+  // 24 saat formatını koru
+  if (targetHours < 0) targetHours += 24;
+  if (targetHours >= 24) targetHours -= 24;
+  
+  return `${targetHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
+
+// Sayfa yüklendiğinde oturum kontrolü
+document.addEventListener('DOMContentLoaded', function() {
+    const contentContainer = document.getElementById("contentContainer");
+    const adminModal = document.getElementById("adminModal");
+    
+    // Oturum kontrolü
+    const isAuthenticated = sessionStorage.getItem("isAuthenticated");
+    if (isAuthenticated === "true") {
+        // Kullanıcı zaten giriş yapmış
+        adminModal.style.display = "none";
+        contentContainer.style.display = "block";
+        initFlightDashboard();
+        return;
+    }
+
+    // Varsayılan olarak dashboard gizlenir
+    contentContainer.style.display = "none";
+    adminModal.style.display = "flex";
+});
+
+async function handleAdminLogin() {
+  const password = document.getElementById("adminPassword").value;
+  if (!password) { alert("Please enter the password."); return; }
+
+  const success = await validatePassword(password);
+  if (success) {
+    sessionStorage.setItem("isAuthenticated", "true");
+    document.getElementById("adminModal").style.display = "none";
+    document.getElementById("contentContainer").style.display = "block";
+    initFlightDashboard();
+    console.log("🚀 IST Flights Dashboard loaded.");
+  } else {
+    alert("Incorrect password. Please try again.");
+    document.getElementById("adminPassword").value = "";
+  }
+}
+
+async function validatePassword(password) {
+  try {
+    const response = await fetch('/Netinfo/api/environment/validate_admin_password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    if (!response.ok) throw new Error("Password validation failed.");
+    const result = await response.json();
+    return result.success;
+  } catch (error) {
+    console.error("Password validation error:", error);
+    return false;
+  }
+}
+
+// Intro Banner + Quick Start + Info + Filters pulse (only first visit)
+document.addEventListener("DOMContentLoaded", () => {
+  const seenIntro = localStorage.getItem("seenQuickStartIntro");
+
+  if (!seenIntro) {
+    // Create intro banner
+    const banner = document.createElement("div");
+    banner.className = "intro-banner";
+    banner.innerHTML = `
+      ⚡ First time here? Open <strong>Info (i)</strong> and check <strong>Quick Start</strong> to begin.
+      <button id="dismissBanner">Got it</button>
+    `;
+    document.body.appendChild(banner);
+
+    // Quick Start pulse
+    const quickStart = document.querySelector(".quickstart-highlight");
+    if (quickStart) {
+      quickStart.classList.add("pulse-on");
+    }
+
+    // Info button pulse
+    const infoBtn = document.getElementById("infoButton");
+    if (infoBtn) {
+      infoBtn.classList.add("pulse-info");
+
+      // Stop Info pulse when clicked
+      infoBtn.addEventListener("click", () => {
+        infoBtn.classList.remove("pulse-info");
+      });
+    }
+
+    // Filters button + panel
+    const filterBtn = document.getElementById("filterToggle");
+    const filterPanel = document.querySelector(".filter-panel");
+
+    // Ensure pulse stops when button clicked
+    if (filterBtn) {
+      filterBtn.addEventListener("click", () => {
+        filterBtn.classList.remove("pulse-filters");
+      });
+    }
+
+    // Ensure pulse also stops when panel opens
+    if (filterPanel && filterBtn) {
+      const observer = new MutationObserver(() => {
+        if (filterPanel.classList.contains("open")) {
+          filterBtn.classList.remove("pulse-filters");
+        }
+      });
+      observer.observe(filterPanel, { attributes: true, attributeFilter: ["class"] });
+    }
+
+    // Dismiss button (Got it)
+    document.getElementById("dismissBanner").addEventListener("click", () => {
+      banner.remove();
+      localStorage.setItem("seenQuickStartIntro", "true");
+
+      // Stop all pulses
+      if (quickStart) quickStart.classList.remove("pulse-on");
+      if (infoBtn) infoBtn.classList.remove("pulse-info");
+      if (filterBtn) filterBtn.classList.remove("pulse-filters");
+    });
+
+    // Highlight Filters after Info modal closed
+    const infoModalClose = document.getElementById("infoModalClose");
+    if (infoModalClose) {
+      infoModalClose.addEventListener("click", () => {
+        if (filterBtn) {
+          filterBtn.classList.add("pulse-filters");
+          // Auto stop after 12s
+          setTimeout(() => {
+            filterBtn.classList.remove("pulse-filters");
+          }, 12000);
+        }
+      });
+    }
+  }
+});
+
+
+
+
+
+
+function resetMapAfterLogin() {
+    if (typeof map === 'undefined' || !map) {
+        console.error("Harita objesi bulunamadı");
+        return;
+    }
+    
+    // 1. Harita boyutunu zorla güncelle
+    map.invalidateSize(true);
+    
+    // 2. Tile layer'ları yeniden yükle
+    map.eachLayer(function(layer) {
+        if (layer._tiles) {
+            layer.redraw();
+        }
+    });
+    
+    // 3. Görünümü resetle
+    map.setView([45.0, 15.0], 5);
+    
+    // 4. Kontrolleri yeniden başlat (eğer varsa)
+    if (typeof updateVisibility === 'function') {
+        updateVisibility();
+    }
+    
+    console.log("🔄 Harita tamamen yeniden başlatıldı");
+}
+
+function initFlightDashboard() {
+    console.log("Flight Dashboard initializing...");
+    
+    setTimeout(() => {
+        resetMapAfterLogin();
+    }, 100);
+}	
+
+// Çıkış fonksiyonu (isteğe bağlı)
+function handleAdminLogout() {
+    sessionStorage.removeItem("isAuthenticated");
+    location.reload();
+}
+
+// Enter tuşu ile giriş
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const adminModal = document.getElementById("adminModal");
+        if (adminModal && adminModal.style.display !== "none") {
+            handleAdminLogin();
+        }
+    }
+});
+
+async function pullLiveOnce() {
+  try {
+    const base = 'https://opensky-network.org/api/states/all';
+    let url;
+    
+    if (liveMode === 'istanbul') {
+      url = `${base}?lamin=${IST_BBOX.lamin}&lomin=${IST_BBOX.lomin}&lamax=${IST_BBOX.lamax}&lomax=${IST_BBOX.lomax}`;
+    } else {
+      // 'all' seçildiğinde de EU+TR sınırla
+      url = `${base}?lamin=${EU_TR_BBOX.lamin}&lomin=${EU_TR_BBOX.lomin}&lamax=${EU_TR_BBOX.lamax}&lomax=${EU_TR_BBOX.lomax}`;
+    }
+
+    const res = await fetch(url, { headers: authHeaders() });
+    
+    if (res.status === 429) {
+      console.warn('OpenSky 429 Too Many Requests – backing off…');
+      scheduleBackoff();
+      showTransientStatus('⚠️ Rate limit (429). Retrying slower…');
+      return;
+    }
+    
+    if (!res.ok) {
+      console.error('OpenSky error:', res.status, res.statusText);
+      showTransientStatus(`❌ OpenSky error: ${res.status}`);
+      return;
+    }
+
+    const data = await res.json();
+    if (!data.states || !Array.isArray(data.states)) {
+      showTransientStatus('ℹ️ No live state data.');
+      return;
+    }
+
+    // FedEx filtrele - sadece FX ve FDX
+    const fedexStates = data.states.filter(s => {
+      if (!s[1]) return false;
+      const callsign = s[1].trim().toUpperCase();
+      return callsign.startsWith('FDX') || callsign.startsWith('FX');
+    });
+    
+    // Marker'ları güncelle
+    const seen = new Set();
+    fedexStates.forEach(s => {
+      const icao24 = s[0];
+      const callsign = s[1] ? s[1].trim().toUpperCase() : '';
+      const lon = s[5], lat = s[6];
+      const heading = s[10];
+      if (lat && lon) {
+        upsertMarker({ icao24, callsign, lat, lon, heading });
+        seen.add(icao24);
+      }
+    });
+
+    // Olmayanları kaldır
+    for (const key of Array.from(liveMarkers.keys())) {
+      if (!seen.has(key)) {
+        map.removeLayer(liveMarkers.get(key));
+        liveMarkers.delete(key);
+      }
+    }
+
+    updateLiveStatusPanel(liveMarkers.size);
+
+    // Başarılıysa normal interval'a dön
+    if (lastUsedInterval !== liveIntervalMs && liveTimer) {
+      clearInterval(liveTimer);
+      lastUsedInterval = liveIntervalMs;
+      liveTimer = setInterval(pullLiveOnce, liveIntervalMs);
+    }
+  } catch (e) {
+    console.error('Live fetch error:', e);
+    showTransientStatus('❌ Network error while fetching live data.');
+  }
+}
+
+// Add airport markers
+Object.entries(airports).forEach(([code, airport]) => {
+  L.circleMarker([airport.lat, airport.lng], {
+    radius: 10,
+    fillColor: airport.color,
+    color: '#fff',
+    weight: 3,
+    fillOpacity: 0.8
+  }).addTo(map).bindPopup(`
+    <div class="popup-content">
+      <div class="popup-title">${code}</div>
+      <div class="popup-details">
+        <strong>${airport.name}</strong><br>
+        📍 ${airport.city}<br>
+        🌍 ${airport.lat.toFixed(3)}, ${airport.lng.toFixed(3)}
+      </div>
+    </div>
+  `);
+
+  L.marker([airport.lat, airport.lng], {
+    icon: L.divIcon({
+      html: `<div class="airport-marker ${code.toLowerCase()}">${code}</div>`,
+      iconSize: [60, 30],
+      iconAnchor: [30, 40],
+      className: 'custom-airport-label'
+    }),
+    interactive: false
+  }).addTo(map);
+});
+
+// Düzgün fonksiyon tanımları
+async function fetchLiveFlights() {
+  const url = "https://opensky-network.org/api/states/all";
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.states) return [];
+
+    // Tüm FedEx uçaklarını seç
+    let flights = (data.states || []).filter(
+      s => s[1] && (s[1].trim().toUpperCase().startsWith("FDX") || s[1].trim().toUpperCase().startsWith("FTH"))
+    ).map(s => {
+      const callsign = s[1] ? s[1].trim().toUpperCase() : "UNKNOWN";
+      let flightNumber = callsign.replace("FDX", "FX").replace("FTH", "FX");
+      flightNumber = flightNumber.replace(/[^A-Z0-9]/g, "");
+      return {
+        icao24: s[0],
+        callsign,
+        flightNumber,
+        lat: s[6],
+        lon: s[5],
+        altitude: s[13] ? Math.round(s[13] * 3.28084) : 0,
+        velocity: s[9] ? Math.round(s[9] * 1.94384) : 0,
+        heading: s[10],
+        onGround: s[8],
+        lastSeen: new Date(s[4] * 1000)
+      };
+    });
+
+    // Eğer filtre Istanbul seçiliyse daralt
+    if (flightFilter === "istanbul") {
+      const istanbulFlights = [
+        "FX4727","FX4610","FX4624","FX4725","FX4797",
+        "FX4604","FX4648","FX4713","FX6321","FX6327",
+        "FX6226","FX6238","FX6239","FX5217"
+      ];
+      flights = flights.filter(f => istanbulFlights.includes(f.flightNumber));
+    }
+
+    return flights;
+  } catch (err) {
+    console.error("Error fetching flights:", err);
+    return [];
+  }
+}
+
+/* ==== HEADER WIRING ==== */
+
+// Sticky header gölge/kontrast
+(function () {
+  const header = document.getElementById('siteHeader');
+  if (!header) return;
+  const onScroll = () => {
+    if (window.scrollY > 8) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+// Saat (aktif timezone'a göre)
+(function () {
+  const el = document.getElementById('liveClock');
+  if (!el) return;
+
+  function getOffset(tz) {
+    // Basit offset eşlemesi: sayfanın convertTime fonksiyonundaki ile uyumlu
+    const offsets = { TR: 3, CET: 1, GMT: 0, CST: -6 };
+    return offsets[activeTimezone] ?? 3;
+  }
+
+  function tick() {
+    const nowUtc = new Date(Date.now());
+    // UTC saati, hedef offset ile yerel saat gibi yaz
+    const local = new Date(nowUtc.getTime() + getOffset(activeTimezone) * 3600 * 1000);
+    const hh = String(local.getUTCHours()).padStart(2, '0');
+    const mm = String(local.getUTCMinutes()).padStart(2, '0');
+    el.textContent = `${hh}:${mm}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+// TZ chip'i aktif zaman dilimi ile güncelle
+function updateHeaderTZ() {
+  const chip = document.getElementById('tzChip');
+  if (!chip) return;
+  const map = { TR: 'TR (Istanbul)', CET: 'CET (Central Europe)', GMT: 'GMT (London)', CST: 'CST (US Central)' };
+  chip.querySelector('.label').innerHTML = `TZ: <strong>${map[activeTimezone] || 'TR (Istanbul)'}</strong>`;
+}
+
+// Mevcut timezone butonlarının click handler'larına zaten ekleme yapıyorsun.
+// Oraya bir satır daha ekle: updateHeaderTZ();
+// (Aşağıdaki guard, olası atlamalara karşı ilk yüklemede de senkronlar.)
+updateHeaderTZ();
+
+function getCurrentDay() {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  return days[new Date().getDay()];
+}
+
+function updateScheduleDisplay() {
+  const container = document.getElementById('scheduleFlightList');
+  
+  if (selectedScheduleDay === 'all') {
+    // Tüm hafta görünümü
+    showAllWeekSchedule(container);
+  } else {
+    // Tek gün görünümü
+    showSingleDaySchedule(container, selectedScheduleDay);
+  }
+}
+
+function showSingleDaySchedule(container, day) {
+  const dayName = day.charAt(0).toUpperCase() + day.slice(1);
+  
+  const dayFlights = [];
+  Object.entries(flightSchedules).forEach(([key, schedule]) => {
+    if (schedule.days && schedule.days.includes(day)) {
+      schedule.times.forEach(time => {
+        dayFlights.push({
+          time: convertTime(time, 'TR', activeTimezone),
+          code: schedule.flightCode || key,
+          route: schedule.route,
+          aircraft: schedule.aircraft
+        });
+      });
+    }
+  });
+  
+  dayFlights.sort((a, b) => a.time.localeCompare(b.time));
+  
+  const flightText = dayFlights.length === 1 ? 'flight' : 'flights';
+  
+  let html = `
+    <div class="schedule-day-header">
+      <h4 class="schedule-day-title">${dayName.toUpperCase()} FLIGHTS</h4>
+      <span class="schedule-flight-count">${dayFlights.length} ${flightText}</span>
+    </div>
+  `;
+  
+  if (dayFlights.length === 0) {
+    html += '<div class="no-flights">No flights scheduled for this day</div>';
+  } else {
+    dayFlights.forEach(flight => {
+      const routeParts = flight.route.split('-');
+      const isArrival = routeParts[1] === 'SAW' || routeParts[1] === 'IST';
+      const flightType = isArrival ? 'arrival' : 'departure';
+      
+      html += `
+        <div class="schedule-flight-item ${flightType}">
+          <div class="flight-time">${flight.time}</div>
+          <div class="flight-code">${flight.code}</div>
+          <div class="flight-route">${routeParts[0]} → ${routeParts[1]}</div>
+          <div class="flight-aircraft">${flight.aircraft}</div>
+        </div>
+      `;
+    });
+  }
+  
+  container.innerHTML = html;
+}
+
+function showAllWeekSchedule(container) {
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  let html = `
+    <div class="schedule-day-header">
+      <h4 class="schedule-day-title">WEEKLY FLIGHT SCHEDULE</h4>
+      <span class="schedule-flight-count">All flights</span>
+    </div>
+  `;
+  
+  days.forEach(day => {
+    const dayName = day.charAt(0).toUpperCase() + day.slice(1);
+    const dayFlights = [];
+    
+    Object.entries(flightSchedules).forEach(([flightCode, schedule]) => {
+      if (schedule.days.includes(day)) {
+        schedule.times.forEach(time => {
+          dayFlights.push({
+            time: convertTime(time, 'TR', activeTimezone),
+            code: flightCode,
+            route: schedule.route,
+            aircraft: schedule.aircraft
+          });
+        });
+      }
+    });
+    
+    dayFlights.sort((a, b) => a.time.localeCompare(b.time));
+    
+    html += `
+      <h5 style="margin: 15px 0 10px 0; color: #4B0082; font-weight: 600; border-bottom: 1px solid rgba(75,0,130,0.2); padding-bottom: 5px;">
+        ${dayName} (${dayFlights.length} ${dayFlights.length === 1 ? 'flight' : 'flights'})
+      </h5>
+    `;
+    
+    if (dayFlights.length === 0) {
+      html += '<div style="color: #666; font-style: italic; padding: 10px 0;">No flights</div>';
+    } else {
+      dayFlights.forEach(flight => {
+        const routeParts = flight.route.split('-');
+        
+        const isArrival = routeParts[1] === 'SAW' || routeParts[1] === 'IST';
+        const flightType = isArrival ? 'arrival' : 'departure';
+        
+        html += `
+          <div class="schedule-flight-item ${flightType}">
+            <div class="flight-time">${flight.time}</div>
+            <div class="flight-code">${flight.code}</div>
+            <div class="flight-route">${routeParts[0]} → ${routeParts[1]}</div>
+            <div class="flight-aircraft">${flight.aircraft}</div>
+          </div>
+        `;
+      });
+    }
+    
+    html += '</div>';
+  });
+  
+  container.innerHTML = html;
+}
+
+function getTimezoneDisplayName(tz) {
+  const names = {
+    'TR': 'Turkey (Istanbul)',
+    'CET': 'Central European',
+    'GMT': 'Greenwich Mean Time',
+    'CST': 'US Central'
+  };
+  return names[tz] || 'Istanbul';
+}
+
+// Schedule modal handlers
+// Schedule modal handlers - güncellenmiş versiyon
+document.getElementById('scheduleButton').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  // Default gün seçimini yap
+  selectedScheduleDay = getCurrentDay();
+  
+  // Modal'ı aç
+  document.getElementById('scheduleModal').classList.add('show');
+  
+  // Modal açıldıktan sonra butonları güncelle ve event handler'ları bağla
+  setTimeout(() => {
+    // Butonları güncelle
+    document.querySelectorAll('.schedule-day-btn').forEach(b => b.classList.remove('active'));
+    const todayBtn = document.querySelector(`[data-schedule-day="${selectedScheduleDay}"]`);
+    if (todayBtn) todayBtn.classList.add('active');
+    
+    // Event handler'ları bağla
+    document.querySelectorAll('.schedule-day-btn').forEach(btn => {
+      // Önce eski handler'ları kaldır
+      btn.replaceWith(btn.cloneNode(true));
+    });
+    
+    // Yeni handler'ları bağla
+    document.querySelectorAll('.schedule-day-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Bu satır önemli!
+        selectedScheduleDay = btn.dataset.scheduleDay;
+        
+        // Active state'i güncelle
+        document.querySelectorAll('.schedule-day-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Display'i güncelle
+        updateScheduleDisplay();
+      });
+    });
+    
+    // İlk display'i güncelle
+    updateScheduleDisplay();
+  }, 0);
+});
+
+function updateLiveFlightMarkers(flights) {
+  // eski markerları temizle
+  liveMarkers.forEach(m => map.removeLayer(m));
+  liveMarkers.length = 0; // array'i temizle
+
+  flights.forEach(f => {
+    if (!f.lat || !f.lon) return;
+
+    const icon = L.divIcon({
+      className: "live-plane",
+      html: "✈️",
+      iconSize: [20, 20]
+    });
+
+    const marker = L.marker([f.lat, f.lon], { icon })
+      .bindPopup(`
+        <strong>${f.callsign}</strong><br>
+        Alt: ${f.altitude} ft<br>
+        Speed: ${f.velocity} kt<br>
+        Last seen: ${f.lastSeen.toLocaleTimeString()}
+      `);
+
+    marker.addTo(map);
+    liveMarkers.push(marker);
+  });
+}
+
+// Live başlat/durdur - basitleştirilmiş
+function startLive() {
+  if (liveTimer) clearInterval(liveTimer);
+  liveEnabled = true;
+  const btn = document.getElementById('liveButton');
+  if (btn) btn.classList.add('active');
+  
+  // Sadece bir kez çek
+  pullLiveOnce();
+}
+
+function stopLive() {
+  liveEnabled = false;
+  if (liveTimer) clearInterval(liveTimer);
+  liveTimer = null;
+  const btn = document.getElementById('liveButton');
+  if (btn) btn.classList.remove('active');
+  clearLiveMarkers();
+  
+  // Status panel'i gizle
+  const panel = document.getElementById('liveStatus');
+  if (panel) panel.style.display = 'none';
+}
+
+
+const flightSchedules = {
+  // SAW ↔ CDG
+  'FX4727_FRI': { 
+    route: 'SAW-CDG', 
+    aircraft: 'Boeing 737F', 
+    days: ['friday'], 
+    times: ['22:30'],
+    flightCode: 'FX4727'  // Görüntülenecek kod
+  },
+  'FX4727_SUN': { 
+    route: 'SAW-CDG', 
+    aircraft: 'Boeing 737F', 
+    days: ['sunday'], 
+    times: ['10:05'],
+    flightCode: 'FX4727'  // Görüntülenecek kod
+  },
+  'FX4610': { 
+    route: 'CDG-SAW', 
+    aircraft: 'Boeing 737F', 
+    days: ['monday'], 
+    times: ['05:35'],
+    flightCode: 'FX4610'
+  },
+  'FX4624': { 
+    route: 'CDG-SAW', 
+    aircraft: 'Boeing 737F', 
+    days: ['saturday'], 
+    times: ['10:00'],
+    flightCode: 'FX4624'
+  },
+
+  // SAW ↔ LGG
+  'FX4725': { 
+    route: 'SAW-LGG', 
+    aircraft: 'Boeing 737F', 
+    days: ['thursday'], 
+    times: ['22:30'] 
+  },
+  'FX4797': { 
+    route: 'SAW-LGG', 
+    aircraft: 'Boeing 737F', 
+    days: ['monday', 'tuesday', 'wednesday'], 
+    times: ['22:30'] 
+  },
+  'FX4604': { 
+    route: 'LGG-SAW', 
+    aircraft: 'Boeing 737F', 
+    days: ['tuesday'], 
+    times: ['08:10'] 
+  },
+  'FX4648': { 
+    route: 'LGG-SAW', 
+    aircraft: 'Boeing 737F', 
+    days: ['wednesday', 'thursday', 'friday'], 
+    times: ['08:10'] 
+  },
+
+  // IST ↔ CDG
+  'FX4713': { 
+    route: 'IST-CDG', 
+    aircraft: 'Boeing 767F', 
+    days: ['saturday'], 
+    times: ['16:55'] 
+  },
+  'FX6321': { 
+    route: 'IST-CDG', 
+    aircraft: 'Boeing 767F', 
+    days: ['thursday'], 
+    times: ['22:20'] 
+  },
+  'FX6327': { 
+    route: 'IST-CDG', 
+    aircraft: 'Boeing 767F', 
+    days: ['friday', 'monday', 'tuesday', 'wednesday'], 
+    times: ['22:20'] 
+  },
+  'FX6226': { 
+    route: 'CDG-IST', 
+    aircraft: 'Boeing 767F', 
+    days: ['saturday'], 
+    times: ['05:45'] 
+  },
+  'FX6238': { 
+    route: 'CDG-IST', 
+    aircraft: 'Boeing 767F', 
+    days: ['tuesday', 'wednesday', 'friday'], 
+    times: ['07:56'] 
+  },
+  'FX6239': { 
+    route: 'CDG-IST', 
+    aircraft: 'Boeing 767F', 
+    days: ['thursday'], 
+    times: ['07:56'] 
+  },
+
+  // HKG ↔ IST
+  'FDX5217': { 
+    route: 'HKG-IST', 
+    aircraft: 'Boeing 777F', 
+    days: ['tuesday', 'friday'], 
+    times: ['12:30'] 
+  }
+};
+
+
+
+
+const flightRoutes = {
+  'saw-cdg-route': {
+    color: '#FF6600',
+    weight: 4, opacity: 0.8, offset: -2.0,
+    flights: [
+      { from: 'SAW', to: 'CDG', aircraft: 'Boeing 737F', days: ['friday'],  time: '22:30', type: 'outbound', flightCode: 'FX4727' },
+      { from: 'SAW', to: 'CDG', aircraft: 'Boeing 737F', days: ['sunday'],  time: '10:05', type: 'outbound', flightCode: 'FX4727' }, // ← saturday → sunday
+      { from: 'CDG', to: 'SAW', aircraft: 'Boeing 737F', days: ['monday'],  time: '05:35', type: 'inbound',  flightCode: 'FX4610' },
+      { from: 'CDG', to: 'SAW', aircraft: 'Boeing 737F', days: ['saturday'], time: '10:00', type: 'inbound',  flightCode: 'FX4624' }
+    ]
+  },
+  'saw-lgg-route': {
+    color: '#c0392b',
+    weight: 4, opacity: 0.8, offset: 6.0,
+    flights: [
+      { from: 'SAW', to: 'LGG', aircraft: 'Boeing 737F', days: ['thursday'],                  time: '22:30', type: 'outbound', flightCode: 'FX4725' },
+      { from: 'SAW', to: 'LGG', aircraft: 'Boeing 737F', days: ['monday','tuesday','wednesday'], time: '22:30', type: 'outbound', flightCode: 'FX4797' },
+      { from: 'LGG', to: 'SAW', aircraft: 'Boeing 737F', days: ['tuesday'],                   time: '08:10', type: 'inbound',  flightCode: 'FX4604' },
+      { from: 'LGG', to: 'SAW', aircraft: 'Boeing 737F', days: ['wednesday','thursday','friday'], time: '08:10', type: 'inbound',  flightCode: 'FX4648' }
+    ]
+  },
+  'ist-cdg-route': {
+    color: '#4B0082',
+    weight: 4, opacity: 0.8, offset: 2.0,
+    flights: [
+      { from: 'IST', to: 'CDG', aircraft: 'Boeing 767F', days: ['saturday'],                           time: '16:55', type: 'outbound', flightCode: 'FX4713' },
+      { from: 'IST', to: 'CDG', aircraft: 'Boeing 767F', days: ['thursday'],                           time: '22:20', type: 'outbound', flightCode: 'FX6321' },
+      { from: 'IST', to: 'CDG', aircraft: 'Boeing 767F', days: ['friday','monday','tuesday','wednesday'], time: '22:20', type: 'outbound', flightCode: 'FX6327' },
+      { from: 'CDG', to: 'IST', aircraft: 'Boeing 767F', days: ['saturday'],                           time: '05:45', type: 'inbound',  flightCode: 'FX6226' },
+      { from: 'CDG', to: 'IST', aircraft: 'Boeing 767F', days: ['tuesday','wednesday','friday'],       time: '07:56', type: 'inbound',  flightCode: 'FX6238' },
+      { from: 'CDG', to: 'IST', aircraft: 'Boeing 767F', days: ['thursday'],                           time: '07:56', type: 'inbound',  flightCode: 'FX6239' }
+    ]
+  },
+  'hkg-ist-route': {
+    color: '#6B7280',
+    weight: 4, opacity: 0.8, offset: 0,
+    flights: [
+      { from: 'HKG', to: 'IST', aircraft: 'Boeing 777F', days: ['tuesday','friday'], time: '06:30', type: 'inbound', flightCode: 'FDX5217' }
+    ]
+  }
+};
+
+
+
+const liveMarkers = new Map(); // key=icao24, value = Leaflet marker
+
+
+
+// FedEx callsign tespiti
+function isFedExCallsign(raw) {
+  if (!raw) return false;
+  const c = raw.trim().toUpperCase();
+  // FDX: FedEx Express; bazı feeder’lar da FDX formatını kullanır. Gerekirse buraya varyant eklenir.
+  return c.startsWith('FDX');
+}
+
+// Basic Auth header (varsa)
+function authHeaders() {
+  if (!OPENSKY_USER || !OPENSKY_PASS) return {};
+  const token = btoa(`${OPENSKY_USER}:${OPENSKY_PASS}`);
+  return { 'Authorization': `Basic ${token}` };
+}
+
+
+
+// Marker yönetimi
+function clearLiveMarkers() {
+  for (const m of liveMarkers.values()) {
+    map.removeLayer(m);
+  }
+  liveMarkers.clear();
+}
+
+// İsteğe bağlı: airline kod eşanlamlıları (FedEx özelinde FDX<->FX)
+const airlineCodeAliases = {
+  FDX: 'FX',
+  FX: 'FDX'
+};
+
+
+const fallbackHeuristics = [
+  {
+    range: [5000, 5999],
+    label: '-',
+    from: '-',
+    to: '-'
+  },
+  {
+    range: [6000, 6999],
+    label: '-',
+    from: '-',
+    to: '-'
+  }
+];
+
+// Yardımcı: callsign parçala (prefix + sayı)
+function parseCallsign(raw) {
+  if (!raw) return null;
+  const clean = String(raw).toUpperCase().replace(/\s+/g, '');
+  const m = clean.match(/^([A-Z]{2,3})(\d{1,5})$/);
+  if (!m) return { clean, prefix: null, number: null };
+  return { clean, prefix: m[1], number: Number(m[2]) };
+}
+
+// Yardımcı: airline alias normalize (FDX<->FX)
+function normalizeWithAliases(prefix) {
+  if (!prefix) return [];
+  const alias = airlineCodeAliases[prefix];
+  return alias ? [prefix, alias] : [prefix];
+}
+
+// Yardımcı: havaalanı kodunu (IATA/ICAO) airports sözlüğünde bul ve insan okuyabilir formatla
+function formatAirportLeg(code, airports) {
+  if (!code) return 'Unknown';
+  const direct = airports?.[code];
+  if (direct) {
+    const city = direct.city || direct.municipality || direct.name || 'Unknown';
+    const vcode = direct.iata || direct.icao || code;
+    return `${vcode} (${city})`;
+  }
+  // IATA/ICAO anahtar değilse, değerlerde ara (küçük veri setlerinde sorun değil)
+  if (airports && typeof airports === 'object') {
+    for (const k of Object.keys(airports)) {
+      const ap = airports[k];
+      if (ap?.iata === code || ap?.icao === code) {
+        const city = ap.city || ap.municipality || ap.name || 'Unknown';
+        const vcode = ap.iata || ap.icao || code;
+        return `${vcode} (${city})`;
+      }
+    }
+  }
+  return code; // en azından kodu göster
+}
+
+// Yardımcı: schedule.route → {route, from, to} formatına dönüştür
+function buildRouteResultFromSchedule(schedule, airports) {
+  const rawRoute = schedule?.route || '';
+  const parts = rawRoute.split('-').map(s => s.trim()).filter(Boolean);
+  const fromCode = parts[0] || null;
+  const toCode = parts[1] || null;
+  return {
+    route: rawRoute || 'Unknown',
+    from: formatAirportLeg(fromCode, airports),
+    to: formatAirportLeg(toCode, airports)
+  };
+}
+
+// Yardımcı: flightSchedules içinde pattern eşleşmesi (örn. FDX5xxx gibi)
+// flightSchedules'in anahtarları tam callsign (FDX5030) yanında “pattern” (FDX5XXX) da içerebilir.
+function tryPatternMatch(prefixes, number, flightSchedules) {
+  if (!Array.isArray(prefixes) || number == null) return null;
+  const numStr = String(number);
+  // Örn: 5030 → '5XXX', '50XX', '503X'
+  const patterns = [];
+  for (let i = 1; i < numStr.length; i++) {
+    const head = numStr.slice(0, i);
+    const tail = 'X'.repeat(numStr.length - i);
+    patterns.push(`${head}${tail}`);
+  }
+  for (const pfx of prefixes) {
+    for (const pat of patterns) {
+      const key = `${pfx}${pat}`;
+      const schedule = flightSchedules?.[key];
+      if (schedule?.route) return schedule;
+    }
+  }
+  return null;
+}
+
+/**
+ * GÜÇLENDİRİLMİŞ ROTa BULUCU
+ * - Tam eşleşme: FDX5030, FX5030
+ * - Pattern eşleşmesi: FDX5XXX, FX50XX, vb. (opsiyonel)
+ * - Fallback: numara aralığına göre varsayılan ağ rotası
+ * 
+ * @param {string} callsign - Örn: "FDX5030", "fx 5030"
+ * @param {object} flightSchedules - { "FDX5030": {route:"LTFM-EDDF"}, "FDX5XXX": {route:"..."} }
+ * @param {object} airports - { "LTFM": {city:"Istanbul", iata:"IST", icao:"LTFM"}, ... }
+ * @returns {{route:string, from:string, to:string}}
+ */
+function getRouteFromCallsign(callsign, flightSchedules = {}, airports = {}) {
+  // 1) Temel güvenlik
+  if (!callsign || typeof callsign !== 'string') {
+    return { route: 'Unknown', from: 'Unknown', to: 'Unknown' };
+  }
+
+  // 2) Normalize + parçala
+  const parsed = parseCallsign(callsign);
+  const cleanCallsign = parsed?.clean || '';
+  const prefixes = normalizeWithAliases(parsed?.prefix);
+  const number = parsed?.number;
+
+  // 3) DOĞRUDAN tam eşleşme dene (hem kendi prefix’i hem alias)
+  for (const pfx of prefixes) {
+    const key = `${pfx}${number ?? ''}`;
+    const schedule = flightSchedules?.[key];
+    if (schedule?.route) {
+      return buildRouteResultFromSchedule(schedule, airports);
+    }
+  }
+
+  // 4) Eski fonksiyondaki “FX ↔ FDX” özel kasası (ekstra güvence)
+  if (cleanCallsign.startsWith('FDX')) {
+    const alt = cleanCallsign.replace(/^FDX/, 'FX');
+    if (flightSchedules?.[alt]?.route) {
+      return buildRouteResultFromSchedule(flightSchedules[alt], airports);
+    }
+  } else if (cleanCallsign.startsWith('FX')) {
+    const alt = cleanCallsign.replace(/^FX/, 'FDX');
+    if (flightSchedules?.[alt]?.route) {
+      return buildRouteResultFromSchedule(flightSchedules[alt], airports);
+    }
+  }
+
+  // 5) PATTERN eşleşmesi (örn. FDX5XXX gibi anahtarlar koyduysan buradan yakalar)
+  const patternSchedule = tryPatternMatch(prefixes, number, flightSchedules);
+  if (patternSchedule?.route) {
+    return buildRouteResultFromSchedule(patternSchedule, airports);
+  }
+
+  // 6) NUMARA ARALIĞI heuristikleri (özelleştirilebilir)
+  if (Number.isFinite(number)) {
+    const h = fallbackHeuristics.find(h =>
+      number >= h.range[0] && number <= h.range[1]
+    );
+    if (h) {
+      return {
+        route: h.label,
+        from: h.from,
+        to: h.to
+      };
+    }
+  }
+
+  // 7) GENEL varsayılan
+  return {
+    route: 'FedEx Network',
+    from: 'Hub Airport',
+    to: 'Destination Airport'
+  };
+}
+
+/* ─────────────────────────────────────────────────────────────
+   OPSİYONEL: OpenSky route service (callsign→rota) ile zenginleştirme
+   Kullanım: await getRouteFromCallsignOnline('FDX5030')  // route service açıksa
+   Bu fonksiyonu “fallback” olarak çağırıp, bulursan flightSchedules’a yazıp cache’leyebilirsin.
+────────────────────────────────────────────────────────────── */
+async function getRouteFromCallsignOnline(callsign, airports = {}, routeServiceBase = 'https://flightroutes.opensky-network.org/api/routeset') {
+  if (!callsign) return { route: 'Unknown', from: 'Unknown', to: 'Unknown' };
+  try {
+    const url = `${routeServiceBase}?callsign=${encodeURIComponent(callsign.trim().toUpperCase())}`;
+    const resp = await fetch(url, { method: 'GET' });
+    if (!resp.ok) throw new Error(`route service ${resp.status}`);
+    const data = await resp.json(); // { origin:"LTFM", destination:"EDDF", ... } gibi bir çıktı beklenir
+    if (!data?.origin && !data?.destination) {
+      return { route: 'Unknown', from: 'Unknown', to: 'Unknown' };
+    }
+    const route = `${data.origin || ''}-${data.destination || ''}`.replace(/^-|-$/g, '') || 'Unknown';
+    return {
+      route,
+      from: formatAirportLeg(data.origin, airports),
+      to: formatAirportLeg(data.destination, airports)
+    };
+  } catch (e) {
+    // Servis kapalıysa sessizce düş
+    return { route: 'Unknown', from: 'Unknown', to: 'Unknown' };
+  }
+}
+
+
+function upsertMarker(obj) {
+  const { icao24, lat, lon, heading, callsign } = obj;
+  if (!lat || !lon) return;
+  
+  let mk = liveMarkers.get(icao24);
+  
+  // Uçak ikonu (heading'e göre döndürülmüş)
+  const rotation = heading ? heading : 0;
+  const iconHtml = `
+    <div class="live-aircraft" style="
+      transform: rotate(${rotation}deg);
+      font-size: 18px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    ">
+      ✈️
+    </div>`;
+  
+  const icon = L.divIcon({ 
+    html: iconHtml, 
+    className: 'custom-flight-label', 
+    iconSize: [24, 24], 
+    iconAnchor: [12, 12] 
+  });
+
+  // ✅ Kayıtlı uçuş kontrolü
+  const isRegisteredFlight = flightSchedules.hasOwnProperty(callsign);
+  
+  let popupContent;
+  if (isRegisteredFlight) {
+    // Kayıtlı uçuş - detaylı bilgi göster
+    const flightInfo = flightSchedules[callsign];
+    const routeInfo = getRouteFromCallsign(callsign);
+    
+    popupContent = `
+      <div class="popup-content">
+        <div class="popup-title">${callsign} (Registered Flight)</div>
+        <div class="popup-details">
+          <div class="icon">🛫</div><div>Route: ${flightInfo.route}</div>
+          <div class="icon">✈️</div><div>Aircraft: ${flightInfo.aircraft}</div>
+          <div class="icon">🏢</div><div>From: ${routeInfo.from}</div>
+          <div class="icon">🏢</div><div>To: ${routeInfo.to}</div>
+          <div class="icon">📅</div><div>Days: ${flightInfo.days.join(', ')}</div>
+          <div class="icon">🆔</div><div>ICAO24: ${icao24}</div>
+          <div class="icon">🧭</div><div>Heading: ${Math.round(rotation)}°</div>
+        </div>
+      </div>
+    `;
+  } else {
+    // Kayıtsız uçuş - sadece callsign göster
+    popupContent = `
+      <div class="popup-content">
+        <div class="popup-title">${callsign}</div>
+        <div class="popup-details">
+          <div class="icon">🆔</div><div>Live FedEx Aircraft</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (!mk) {
+    mk = L.marker([lat, lon], { icon });
+    mk.bindPopup(popupContent);
+    mk.addTo(map);
+    liveMarkers.set(icao24, mk);
+  } else {
+    mk.setLatLng([lat, lon]);
+    mk.setIcon(icon);
+    mk.setPopupContent(popupContent);
+  }
+}
+
+function updateLiveStatusPanel(count) {
+  const panel = document.getElementById('liveStatus');
+  const content = document.getElementById('statusContent');
+  window._liveCount = count;          // ⬅️ EK: meta bar için sayacı sakla
+  if (!panel || !content) return;
+  
+  if (count > 0) {
+    panel.style.display = 'block';
+    content.innerHTML = `<div class="status-item">✅ Live FedEx aircraft: ${count}</div>`;
+  } else {
+    panel.style.display = 'none';
+  }
+  updateMetaBar();                    // ⬅️ EK: meta barı güncelle
+}
+
+
+
+
+function scheduleBackoff() {
+  if (liveTimer) clearInterval(liveTimer);
+  lastUsedInterval = backoffIntervalMs;
+  liveTimer = setInterval(pullLiveOnce, backoffIntervalMs);
+}
+
+function showTransientStatus(msg) {
+  const content = document.getElementById('statusContent');
+  if (!content) return;
+  const el = document.createElement('div');
+  el.className = 'status-item';
+  el.textContent = msg;
+  content.prepend(el);
+}
+
+// --- UI bağlama ---
+document.getElementById('liveButton')?.addEventListener('click', () => {
+  if (liveEnabled) { stopLive(); } else { startLive(); }
+});
+
+document.querySelectorAll('input[name="liveScope"]').forEach(r => {
+  r.addEventListener('change', (e) => {
+    liveMode = e.target.value; // 'all' | 'istanbul'
+    if (liveEnabled) {
+      // Hemen filtreyi uygula
+      clearLiveMarkers();
+      pullLiveOnce();
+    }
+  });
+});
+
+// createCurvedPath fonksiyonunu güncelle - daha büyük curvature ve offset
+function createCurvedPath(start, end, curvature = 0.3, offset = 0) {
+  const latlngs = [];
+  const offsetX = end[1] - start[1];
+  const offsetY = end[0] - start[0];
+  const r = Math.sqrt(offsetX**2 + offsetY**2);
+  const theta = Math.atan2(offsetY, offsetX);
+  
+  // Daha büyük curvature için thetaOffset artırıldı
+  const thetaOffset = (Math.PI/6) * curvature; // PI/10'dan PI/6'ya
+  const r2 = (r/2) / Math.cos(thetaOffset);
+  const theta2 = theta + thetaOffset;
+  const midpoint = [(r2 * Math.sin(theta2)) + start[0], (r2 * Math.cos(theta2)) + start[1]];
+  
+  // Offset'i çok daha güçlü uygula
+  const offsetLat = offset * 1.5; // 0.5'ten 1.5'e
+  const offsetLng = offset * 1.5;
+
+  for (let i=0; i<=100; i++) {
+    const t = i/100;
+    const x = (1-t)**2 * start[1] + 2*(1-t)*t * (midpoint[1] + offsetLng) + t**2 * end[1];
+    const y = (1-t)**2 * start[0] + 2*(1-t)*t * (midpoint[0] + offsetLat) + t**2 * end[0];
+    latlngs.push([y,x]);
+  }
+  return latlngs;
+}
+
+// Basit parallel offset fonksiyonu
+function createOffsetPath(start, end, offset = 0) {
+  if (offset === 0) {
+    // Offset yoksa düz çizgi
+    return [start, end];
+  }
+  
+  // Rotanın perpendicular vektörünü hesapla
+  const dx = end[1] - start[1];
+  const dy = end[0] - start[0];
+  const length = Math.sqrt(dx * dx + dy * dy);
+  
+  // Normalize et ve 90 derece döndür
+  const offsetX = (-dy / length) * offset * 0.1; // 0.1 scaling factor
+  const offsetY = (dx / length) * offset * 0.1;
+  
+  // Start ve end noktalarını aynı miktarda kaydır
+  const offsetStart = [start[0] + offsetY, start[1] + offsetX];
+  const offsetEnd = [end[0] + offsetY, end[1] + offsetX];
+  
+  return [offsetStart, offsetEnd];
+}
+
+// Route data for info cards
+const routeData = {
+  'SAW-CDG': { aircraft: 'Boeing 737F', flights: ['FX4727'], capacity: '23 tons' },
+  'CDG-SAW': { aircraft: 'Boeing 737F', flights: ['FX4610','FX4624'], capacity: '23 tons' },
+  'SAW-LGG': { aircraft: 'Boeing 737F', flights: ['FX4725','FX4797'], capacity: '23 tons' },
+  'LGG-SAW': { aircraft: 'Boeing 737F', flights: ['FX4604','FX4648'], capacity: '23 tons' },
+  'IST-CDG': { aircraft: 'Boeing 767F', flights: ['FX4713','FX6321','FX6327'], capacity: '57 tons' },
+  'CDG-IST': { aircraft: 'Boeing 767F', flights: ['FX6226','FX6238','FX6239'], capacity: '57 tons' },
+  'HKG-IST': { aircraft: 'Boeing 777F', flights: ['FDX5217'], capacity: '100+ tons' }
+};
+
+function getRouteLayerKey(routeKey) {
+  return {
+    'SAW-CDG':'saw-cdg-route',
+    'SAW-LGG':'saw-lgg-route',
+    'IST-CDG':'ist-cdg-route',
+    'HKG-IST':'hkg-ist-route'
+  }[routeKey];
+}
+
+function updateVisibility() {
+  // Önce eski layer'ları kaldır
+  Object.values(displayedLayers).forEach(layer => {
+    if (layer && map.hasLayer(layer)) map.removeLayer(layer);
+  });
+  Object.keys(displayedLayers).forEach(k => delete displayedLayers[k]);
+  if (activeRoutes.size === 0) return;
+
+  activeRoutes.forEach(routeKey => {
+    const layerKey = getRouteLayerKey(routeKey);
+    const cfg = flightRoutes[layerKey];
+    if (!layerKey || !cfg) return;
+    if (!routeHasFlightsOnDay(routeKey, activeDay)) return;
+
+    const filteredLayer = L.layerGroup();
+    const ref = cfg.flights[0];
+    const fromAirport = airports[ref.from], toAirport = airports[ref.to];
+    
+    // Curved path'e geri dön
+    const pathPoints = createCurvedPath(
+      [fromAirport.lat, fromAirport.lng],
+      [toAirport.lat, toAirport.lng],
+      0.3, cfg.offset || 0
+    );
+
+    let markersAdded = 0;
+
+    cfg.flights.forEach(flight => {
+      if (activeDay !== 'all' && !flight.days.includes(activeDay)) return;
+
+      const isToIstanbul = (flight.to === 'SAW' || flight.to === 'IST');
+      const isFromIstanbul = (flight.from === 'SAW' || flight.from === 'IST');
+      
+      // Marker pozisyonu: path yönüne göre ayarla
+      let markerPos;
+      if (isFromIstanbul) {
+        markerPos = Math.floor(pathPoints.length * 0.6);
+      } else if (isToIstanbul) {
+        markerPos = Math.floor(pathPoints.length * 0.4);
+      } else {
+        markerPos = Math.floor(pathPoints.length * 0.5);
+      }
+      
+      const markerPt = pathPoints[markerPos];
+      const short = flight.aircraft.split(' ')[1];
+      
+      // Ok yönü - HKG için istisna, diğerleri normal mantık
+      let arrow;
+      if (flight.from === 'HKG') {
+        arrow = '←'; // HKG'den gelenler için sola ok (istisna)
+      } else if (isFromIstanbul) {
+        arrow = '←'; // Istanbul'dan çıkış (Departure/Outbound)
+      } else if (isToIstanbul) {
+        arrow = '→'; // Istanbul'a geliş (Arrival/Inbound)
+      } else {
+        arrow = '→'; // Fallback
+      }
+
+      const marker = L.marker(markerPt, {
+        icon: L.divIcon({
+          html: `<div class="flight-marker" style="background-color:${cfg.color};border:2px solid white;">${short} ${arrow}</div>`,
+          iconSize: [90, 25],
+          iconAnchor: [45, 12],
+          className: 'custom-flight-label'
+        })
+      });
+
+      const typeText = isFromIstanbul ? 'Outbound (Departure)' : 'Inbound (Arrival)';
+      const daysText = flight.days.map(d => d.charAt(0).toUpperCase() + d.slice(1)).join(', ');
+      const convertedTime = convertTime(flight.time, 'TR', activeTimezone);
+
+      marker.bindPopup(`
+        <div class="popup-content">
+          <div class="popup-title">${flight.aircraft}</div>
+          <div class="popup-details">
+            <div class="icon">✈️</div><div><strong>${flight.from} → ${flight.to}</strong></div>
+            <div class="icon">🔖</div><div>Flight: ${flight.flightCode}</div>
+            <div class="icon">📌</div><div>Type: ${typeText}</div>
+            <div class="icon">⏰</div><div>Time: ${convertedTime}</div>
+            <div class="icon">📅</div><div>Days: ${daysText}</div>
+          </div>
+        </div>
+      `);
+
+      filteredLayer.addLayer(marker);
+      markersAdded++;
+    });
+
+    if (markersAdded === 0) return;
+
+    // Polyline oluşturma - HKG için kesikli çizgi
+    const polyline = L.polyline(pathPoints, {
+      color: cfg.color,
+      weight: cfg.weight,
+      opacity: cfg.opacity,
+      dashArray: routeKey === 'HKG-IST' ? '10, 10' : null // HKG rotası için kesikli çizgi
+    });
+
+    filteredLayer.addLayer(polyline);
+
+    filteredLayer.addTo(map);
+    displayedLayers[layerKey] = filteredLayer;
+  });
+}
+
+
+function updateInfoCards() {
+  const cont = document.getElementById('infoCards');
+  cont.innerHTML = '';
+  if (activeRoutes.size === 0) return;
+  const today = new Date().toLocaleDateString('en-US', {weekday: 'long'}).toLowerCase();
+
+  activeRoutes.forEach(routeKey => {
+    const route = routeData[routeKey]; 
+    if (!route) return;
+    
+    const todaysFlights = Object.entries(flightSchedules).filter(([f,s]) => 
+      s.route === routeKey && s.days.includes(today)
+    );
+    
+    const card = document.createElement('div'); 
+    card.className = 'info-card';
+    
+    const flightsInfo = todaysFlights.length > 0 ? 
+  todaysFlights.map(([f,s]) => {
+    const convertedTime = convertTime(s.times[0], 'TR', activeTimezone);
+    return `<div class="flight-item">${f} - ${convertedTime}</div>`;
+  }).join('') : 
+  '<div class="flight-item">No flights today</div>';
+    
+    const statusText = todaysFlights.length > 0 ? 
+      `Today: ${todaysFlights.length} Flight${todaysFlights.length > 1 ? 's' : ''}` : 
+      'No Flights Today';
+    
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-title">${routeKey}</div>
+        <div class="card-status">${statusText}</div>
+      </div>
+      <div class="card-details">
+        <span class="detail-label">Aircraft:</span><span class="detail-value">${route.aircraft}</span>
+        <span class="detail-label">Capacity:</span><span class="detail-value">${route.capacity}</span>
+        <span class="detail-label">Today's Flights:</span>
+        <div class="flights-list">${flightsInfo}</div>
+      </div>`;
+    
+    cont.appendChild(card);
+  });
+}
+
+// Timezone button listeners
+document.querySelectorAll('.timezone-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.timezone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTimezone = btn.dataset.tz;
+    updateInfoCards(); // Kartları yeniden oluştur
+    updateVisibility(); // Popup'ları da güncelle - BU ÖNEMLİ!
+	updateHeaderTZ();
+  });
+});
+
+function updateDayIndicators() {
+  // Tüm segment'lerden işaretleri temizle
+  document.querySelectorAll('.day-segment').forEach(segment => {
+    segment.classList.remove('has-flight');
+  });
+
+  if (activeRoutes.size === 0) return;
+
+  // Seçili rotaların tüm uçuş günlerini topla
+  const daysWithFlights = new Set();
+  activeRoutes.forEach(routeKey => {
+    const cfg = flightRoutes[getRouteLayerKey(routeKey)];
+    if (!cfg) return;
+    cfg.flights.forEach(f => f.days.forEach(d => daysWithFlights.add(d)));
+  });
+
+  // Gün isimleriyle eşleşen segment'lere işaret ekle
+  document.querySelectorAll('.day-segment').forEach(segment => {
+    const day = segment.dataset.day;
+    if (daysWithFlights.has(day)) {
+      segment.classList.add('has-flight');
+    }
+  });
+}
+
+
+function routeHasFlightsOnDay(routeKey,day){
+  if(day==='all') return true;
+  const cfg=flightRoutes[getRouteLayerKey(routeKey)];
+  return cfg?cfg.flights.some(f=>f.days.includes(day)):false;
+}
+
+function updateRouteButtonAvailability() {
+  document.querySelectorAll('.route-btn').forEach(btn => {
+    const routeKey = btn.dataset.route;
+    const allowed = routeHasFlightsOnDay(routeKey, activeDay);
+    btn.classList.toggle('disabled', !allowed);
+    btn.disabled = !allowed;
+    if (!allowed && btn.classList.contains('active')) {
+      btn.classList.remove('active');
+      activeRoutes.delete(routeKey);
+      const layerKey = getRouteLayerKey(routeKey);
+      const dl = displayedLayers?.[layerKey];
+      if (dl && map.hasLayer(dl)) map.removeLayer(dl);
+      if (displayedLayers) delete displayedLayers[layerKey];
+    }
+  });
+}
+
+// Day segment listeners
+document.querySelectorAll('.day-segment').forEach(segment => {
+  segment.addEventListener('click', () => {
+    const selected = segment.dataset.day;
+    document.querySelectorAll('.day-segment').forEach(s => {
+      s.classList.remove('active');
+      s.setAttribute('aria-checked', 'false');
+    });
+    segment.classList.add('active');
+    segment.setAttribute('aria-checked', 'true');
+    activeDay = selected;
+    updateVisibility();
+    updateInfoCards();
+    updateRouteButtonAvailability();
+    updateDayIndicators();
+  });
+}); 
+
+// Format current time in a specific IANA timezone (no shifting!)
+function formatHHMMInTZ(date, tz) {
+  return new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: tz
+  }).format(date);
+}
+
+
+
+// DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Route button listeners
+  document.querySelectorAll('.route-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const routeKey = btn.dataset.route;
+      if (!routeKey) return; // emniyet
+      const layerKey = getRouteLayerKey(routeKey);
+
+      if (activeDay !== 'all' && !routeHasFlightsOnDay(routeKey, activeDay)) {
+        btn.classList.add('shake');
+        setTimeout(() => btn.classList.remove('shake'), 300);
+        return;
+      }
+
+      if (btn.classList.contains('active')) {
+        btn.classList.remove('active');
+        activeRoutes.delete(routeKey);
+        const dl = displayedLayers?.[layerKey];
+        if (dl && map.hasLayer(dl)) map.removeLayer(dl);
+        if (displayedLayers) delete displayedLayers[layerKey];
+      } else {
+        btn.classList.add('active');
+        activeRoutes.add(routeKey);
+      }
+
+      updateRouteButtonAvailability();
+      updateVisibility();
+      updateInfoCards();
+      updateDayIndicators();
+    });
+  });
+
+  // Initial paint
+  renderKpis();
+  updateMetaBar();
+  renderScheduleSummary();
+
+  // Timezone changes
+  document.querySelectorAll('.timezone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      renderKpis();
+      updateMetaBar();
+      renderScheduleSummary();
+    });
+  });
+
+  // Day filter clicks (informational)
+  document.querySelectorAll('.day-segment').forEach(seg => {
+    seg.addEventListener('click', () => {
+      updateMetaBar();
+      renderScheduleSummary();
+    });
+  });
+
+  // Live toggle -> meta refresh
+  const liveBtn = document.getElementById('liveButton');
+  if (liveBtn) {
+    liveBtn.addEventListener('click', () => {
+      setTimeout(() => updateMetaBar(), 0);
+    });
+  }
+
+  // Open schedule modal -> refresh summary after DOM paints
+  document.getElementById('scheduleButton')?.addEventListener('click', () => {
+    setTimeout(() => renderScheduleSummary(), 0);
+  });
+
+  // ✅ Auto-refresh countdown every 60s
+  setInterval(() => {
+    renderKpis();
+  }, 60000);
+});
+
+
+
+  // Live button as Leaflet control
+  const LiveControl = L.Control.extend({
+    options: { position: 'topright' },
+    onAdd: function (map) {
+      const container = L.DomUtil.create('div', 'live-control leaflet-bar');
+      container.innerHTML = `
+        <button id="liveButton" class="live-indicator">
+          <span class="dot"></span>
+          <span class="label">LIVE</span>
+        </button>
+      `;
+      L.DomEvent.disableClickPropagation(container);
+      return container;
+    }
+  });
+
+  map.addControl(new LiveControl());
+  
+  // Leaflet LIVE butonu eklendikten sonra tıklamayı bağla
+const wireLiveButton = () => {
+  const btn = document.getElementById('liveButton');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    liveEnabled ? stopLive() : startLive();
+    btn.classList.toggle('active', liveEnabled);
+  });
+};
+wireLiveButton();
+
+
+  // Live button toggle - setTimeout ile ID'nin hazır olmasını bekle
+  setTimeout(() => {
+  document.querySelectorAll('.route-btn').forEach(btn => {
+    const routeKey = btn.dataset.route;
+    if (!routeKey) return;
+    btn.classList.add('active');
+    activeRoutes.add(routeKey);
+  });
+  updateVisibility();
+  updateInfoCards();
+  updateDayIndicators();
+}, 100);
+
+
+/* === HEADER: scroll efekti ve LIVE senkron === */
+(function(){
+  // Scroll gölgesi
+  const sh = document.getElementById('siteHeader');
+  if (sh){
+    const onScroll=()=>{ (window.scrollY>8)?sh.classList.add('scrolled'):sh.classList.remove('scrolled'); };
+    onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+  }
+
+  const headerBtn = document.getElementById('headerLiveToggle');
+  if (!headerBtn) return;
+
+  function setHeaderLiveState(on){
+    headerBtn.classList.toggle('active', !!on);
+    headerBtn.setAttribute('aria-pressed', on ? 'true':'false');
+  }
+
+  // Header butonu → live toggle
+  headerBtn.addEventListener('click', ()=>{
+    // Varsa Leaflet kontrolünü tetikle; yoksa doğrudan fonksiyonları çağır
+    const leafBtn = document.getElementById('liveButton');
+    if (leafBtn){ leafBtn.click(); }
+    else { (typeof liveEnabled!=='undefined' && liveEnabled) ? stopLive() : startLive(); }
+  });
+
+  // Leaflet "LIVE" düğmesi DOM'a sonradan geliyor; state’i izleyelim
+  const syncObserver = new MutationObserver(()=>{
+    const leafBtn = document.getElementById('liveButton');
+    if (!leafBtn) return;
+    // İlk eşitleme
+    setHeaderLiveState(leafBtn.classList.contains('active'));
+    // Leaflet butonuna tıklanırsa header’ı güncelle
+    leafBtn.addEventListener('click', ()=> {
+      setTimeout(()=> setHeaderLiveState(leafBtn.classList.contains('active')), 0);
+    });
+  });
+  syncObserver.observe(document.body, {childList:true, subtree:true});
+})();
+
+
+// Ufuk linkine tıklayınca FedEx uçak görseli sağdan sola uçsun
+document.getElementById('fxAuthor')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const sky = document.querySelector('.fx-footer__sky') || document.body;
+
+  const img = document.createElement('img');
+  img.src = 'https://tr.eu.fedex.com/Netinfo/fdx-plane2.png';
+  img.className = 'fx-fedex-plane-svg';
+  img.alt = 'FedEx cargo plane';
+  img.setAttribute('aria-hidden', 'true');
+
+  sky.appendChild(img);
+  img.addEventListener('animationend', () => img.remove());
+});
+
+
+
+
+</script>
+
+
+</body>
+</html>
