@@ -934,24 +934,51 @@ function renderChassis() {
         return;
     }
 
-    // Parse port numbers and sort
+    // Parse: extract stack/slot/port from interface name
     var parsed = physicalPorts.map(function(p) {
         var match = (p.interface_name || '').match(/(\d+)\/(\d+)\/(\d+)$/);
-        var num = match ? parseInt(match[3]) : 0;
         var stack = match ? parseInt(match[1]) : 1;
-        return { port: p, num: num, stack: stack };
+        var slot  = match ? parseInt(match[2]) : 0;
+        var num   = match ? parseInt(match[3]) : 0;
+        // Short type prefix: Gi, Te, Fa, etc.
+        var typeMatch = (p.interface_name || '').match(/^([A-Za-z]+)/);
+        var typePrefix = typeMatch ? typeMatch[1] : '';
+        // Abbreviate: GigabitEthernet -> Gi, TenGigabitEthernet -> Te, etc.
+        if (typePrefix.toLowerCase().indexOf('tengig') === 0) typePrefix = 'Te';
+        else if (typePrefix.toLowerCase().indexOf('gigabit') === 0) typePrefix = 'Gi';
+        else if (typePrefix.toLowerCase().indexOf('fastethernet') === 0) typePrefix = 'Fa';
+        else if (typePrefix.toLowerCase().indexOf('twentyfive') === 0) typePrefix = 'Twe';
+        else if (typePrefix.toLowerCase().indexOf('forty') === 0) typePrefix = 'Fo';
+        return { port: p, stack: stack, slot: slot, num: num, typePrefix: typePrefix };
     });
 
-    // Group by stack member
-    var stacks = {};
+    // Group by stack -> slot
+    var groups = {};
     parsed.forEach(function(item) {
-        if (!stacks[item.stack]) stacks[item.stack] = [];
-        stacks[item.stack].push(item);
+        var key = item.stack + '/' + item.slot;
+        if (!groups[key]) groups[key] = { stack: item.stack, slot: item.slot, typePrefix: item.typePrefix, ports: [] };
+        groups[key].ports.push(item);
     });
 
-    Object.keys(stacks).sort().forEach(function(stackNum) {
-        var ports = stacks[stackNum];
+    // Sort groups by stack then slot
+    var sortedKeys = Object.keys(groups).sort(function(a, b) {
+        var ga = groups[a], gb = groups[b];
+        if (ga.stack !== gb.stack) return ga.stack - gb.stack;
+        return ga.slot - gb.slot;
+    });
+
+    sortedKeys.forEach(function(key) {
+        var group = groups[key];
+        var ports = group.ports;
         ports.sort(function(a, b) { return a.num - b.num; });
+
+        // Section label: e.g. "Gi1/0  (24 port)"
+        var label = document.createElement('div');
+        label.style.cssText = 'font-size:12px;color:var(--text-muted);margin-bottom:8px;' +
+            (key !== sortedKeys[0] ? 'margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);' : '');
+        var labelText = group.typePrefix + group.stack + '/' + group.slot;
+        label.textContent = labelText + '  (' + ports.length + ' port)';
+        chassis.appendChild(label);
 
         var grid = document.createElement('div');
         grid.className = 'port-grid';
@@ -974,7 +1001,7 @@ function renderChassis() {
                 groupCount++;
             }
         });
-        topRow.appendChild(topGroup);
+        if (groupCount > 0) topRow.appendChild(topGroup);
 
         // Even ports row (bottom)
         var bottomRow = document.createElement('div');
@@ -994,17 +1021,10 @@ function renderChassis() {
                 groupCount2++;
             }
         });
-        bottomRow.appendChild(bottomGroup);
+        if (groupCount2 > 0) bottomRow.appendChild(bottomGroup);
 
         grid.appendChild(topRow);
         grid.appendChild(bottomRow);
-
-        if (Object.keys(stacks).length > 1) {
-            var label = document.createElement('div');
-            label.style.cssText = 'font-size:11px;color:var(--text-muted);margin-bottom:6px;margin-top:12px;';
-            label.textContent = 'Stack ' + stackNum;
-            chassis.appendChild(label);
-        }
         chassis.appendChild(grid);
     });
 }
