@@ -1022,7 +1022,7 @@ document.getElementById('copyIcon').addEventListener('click', function () {
 document.addEventListener('DOMContentLoaded', async function () {
     const loadingScreen = document.getElementById('loadingScreen');
     const params = new URLSearchParams(window.location.search);
-    const deviceId = params.get('id');
+    const uuid = params.get('uid');
     const basicDeviceInfoDiv = document.getElementById('basicDeviceInfo');
     const reportContentDiv = document.getElementById('reportContent');
     const switchIconEl = document.getElementById("switchIcon");
@@ -1061,14 +1061,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    if (!deviceId) {
-        basicDeviceInfoDiv.textContent = "Cihaz ID'si belirtilmemiş.";
-        reportContentDiv.textContent = "Rapor verisi için cihaz ID gerekli.";
+    if (!uuid) {
+        basicDeviceInfoDiv.textContent = "Cihaz UUID'si belirtilmemiş.";
+        reportContentDiv.textContent = "Rapor verisi için cihaz UUID gerekli.";
         hideLoadingScreen();
         return;
     }
 
-    // Fetch data then hide loading screen
+    // Resolve UUID to device ID, then fetch data
+    const deviceId = await resolveUUIDtoDeviceId(uuid);
+    if (!deviceId) {
+        basicDeviceInfoDiv.textContent = "UUID ile eşleşen cihaz bulunamadı.";
+        hideLoadingScreen();
+        return;
+    }
+
     deviceData = await fetchDeviceData(deviceId);
     if (deviceData) {
         displayBasicDeviceInfo(deviceData);
@@ -1080,14 +1087,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
-    const deviceId = params.get('id');
+    const uuid = params.get('uid');
 
-    if (!deviceId) {
-        devLog("Cihaz ID belirtilmemiş.");
+    if (!uuid) {
+        devLog("Cihaz UUID belirtilmemiş.");
         return;
     }
 
-    // Veri çek
+    // UUID'den device ID'ye çevir, sonra veri çek
+    const deviceId = await resolveUUIDtoDeviceId(uuid);
+    if (!deviceId) {
+        devLog("UUID ile eşleşen cihaz bulunamadı: " + uuid);
+        return;
+    }
+
     deviceData = await fetchDeviceData(deviceId);
 
     // Veri kontrolü ve görüntüleme
@@ -1210,6 +1223,23 @@ async function fetchWithRetry(url, options = {}, retries = 3, timeoutMs = 15000)
         }
     }
     throw new Error("All fetch attempts failed");
+}
+
+async function resolveUUIDtoDeviceId(uuid) {
+   if (!uuid) return null;
+   try {
+       var response = await fetchWithRetry("/Netinfo/api/device/uuid_to_deviceid?uuid=" + encodeURIComponent(uuid));
+       var data = await response.json();
+       if (data && data.device_id) {
+           devLog("UUID resolved: " + uuid + " -> " + data.device_id);
+           return String(data.device_id);
+       }
+       devLog("UUID resolution failed for: " + uuid);
+       return null;
+   } catch (error) {
+       devLog("Error resolving UUID " + uuid + ": " + error.message);
+       return null;
+   }
 }
 
 async function fetchDeviceData(id) {
