@@ -34,6 +34,8 @@
     text-align: center;
     color: #FFD700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    height: 80px;
+    line-height: 80px;
 }
 
 .green-bg, 
@@ -95,11 +97,6 @@ li.green {
 
 
 
-.header {
-    height: 80px; /* Başlık için sabit bir yükseklik */
-    line-height: 80px; /* İçeriği dikey ortalar */
-}
-
 
         .container {
         display: flex;
@@ -139,18 +136,6 @@ li.green {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
-.card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-        }
-
-
-         .header {
-            text-align: center;
-            color: #FFD700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
 
         .header .title {
             font-size: 2.5rem;
@@ -498,12 +483,6 @@ li.green {
     animation: fadeInOut 1s infinite;
 }
 
-
-@keyframes blink {
-    50% {
-        opacity: 0.5;
-    }
-}
 
 @keyframes shrinkToIcon {
     from {
@@ -1076,16 +1055,6 @@ li.green {
 
 
 
-/* Yanıp Sönme Efekti */
-@keyframes blinkEffect {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-.blink {
-    animation: blinkEffect 1s infinite;
-}
-
 /* Tarih seçicinin genişlik ve hizasını kontrol eder */
 #datePicker {
     max-width: 120px;
@@ -1549,16 +1518,6 @@ li.green {
 .close-carbon:hover {
     color: white;
 }
-
-@keyframes blinkEffect {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-.blink {
-    animation: blinkEffect 1s infinite;
-}
-
 
 .text-red-500 {
     color: #D32F2F !important;
@@ -2808,6 +2767,94 @@ li.green {
         </div>
 
     </div>
+
+    <!-- ============================== -->
+    <!-- 📡 İKİNCİ SATIR: AP Durumu & VLAN Genel Bakış -->
+    <!-- ============================== -->
+    <div class="dashboard-row" style="margin-top: 20px;">
+
+        <!-- SOL: Access Point Durumu -->
+        <div class="card half-card">
+            <div class="table-container">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-wifi text-green-400 mr-2"></i> Access Point Durumu
+                </h3>
+                <div id="apSummaryStats" class="mb-3" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <div style="background: rgba(34,197,94,0.2); border: 1px solid #22c55e; border-radius: 8px; padding: 10px 16px; flex: 1; min-width: 120px; text-align: center;">
+                        <div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;" id="apOnlineCount">-</div>
+                        <div style="font-size: 0.85rem; color: #ccc;">Aktif AP</div>
+                    </div>
+                    <div style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 10px 16px; flex: 1; min-width: 120px; text-align: center;">
+                        <div style="font-size: 1.8rem; font-weight: bold; color: #ef4444;" id="apOfflineCount">-</div>
+                        <div style="font-size: 0.85rem; color: #ccc;">Pasif AP</div>
+                    </div>
+                    <div style="background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; border-radius: 8px; padding: 10px 16px; flex: 1; min-width: 120px; text-align: center;">
+                        <div style="font-size: 1.8rem; font-weight: bold; color: #3b82f6;" id="apClientCount">-</div>
+                        <div style="font-size: 0.85rem; color: #ccc;">Toplam Client</div>
+                    </div>
+                </div>
+                <table id="apTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>AP Adı</th>
+                            <th>Model</th>
+                            <th>Durum</th>
+                            <th>Client Sayısı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" class="text-center text-gray-400">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ORTA: VLAN Genel Bakışı -->
+        <div class="card half-card">
+            <div class="table-container">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-layer-group text-purple-400 mr-2"></i> VLAN Genel Bakışı
+                </h3>
+                <table id="vlanTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>VLAN ID</th>
+                            <th>VLAN Adı</th>
+                            <th>Cihaz Sayısı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="3" class="text-center text-gray-400">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SAĞ: Lokasyon Bazlı Cihaz Dağılımı -->
+        <div class="card half-card">
+            <div class="table-container">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-map-marker-alt text-red-400 mr-2"></i> Lokasyon Bazlı Dağılım
+                </h3>
+                <div id="locationDistribution">
+                    <table id="locationTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Lokasyon</th>
+                                <th>Toplam Cihaz</th>
+                                <th>Aktif</th>
+                                <th>Pasif</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="4" class="text-center text-gray-400">Yükleniyor...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- ============================== -->
@@ -3327,144 +3374,7 @@ function showSidebarButtons() {
     console.log("✅ Sidebar sistemi başarıyla başlatıldı!");
 });
 
-// 🔍 Gelişmiş MAC Arama Sonucu - performMacSearch fonksiyonunu güncelle
-
-async function performMacSearch() {
-    const macSearchInput = document.getElementById("macSearchInput");
-    const resultContainer = document.getElementById("macSearchResult");
-    
-    if (!macSearchInput || !resultContainer) {
-        console.error("❌ MAC arama elemanları bulunamadı!");
-        return;
-    }
-
-    const macAddress = macSearchInput.value.trim();
-    
-    if (macAddress === "") {
-        resultContainer.innerHTML = `
-            <div class="error" style="color: #ff6b6b; font-weight: bold;">
-                ⚠️ Lütfen bir MAC adresi girin!
-            </div>
-        `;
-        macSearchInput.focus();
-        return;
-    }
-
-    showSearchLoading();
-
-    try {
-        console.log("🔍 MAC arama başlatıldı:", macAddress);
-
-        const normalizedMac = normalizeMacAddress(macAddress);
-        if (!normalizedMac) {
-            throw new Error("Geçersiz MAC adresi formatı!");
-        }
-
-        // Paralel API çağrıları
-        const [devicesResponse, switchInfoResponse] = await Promise.all([
-            fetch(`/Netinfo/api/device/get_all_device_ports`),
-            fetch(`/Netinfo/api/device/get_all_devices`) // Switch bilgileri için
-        ]);
-
-        if (!devicesResponse.ok || !switchInfoResponse.ok) {
-            throw new Error(`API hatası: ${devicesResponse.status}`);
-        }
-
-        const [devices, switches] = await Promise.all([
-            devicesResponse.json(),
-            switchInfoResponse.json()
-        ]);
-
-        let found = null;
-        let switchInfo = null;
-
-        // MAC adresi ara
-        devices.forEach(device => {
-            if (!device.connected_macs || device.connected_macs.trim() === "") {
-                return;
-            }
-
-            device.connected_macs.split(',').forEach(macEntry => {
-                const macParts = macEntry.split(' ');
-                if (macParts.length === 0) return;
-
-                const rawMac = macParts[0].trim();
-                if (rawMac === "") return;
-
-                const manufacturer = macParts.slice(1).join(' ').trim();
-                const normalizedEntryMac = normalizeMacAddress(rawMac);
-                
-                if (!normalizedEntryMac) return;
-
-                if (normalizedEntryMac === normalizedMac) {
-                    found = {
-                        switch: device.hostname,
-        port: device.interface_name,
-        mac: rawMac,
-        manufacturer: manufacturer || "Bilinmeyen Üretici",
-        // ✅ Doğru field'ları kullan
-        portDescription: device.description || "Açıklama yok",
-        portStatus: device.link_status || "unknown",
-        protocolStatus: device.protocol_status || "unknown",
-        vlan: device.vlan_id || "N/A",
-        vlanName: device.vlan_name || "N/A", 
-        speed: device.speed || "N/A",
-        duplex: device.duplex || "N/A",
-        isUp: device.is_up,
-        inputRate: device.input_rate_mbps || 0,
-        outputRate: device.output_rate_mbps || 0,
-        lastInput: device.last_input || "Bilinmiyor",
-        lastOutput: device.last_output || "Bilinmiyor"
-                    };
-
-                    // Switch bilgilerini bul
-                    switchInfo = switches.find(sw => sw.hostname === device.hostname);
-					
-                }
-            });
-        });
-
-        if (found) {
-            // Lokasyon bilgisi çıkar
-            const location = extractLocationFromHostname(found.switch);
-            const deviceType = getDeviceType(found.manufacturer);
-            const portType = getPortType(found.port);
-			
-            
-            showEnhancedMacResult(found, switchInfo);
-            
-            console.log("✅ MAC adresi bulundu:", found);
-        } else {
-            resultContainer.innerHTML = `
-                <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: white;">
-                    <h4 style="color: #ef4444; margin-bottom: 10px;">❌ Sonuç Bulunamadı</h4>
-                    <p>Aranan MAC adresi: <strong>${macAddress}</strong></p>
-                    <p>Bu MAC adresi hiçbir switch'te bulunamadı.</p>
-                    
-                    <!-- Troubleshooting önerileri -->
-                    <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 6px; margin-top: 15px;">
-                        <h5 style="color: #FFD700; margin-bottom: 8px;">💡 Sorun Giderme:</h5>
-                        <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
-                            <li>Cihaz şu anda açık ve ağa bağlı mı?</li>
-                            <li>MAC adresi formatını kontrol edin (aa:bb:cc:dd:ee:ff)</li>
-                            <li>Cihaz WiFi üzerinden bağlıysa switch'te görünmeyebilir</li>
-                            <li>MAC adresi tablosu güncellensin diye cihazdan trafik gönderin</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-        }
-
-    } catch (error) {
-        console.error("❌ MAC arama hatası:", error);
-        resultContainer.innerHTML = `
-            <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: white;">
-                <h4 style="color: #ef4444; margin-bottom: 10px;">🚨 Hata Oluştu</h4>
-                <p>${error.message}</p>
-            </div>
-        `;
-    }
-}
+// performMacSearch - eski kopya kaldırıldı, güncel versiyonu aşağıda (history destekli)
 
 function showEnhancedMacResult(found, switchInfo) {
     const resultContainer = document.getElementById("macSearchResult");
@@ -4427,49 +4337,11 @@ function updateNotification() {
 
 
 
-// 🖱️ **Bildirim kutusunu sürüklenebilir hale getir**
-document.addEventListener("DOMContentLoaded", () => {
-    const notificationContainer = document.getElementById("notificationContainer");
-    if (!notificationContainer) {
-        console.error("⚠️ Bildirim konteyneri bulunamadı.");
-        return;
-    }
-
-    let isDragging = false;
-    let startX, startY, translateX = 0, translateY = 0;
-
-    notificationContainer.style.position = "fixed"; // Sabit konumlandır
-
-    notificationContainer.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        startX = e.clientX - translateX;
-        startY = e.clientY - translateY;
-
-        document.addEventListener("mousemove", drag);
-        document.addEventListener("mouseup", stopDrag);
-    });
-
-    function drag(e) {
-        if (!isDragging) return;
-
-        translateX = e.clientX - startX;
-        translateY = e.clientY - startY;
-
-        requestAnimationFrame(() => {
-            notificationContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
-        });
-    }
-
-    function stopDrag() {
-        isDragging = false;
-        document.removeEventListener("mousemove", drag);
-        document.removeEventListener("mouseup", stopDrag);
-    }
-});
+// Bildirim drag handler - eski kopya kaldırıldı, yukarıdaki kullanılıyor
 
 // **Sayfa açıldığında ilk kez çalıştır**
 setTimeout(updateNotification, 2000); // İlk güncelleme için 2 saniye beklet
-setInterval(updateNotification, 10000); // Her 10 saniyede bir güncelle
+activeIntervals.push(setInterval(updateNotification, 10000)); // Her 10 saniyede bir güncelle
 
 
 
@@ -4590,16 +4462,6 @@ async function fetchDevicePorts(deviceId) {
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    const adminModal = document.getElementById("adminModal");
-    if (!adminModal) {
-        console.error("adminModal DOM'da bulunamadı.");
-        return;
-    }
-    adminModal.style.display = "block";
-});
-
-
 
 function calculateAveragePowerConsumption() {
     const powerConsumption = {
@@ -4658,12 +4520,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // Admin Giriş Doğrulama
     window.handleAdminLogin = async function () {
     const password = document.getElementById("adminPassword").value;
+    const loginBtn = document.querySelector('#adminModal button[onclick]') || document.querySelector('#adminModal .login-btn');
+
     if (!password) {
         alert("Lütfen şifre giriniz.");
         return;
     }
 
-    const success = await validatePassword(password);
+    // Loading state
+    if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Doğrulanıyor...";
+    }
+
+    let success = false;
+    try {
+        success = await validatePassword(password);
+    } catch (err) {
+        console.error("Login hatası:", err);
+    } finally {
+        if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.textContent = "Giriş Yap";
+        }
+    }
     if (success) {
         sessionStorage.setItem("isAuthenticated", "true");
         
@@ -4699,10 +4579,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (carbonIcon) carbonIcon.style.display = "block";
         
         console.log("🚀 Tüm UI elemanları (sidebar'lar dahil) gösterildi!");
-        
+
         initDashboard();
+
+        // Oturum zamanlayıcısını başlat
+        startAdminCountdown();
     } else {
         alert("Hatalı şifre. Lütfen tekrar deneyiniz.");
+        document.getElementById("adminPassword").value = "";
+        document.getElementById("adminPassword").focus();
     }
 };
 });
@@ -4719,6 +4604,7 @@ async function validatePassword(password) {
         return result.success;
     } catch (error) {
         console.error("Şifre doğrulama hatası:", error);
+        alert("Sunucu bağlantı hatası! Lütfen ağ bağlantınızı kontrol edip tekrar deneyin.");
         return false;
     }
 }
@@ -4730,32 +4616,7 @@ function initDashboard() {
 
 
 
-function handleAdminLogin() {
-    const adminPassword = document.getElementById("adminPassword").value;
-    const notificationContainer = document.getElementById("notificationContainer");
-
-    if (adminPassword === "gizliSifre") {
-        alert("✅ Admin girişi başarılı!");
-        document.getElementById("adminModal").style.display = "none";
-        document.getElementById('insightTickerContainer').style.display = 'block';
-        document.getElementById("contentContainer").style.display = "block";
-
-        // Bildirim ikonunu göster
-        if (notificationContainer) {
-            notificationContainer.style.display = "block";
-        }
-        
-        // ✅ Bu 4 satırı ekle:
-        const sidebarContainer = document.querySelector(".sidebar-toggle-container");
-        if (sidebarContainer) sidebarContainer.style.display = "block";
-        
-        const carbonIcon = document.getElementById("carbonIcon");
-        if (carbonIcon) carbonIcon.style.display = "block";
-        
-    } else {
-        alert("❌ Hatalı şifre! Tekrar deneyin.");
-    }
-}
+// Hardcoded şifre kaldırıldı - sadece API tabanlı doğrulama kullanılıyor (window.handleAdminLogin)
 
 
 		
@@ -4763,18 +4624,6 @@ function handleAdminLogin() {
     sessionStorage.removeItem("isAuthenticated"); // Oturumu sıfırla
     location.reload(); // Sayfayı yeniden yükle
 }
-
-
-
-function updateClock() {
-    const now = new Date();
-    const time = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const date = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-    document.getElementById('clock').textContent = time;
-    document.getElementById('date').textContent = date;
-}
-
 
 
 
@@ -4789,88 +4638,11 @@ function updateClock() {
 }
 
 // Her saniye güncelle
-setInterval(updateClock, 1000);
+activeIntervals.push(setInterval(updateClock, 1000));
 updateClock();
 
 
-function updateDeviceList(filteredDevices = null) {
-    const deviceList = document.getElementById('deviceList');
-
-    if (!deviceList) {
-        console.error("Cihaz listesi konteyneri bulunamadı!");
-        return;
-    }
-
-    // Eğer filtreli cihaz listesi verilmezse, tüm cihazları kullan
-    const devicesToShow = filteredDevices || devices;
-
-    // Cihazları alfabetik olarak sırala
-    const sortedDevices = devicesToShow.sort((a, b) =>
-        (a.hostname || '').localeCompare(b.hostname || '', 'tr', { sensitivity: 'base' })
-    );
-
-    // Listeyi temizle
-    deviceList.innerHTML = '';
-
-    const deviceMap = new Map();
-
-    sortedDevices.forEach((device) => {
-        const hostname = device.hostname || "Bilinmiyor";
-
-        if (!deviceMap.has(hostname)) {
-            deviceMap.set(hostname, []);
-        }
-        deviceMap.get(hostname).push(device);
-    });
-
-    // Liste elemanlarını oluştur
-    deviceMap.forEach((deviceGroup) => {
-        if (deviceGroup.length > 0) {
-            const primaryDevice = deviceGroup[0];
-
-            // `deviceid` null ise `uuid` kullan, yoksa "unknown-hostname"
-            const deviceIdentifier = primaryDevice.deviceid || primaryDevice.uuid || `unknown-${primaryDevice.hostname}`;
-            const isSelected = selectedCriticalDevices.some(d => d.deviceid === primaryDevice.deviceid);
-            const starIcon = isSelected ? "⭐" : "☆";
-
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                <strong>${primaryDevice.hostname}</strong> (${primaryDevice.ipaddress || "IP Yok"})
-                <span id="star-${deviceIdentifier}" class="text-yellow-400 ml-2 cursor-pointer" 
-                    onclick="toggleCriticalDevice('${deviceIdentifier}')">
-                    ${starIcon}
-                </span>
-                <br><em>Model:</em> ${primaryDevice.model || 'Bilinmiyor'}
-                <br><em>Durum:</em> ${translateDeviceStatus(primaryDevice.ping_state)}
-            `;
-
-            listItem.classList.add(getDeviceStatusClass(primaryDevice.ping_state));
-
-            listItem.onclick = function (event) {
-    if (event.target.tagName !== "SPAN") {  
-        if (primaryDevice.deviceid) {
-            window.open(`deviceDetails.html?deviceid=${primaryDevice.deviceid}`, '_blank');
-        } else if (primaryDevice.uuid) {
-            window.open(`index5.html?uuid=${primaryDevice.uuid}`, '_blank');
-        } else {
-            console.error('Hem Device ID hem UUID bulunamadı!', primaryDevice);
-            alert('Bu cihaz için Device ID veya UUID bulunamadı.');
-        }
-    }
-};
-
-
-            deviceList.appendChild(listItem);
-
-            // 🌟 Yıldız elementinin DOM'a eklenip eklenmediğini test et
-            setTimeout(() => {
-}, 1000);  // DOM'un tam render edilmesini beklemek için 1 saniye gecikme ekledik
-
-        }
-    });
-
-
-}
+// updateDeviceList - eski kopya kaldırıldı, güncel versiyonu aşağıda (Levenshtein öneri destekli)
 
 function showPopup(model, serial, ip, link) {
             document.getElementById('popupModel').textContent = model || '-';
@@ -4898,11 +4670,6 @@ function translateDeviceStatus(status) {
     return status.toLowerCase() === 'up' ? 'Aktif' : 'Pasif';
 }
 
-		
-		destroyExistingChart();
-		createDeviceChart(devices);
-
-		
 // Grafik oluşturma fonksiyonu
 function createDeviceChart(devices) {
     const ctxElement = document.getElementById('deviceChart');
@@ -4955,19 +4722,19 @@ function createDeviceChart(devices) {
     }
 }
 
+let _timerIntervalId = null;
 function updateNextUpdateTimer() {
     const timerElement = document.getElementById('nextUpdateTimer');
     if (timerElement) {
-        // Timer varsa güncelle
+        // Önceki timer varsa temizle (leak önleme)
+        if (_timerIntervalId) clearInterval(_timerIntervalId);
         let timeLeft = 60;
-        setInterval(() => {
+        _timerIntervalId = setInterval(() => {
             timeLeft--;
             if (timeLeft <= 0) timeLeft = 60;
             timerElement.textContent = `Bir sonraki güncellemeye kalan süre: ${timeLeft} saniye`;
         }, 1000);
-    } else {
-        // Timer yoksa console'da göster
-        console.log("⏱️ Timer elementi bulunamadı, console'da gösteriliyor.");
+        activeIntervals.push(_timerIntervalId);
     }
 }
 
@@ -5166,7 +4933,7 @@ function destroyExistingChart() {
     }
 }
 
-fetchAllDevices();
+// fetchAllDevices() - bare çağrı kaldırıldı, DOMContentLoaded içinde çağrılıyor
 
 // Gösterici fonksiyon
 function showLoader(loaderId) {
@@ -5269,27 +5036,6 @@ async function createRecentChangesTable(devices) {
         tbody.appendChild(row);
     });
 }
-
-
-
-document.addEventListener("DOMContentLoaded", async function () {
-    await fetchAllDevices();
-    syncAllComponents();
-    startAutoUpdate();
-
-    const searchInput = document.getElementById("deviceSearch");
-    if (searchInput) {
-        searchInput.addEventListener("input", function () {
-            const searchValue = this.value.trim();
-            if (searchValue) {
-                const filteredDevices = filterDevices(searchValue);
-                updateDeviceList(filteredDevices, searchValue);
-            } else {
-                updateDeviceList(devices);
-            }
-        });
-    }
-});
 
 
 
@@ -5579,12 +5325,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-function startAutoUpdate() {
+const INTERVALS = {
+    normalData: 30000, // 30 saniyede bir
+    trafficData: 600000, // 10 dakikada bir
+    clock: 1000, // Her saniye
+};
 
-    setInterval(fetchAllDevices, INTERVALS.normalData);
-    setInterval(createTrafficTable, INTERVALS.trafficData);
-    setInterval(updateClock, INTERVALS.clock);
+// Interval ID'lerini takip et (temizlik için)
+const activeIntervals = [];
+
+function startAutoUpdate() {
+    activeIntervals.push(setInterval(fetchAllDevices, INTERVALS.normalData));
+    activeIntervals.push(setInterval(createTrafficTable, INTERVALS.trafficData));
+    activeIntervals.push(setInterval(updateClock, INTERVALS.clock));
 }
+
+// Sayfa kapatılırken tüm interval'leri temizle
+window.addEventListener('beforeunload', () => {
+    activeIntervals.forEach(id => clearInterval(id));
+    if (existingChart) {
+        existingChart.destroy();
+        existingChart = null;
+    }
+});
 
 
 
@@ -5669,8 +5432,8 @@ function updateStarIcon(deviceId, isCritical) {
 
 
 
-// ⏳ Kritik cihazları her 20 saniyede bir güncelle
-setInterval(updateCriticalDevices, 20000);
+// Kritik cihazları her 20 saniyede bir güncelle
+activeIntervals.push(setInterval(updateCriticalDevices, 20000));
 
 document.addEventListener("DOMContentLoaded", () => {
     const notificationElements = {
@@ -5689,12 +5452,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // **Yanıp sönme efekti için CSS ekleyelim**
 const style = document.createElement('style');
 style.innerHTML = `
-@keyframes blink {
+@keyframes blinkBg {
     0%, 100% { background-color: transparent; }
     50% { background-color: rgba(255, 0, 0, 0.5); }
 }
 .blink-effect {
-    animation: blink 0.7s ease-in-out 5;
+    animation: blinkBg 0.7s ease-in-out 5;
 }`;
 document.head.appendChild(style);
 
@@ -5766,13 +5529,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
 // Bir sonraki güncellemeye kalan süreyi gösteren sayaç
-setInterval(() => {
+activeIntervals.push(setInterval(() => {
     nextUpdateTime--;
     if (nextUpdateTime <= 0) {
-        nextUpdateTime = 60; // Sayaç sıfırlanıyor
+        nextUpdateTime = 60;
     }
-    document.getElementById('nextUpdateTimer').textContent = `Bir sonraki güncellemeye kalan süre: ${nextUpdateTime} saniye`;
-}, 1000);
+    const el = document.getElementById('nextUpdateTimer');
+    if (el) el.textContent = `Bir sonraki güncellemeye kalan süre: ${nextUpdateTime} saniye`;
+}, 1000));
 
 
 
@@ -5843,8 +5607,8 @@ async function updateRecentStatusChanges() {
     }
 }
 
-// 📌 **Her 10 saniyede bir güncelle**
-setInterval(updateRecentStatusChanges, 10000);
+// Her 10 saniyede bir güncelle
+activeIntervals.push(setInterval(updateRecentStatusChanges, 10000));
 
 
 
@@ -5928,51 +5692,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCriticalDevices();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const carbonBox = document.getElementById("carbonFootprintBox");
-    let isDragging = false;
-    let startX, startY, offsetX = 0, offsetY = 0;
-
-    if (!carbonBox) {
-        console.error("⚠️ Karbon Ayak İzi kutusu bulunamadı!");
-        return;
-    }
-
-    // 🖱️ Sürüklemeye başlama
-    carbonBox.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        startX = e.clientX - offsetX;
-        startY = e.clientY - offsetY;
-        carbonBox.style.cursor = "grabbing";
-        document.addEventListener("mousemove", drag);
-        document.addEventListener("mouseup", stopDrag);
-    });
-
-    function drag(e) {
-        if (!isDragging) return;
-
-        offsetX = e.clientX - startX;
-        offsetY = e.clientY - startY;
-
-        // 🛑 Kutunun ekran dışına çıkmasını engelle
-        const maxX = window.innerWidth - carbonBox.offsetWidth - 10;
-        const maxY = window.innerHeight - carbonBox.offsetHeight - 10;
-
-        offsetX = Math.max(10, Math.min(offsetX, maxX));
-        offsetY = Math.max(10, Math.min(offsetY, maxY));
-
-        // 🏗️ Yeni konumu belirle
-        carbonBox.style.left = `${offsetX}px`;
-        carbonBox.style.top = `${offsetY}px`;
-    }
-
-    function stopDrag() {
-        isDragging = false;
-        carbonBox.style.cursor = "grab";
-        document.removeEventListener("mousemove", drag);
-        document.removeEventListener("mouseup", stopDrag);
-    }
-});
+// Karbon kutusu drag handler - eski kopya kaldırıldı, yukarıdaki kullanılıyor
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -5989,12 +5709,6 @@ function logFunctionTime(fn, functionName) {
         return result;
     };
 }
-
-const INTERVALS = {
-    normalData: 30000, // 30 saniyede bir
-    trafficData: 600000, // 10 dakikada bir
-    clock: 1000, // Her saniye
-};
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadAvailableDates();
@@ -6479,8 +6193,167 @@ async function loadInsightCard() {
 
 
 
+// ============================
+// 📡 Access Point Dashboard
+// ============================
+async function fetchAPDashboard() {
+    try {
+        const response = await fetch('/Netinfo/api/device/ap-dashboard');
+        if (!response.ok) throw new Error("AP verisi alınamadı");
+        const data = await response.json();
+
+        // Özet istatistikler
+        const summary = data.summary || {};
+        const onlineEl = document.getElementById('apOnlineCount');
+        const offlineEl = document.getElementById('apOfflineCount');
+        const clientEl = document.getElementById('apClientCount');
+
+        if (onlineEl) onlineEl.textContent = summary.onlineCount ?? '-';
+        if (offlineEl) offlineEl.textContent = summary.offlineCount ?? '-';
+        if (clientEl) clientEl.textContent = summary.totalClients ?? '-';
+
+        // AP Tablosu
+        const tbody = document.querySelector('#apTable tbody');
+        if (!tbody) return;
+
+        const apList = data.inventory || [];
+        if (apList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-gray-400">AP verisi bulunamadı</td></tr>';
+            return;
+        }
+
+        // Duruma göre sırala (offline olanlar üstte)
+        apList.sort((a, b) => {
+            if (a.status === 'offline' && b.status !== 'offline') return -1;
+            if (a.status !== 'offline' && b.status === 'offline') return 1;
+            return (a.name || '').localeCompare(b.name || '');
+        });
+
+        tbody.innerHTML = apList.slice(0, 20).map(ap => `
+            <tr>
+                <td class="p-2 border">${ap.name || 'Bilinmiyor'}</td>
+                <td class="p-2 border">${ap.model || '-'}</td>
+                <td class="p-2 border">
+                    <span style="color: ${ap.status === 'online' ? '#22c55e' : '#ef4444'}; font-weight: bold;">
+                        ${ap.status === 'online' ? 'Aktif' : 'Pasif'}
+                    </span>
+                </td>
+                <td class="p-2 border">${ap.clientCount ?? '-'}</td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.warn("AP dashboard yüklenemedi:", error.message);
+        const tbody = document.querySelector('#apTable tbody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-gray-400">AP verisi yüklenemedi</td></tr>';
+        }
+    }
+}
+
+// ============================
+// 🔗 VLAN Genel Bakışı
+// ============================
+async function fetchVLANOverview() {
+    try {
+        const response = await fetch('/Netinfo/api/device/get_vlans');
+        if (!response.ok) throw new Error("VLAN verisi alınamadı");
+        const vlans = await response.json();
+
+        const tbody = document.querySelector('#vlanTable tbody');
+        if (!tbody) return;
+
+        if (!vlans || vlans.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400">VLAN verisi bulunamadı</td></tr>';
+            return;
+        }
+
+        // VLAN'ları cihaz sayısına göre sırala
+        const vlanMap = {};
+        vlans.forEach(v => {
+            const id = v.vlan_id || v.vlanId || 'N/A';
+            const name = v.vlan_name || v.vlanName || '-';
+            const key = `${id}-${name}`;
+            if (!vlanMap[key]) {
+                vlanMap[key] = { id, name, count: 0 };
+            }
+            vlanMap[key].count++;
+        });
+
+        const sortedVlans = Object.values(vlanMap).sort((a, b) => b.count - a.count);
+
+        tbody.innerHTML = sortedVlans.slice(0, 15).map(v => `
+            <tr>
+                <td class="p-2 border" style="color: #a78bfa; font-weight: bold;">${v.id}</td>
+                <td class="p-2 border">${v.name}</td>
+                <td class="p-2 border">${v.count}</td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.warn("VLAN verisi yüklenemedi:", error.message);
+        const tbody = document.querySelector('#vlanTable tbody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400">VLAN verisi yüklenemedi</td></tr>';
+        }
+    }
+}
+
+// ============================
+// 📍 Lokasyon Bazlı Dağılım
+// ============================
+function updateLocationDistribution() {
+    const tbody = document.querySelector('#locationTable tbody');
+    if (!tbody || !devices || devices.length === 0) return;
+
+    // Lokasyona göre grupla
+    const locationMap = {};
+    devices.forEach(device => {
+        // Hostname'den lokasyon çıkar (ilk 3-5 karakter genellikle lokasyon kodu)
+        const hostname = device.hostname || '';
+        const location = device.location || device.city || extractLocationFromHostname(hostname) || 'Bilinmiyor';
+
+        if (!locationMap[location]) {
+            locationMap[location] = { total: 0, up: 0, down: 0 };
+        }
+        locationMap[location].total++;
+        if (device.ping_state && device.ping_state.toLowerCase() === 'up') {
+            locationMap[location].up++;
+        } else {
+            locationMap[location].down++;
+        }
+    });
+
+    // Toplam cihaz sayısına göre sırala
+    const sorted = Object.entries(locationMap).sort((a, b) => b[1].total - a[1].total);
+
+    tbody.innerHTML = sorted.slice(0, 15).map(([loc, stats]) => `
+        <tr>
+            <td class="p-2 border" style="font-weight: bold;">${loc}</td>
+            <td class="p-2 border">${stats.total}</td>
+            <td class="p-2 border" style="color: #22c55e;">${stats.up}</td>
+            <td class="p-2 border" style="color: ${stats.down > 0 ? '#ef4444' : '#666'};">${stats.down}</td>
+        </tr>
+    `).join('');
+}
+
+// Yeni bileşenleri başlat
+document.addEventListener("DOMContentLoaded", async () => {
+    // AP ve VLAN verilerini çek (ana veriler yüklendikten sonra)
+    setTimeout(async () => {
+        await Promise.all([
+            fetchAPDashboard(),
+            fetchVLANOverview()
+        ]);
+        updateLocationDistribution();
+    }, 3000);
+
+    // Periyodik güncelleme
+    activeIntervals.push(setInterval(fetchAPDashboard, 60000)); // Her dakika
+    activeIntervals.push(setInterval(fetchVLANOverview, 120000)); // Her 2 dakika
+    activeIntervals.push(setInterval(updateLocationDistribution, 30000)); // Her 30 saniye
+});
+
     </script>
-	
+
 	<script src="/Netinfo/js/translations.js"></script>
 
 
