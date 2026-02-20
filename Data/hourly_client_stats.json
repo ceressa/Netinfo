@@ -1,83 +1,4 @@
 {
-  "2026-02-18_11": {
-    "total_clients": 0,
-    "total_aps": 69,
-    "online_aps": 69,
-    "offline_aps": 0,
-    "avg_clients_per_ap": 0.0,
-    "timestamp": "2026-02-18T11:45:56.038769+03:00",
-    "top_aps": [
-      {
-        "hostname": "TrTCHO-TSEG05",
-        "clients": 0,
-        "location": "Istanbul HQ"
-      },
-      {
-        "hostname": "TrTBL5-TSEG02",
-        "clients": 0,
-        "location": "Hadimkoy"
-      },
-      {
-        "hostname": "TrTBL5-TSEGS01",
-        "clients": 0,
-        "location": "Hadimkoy"
-      },
-      {
-        "hostname": "TrTANK-TSEGS01",
-        "clients": 0,
-        "location": "Ankara"
-      },
-      {
-        "hostname": "TrTASR-TSEGS-01",
-        "clients": 0,
-        "location": "Kayseri"
-      }
-    ],
-    "ssid_breakdown": {},
-    "location_breakdown": {
-      "Istanbul HQ": {
-        "aps": 1,
-        "clients": 0
-      },
-      "Hadimkoy": {
-        "aps": 2,
-        "clients": 0
-      },
-      "Ankara": {
-        "aps": 3,
-        "clients": 0
-      },
-      "Kayseri": {
-        "aps": 1,
-        "clients": 0
-      },
-      "Serifali": {
-        "aps": 2,
-        "clients": 0
-      },
-      "Izmir": {
-        "aps": 2,
-        "clients": 0
-      },
-      "Konya": {
-        "aps": 1,
-        "clients": 0
-      },
-      "Gunesli": {
-        "aps": 3,
-        "clients": 0
-      },
-      "Denizli": {
-        "aps": 1,
-        "clients": 0
-      },
-      "Balikesir": {
-        "aps": 1,
-        "clients": 0
-      }
-    },
-    "uptime_percentage": 100.0
-  },
   "2026-02-18_12": {
     "total_clients": 0,
     "total_aps": 69,
@@ -3719,6 +3640,85 @@
     "offline_aps": 0,
     "avg_clients_per_ap": 0.0,
     "timestamp": "2026-02-20T10:50:33.611089+03:00",
+    "top_aps": [
+      {
+        "hostname": "TrTCHO-TSEG05",
+        "clients": 0,
+        "location": "Istanbul HQ"
+      },
+      {
+        "hostname": "TrTBL5-TSEG02",
+        "clients": 0,
+        "location": "Hadimkoy"
+      },
+      {
+        "hostname": "TrTBL5-TSEGS01",
+        "clients": 0,
+        "location": "Hadimkoy"
+      },
+      {
+        "hostname": "TrTANK-TSEGS01",
+        "clients": 0,
+        "location": "Ankara"
+      },
+      {
+        "hostname": "TrTASR-TSEGS-01",
+        "clients": 0,
+        "location": "Kayseri"
+      }
+    ],
+    "ssid_breakdown": {},
+    "location_breakdown": {
+      "Istanbul HQ": {
+        "aps": 1,
+        "clients": 0
+      },
+      "Hadimkoy": {
+        "aps": 2,
+        "clients": 0
+      },
+      "Ankara": {
+        "aps": 3,
+        "clients": 0
+      },
+      "Kayseri": {
+        "aps": 1,
+        "clients": 0
+      },
+      "Serifali": {
+        "aps": 2,
+        "clients": 0
+      },
+      "Izmir": {
+        "aps": 2,
+        "clients": 0
+      },
+      "Konya": {
+        "aps": 1,
+        "clients": 0
+      },
+      "Gunesli": {
+        "aps": 3,
+        "clients": 0
+      },
+      "Denizli": {
+        "aps": 1,
+        "clients": 0
+      },
+      "Balikesir": {
+        "aps": 1,
+        "clients": 0
+      }
+    },
+    "uptime_percentage": 100.0
+  },
+  "2026-02-20_11": {
+    "total_clients": 0,
+    "total_aps": 69,
+    "online_aps": 69,
+    "offline_aps": 0,
+    "avg_clients_per_ap": 0.0,
+    "timestamp": "2026-02-20T11:41:16.801954+03:00",
     "top_aps": [
       {
         "hostname": "TrTCHO-TSEG05",
