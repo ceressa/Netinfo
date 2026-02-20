@@ -97,6 +97,6 @@ public IActionResult CheckActivity()
 
     public class PasswordModel
     {
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 }

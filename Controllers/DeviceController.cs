@@ -495,7 +495,7 @@ namespace Netinfo.Controllers
 
         public class LocationRequest
         {
-            public string LocationCode { get; set; }
+            public string LocationCode { get; set; } = string.Empty;
         }
     }
 }

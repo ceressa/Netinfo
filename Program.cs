@@ -226,16 +226,16 @@ app.Use(async (context, next) =>
 app.UseRouting();
 app.UseCors();
 
+app.UseDefaultFiles(new DefaultFilesOptions
+{
+    DefaultFileNames = new List<string> { "index.html" }
+});
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
     RequestPath = ""
-});
-
-app.UseDefaultFiles(new DefaultFilesOptions
-{
-    DefaultFileNames = new List<string> { "index.html" }
 });
 
 app.UseEndpoints(endpoints =>

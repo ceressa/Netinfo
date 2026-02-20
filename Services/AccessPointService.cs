@@ -135,19 +135,23 @@ namespace Netinfo.Services
         // JsonElement'leri object'e dönüştür
         var result = new Dictionary<string, object>();
 
-        foreach (var kvp in hourlyStats)
+        if (hourlyStats != null)
         {
-            if (kvp.Value.ValueKind == JsonValueKind.Number)
+            foreach (var kvp in hourlyStats)
             {
-                // Eski format - sadece sayı
-                result[kvp.Key] = kvp.Value.GetInt32();
-            }
-            else if (kvp.Value.ValueKind == JsonValueKind.Object)
-            {
-                // Yeni format - object
-                var objStr = kvp.Value.GetRawText();
-                var obj = JsonSerializer.Deserialize<Dictionary<string, object>>(objStr);
-                result[kvp.Key] = obj;
+                if (kvp.Value.ValueKind == JsonValueKind.Number)
+                {
+                    // Eski format - sadece sayı
+                    result[kvp.Key] = kvp.Value.GetInt32();
+                }
+                else if (kvp.Value.ValueKind == JsonValueKind.Object)
+                {
+                    // Yeni format - object
+                    var objStr = kvp.Value.GetRawText();
+                    var obj = JsonSerializer.Deserialize<Dictionary<string, object>>(objStr);
+                    if (obj != null)
+                        result[kvp.Key] = obj;
+                }
             }
         }
 
@@ -160,7 +164,7 @@ namespace Netinfo.Services
     }
 }
 
-        public async Task<object> GetWirelessClients()
+        public Task<object> GetWirelessClients()
         {
             var allClients = new List<object>();
 
@@ -192,16 +196,16 @@ namespace Netinfo.Services
                 }
             }
 
-            return new
+            return Task.FromResult<object>(new
             {
                 success = true,
                 data = allClients,
                 total_clients = allClients.Count,
                 last_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            };
+            });
         }
 
-        public async Task<object> GetAPStatistics()
+        public Task<object> GetAPStatistics()
         {
             // Top 10 busiest APs
             var topAPs = _apInventory
@@ -275,7 +279,7 @@ namespace Netinfo.Services
                 }
             }
 
-            return new
+            return Task.FromResult<object>(new
             {
                 success = true,
                 data = new
@@ -300,7 +304,7 @@ namespace Netinfo.Services
                     }
                 },
                 last_updated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            };
+            });
         }
 
         private double ParseUptimeToHours(string uptime)

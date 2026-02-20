@@ -22,12 +22,11 @@ namespace Netinfo.Services
         private List<Dictionary<string, object>> _routerPortData;
         private List<Dictionary<string, object>> _locationData;
         private readonly Dictionary<string, int> _lastPingStates;
-        private Dictionary<string, DeviceModel> _previousDeviceData;
-        private List<Dictionary<string, object>> _uuidPoolData;
+        private Dictionary<string, DeviceModel> _previousDeviceData = new();
+        private List<Dictionary<string, object>> _uuidPoolData = new();
         private DateTime _lastUuidPoolLoadTime;
-        private List<Dictionary<string, object>> _logAnalysisData;
+        private List<Dictionary<string, object>> _logAnalysisData = new();
         private Dictionary<int, (double input, double output)> _hourlyTrafficData = new();
-        private int _lastProcessedHour = -1;
 
         public DeviceDataService(Serilog.ILogger logger, DataPathsConfig paths)
         {
@@ -72,12 +71,12 @@ namespace Netinfo.Services
         public class DeviceModel
         {
             public int DeviceId { get; set; }
-            public string Serial { get; set; }
-            public string Hostname { get; set; }
-            public string IpAddress { get; set; }
-            public string Model { get; set; }
-            public string DeviceType { get; set; }
-            public string Location { get; set; }
+            public string Serial { get; set; } = string.Empty;
+            public string Hostname { get; set; } = string.Empty;
+            public string IpAddress { get; set; } = string.Empty;
+            public string Model { get; set; } = string.Empty;
+            public string DeviceType { get; set; } = string.Empty;
+            public string Location { get; set; } = string.Empty;
             public int PingStateNumeric { get; set; }
         }
 
@@ -88,7 +87,7 @@ namespace Netinfo.Services
                 return new List<Dictionary<string, object>>();
 
             var jsonContent = File.ReadAllText(statusLogFile);
-            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent);
+            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
         }
 
         public List<Dictionary<string, object>> GetLatestArchivedStatusLog()
@@ -105,7 +104,7 @@ namespace Netinfo.Services
 
             var latestArchiveFile = archiveFiles.First();
             var jsonContent = File.ReadAllText(latestArchiveFile);
-            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent);
+            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
         }
 
         public void LoadPreviousDeviceData(string filePath)
@@ -119,7 +118,7 @@ namespace Netinfo.Services
                 }
 
                 var json = File.ReadAllText(filePath);
-                var deviceList = JsonConvert.DeserializeObject<List<DeviceModel>>(json);
+                var deviceList = JsonConvert.DeserializeObject<List<DeviceModel>>(json) ?? new List<DeviceModel>();
 
                 _previousDeviceData = deviceList
                     .GroupBy(d => new { d.DeviceId, d.Serial })
@@ -147,9 +146,9 @@ namespace Netinfo.Services
             try
             {
                 var jsonContent = File.ReadAllText(filePath);
-                _deviceData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent);
+                _deviceData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
 
-                if (_deviceData == null || _deviceData.Count == 0)
+                if (_deviceData.Count == 0)
                 {
                     _logger.Warning("No device data found in JSON file at {FilePath}", filePath);
                 }
@@ -266,7 +265,7 @@ namespace Netinfo.Services
             }
         }
 
-        public Dictionary<string, object> GetDeviceById(string deviceId)
+        public Dictionary<string, object>? GetDeviceById(string deviceId)
         {
             if (_deviceData == null || !_deviceData.Any())
             {
@@ -296,7 +295,7 @@ namespace Netinfo.Services
                 p.TryGetValue("deviceid", out var idValue) && idValue.ToString() == deviceId).ToList();
         }
 
-        public Dictionary<string, double> GetMainDataMetrics()
+        public Dictionary<string, double>? GetMainDataMetrics()
         {
             string filePath = Path.Combine(_paths.DataDir, _paths.MainData);
 
@@ -348,7 +347,8 @@ namespace Netinfo.Services
                     continue;
                 }
 
-                string deviceKey = deviceId.ToString();
+                string? deviceKey = deviceId?.ToString();
+                if (deviceKey == null) continue;
                 int currentState = Convert.ToInt32(currentPingState);
                 int previousState = currentState;
 
@@ -444,9 +444,9 @@ namespace Netinfo.Services
                 }
 
                 var jsonContent = File.ReadAllText(filePath);
-                _locationData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent);
+                _locationData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
 
-                if (_locationData == null || !_locationData.Any())
+                if (!_locationData.Any())
                 {
                     _logger.Warning("No location data found in JSON file at {FilePath}", filePath);
                 }
@@ -462,7 +462,7 @@ namespace Netinfo.Services
             }
         }
 
-        public Dictionary<string, object> GetLocationInfoByCode(string locationCode)
+        public Dictionary<string, object>? GetLocationInfoByCode(string locationCode)
         {
             if (_locationData == null || !_locationData.Any())
             {
@@ -472,7 +472,7 @@ namespace Netinfo.Services
 
             return _locationData.FirstOrDefault(d =>
                 d.TryGetValue("code", out var codeValue) &&
-                codeValue.ToString().Equals(locationCode, StringComparison.OrdinalIgnoreCase));
+                (codeValue?.ToString()?.Equals(locationCode, StringComparison.OrdinalIgnoreCase) ?? false));
         }
 
         public List<Dictionary<string, object>> GetDevicesByLocationCode(string locationCode)
@@ -499,7 +499,7 @@ namespace Netinfo.Services
             return filteredDevices;
         }
 
-        public string GetDeviceIdByUUID(string uuid)
+        public string? GetDeviceIdByUUID(string uuid)
         {
             if (string.IsNullOrEmpty(uuid))
             {
@@ -515,14 +515,14 @@ namespace Netinfo.Services
             if (match != null && match.TryGetValue("deviceid", out var deviceId))
             {
                 _logger.Information("Found Device ID: {DeviceId} for UUID: {UUID}", deviceId, uuid);
-                return deviceId.ToString();
+                return deviceId?.ToString();
             }
 
             _logger.Warning("No matching Device ID found for UUID: {UUID}", uuid);
             return null;
         }
 
-        public Dictionary<string, object> GetDeviceByUUID(string uuid)
+        public Dictionary<string, object>? GetDeviceByUUID(string uuid)
         {
             if (string.IsNullOrEmpty(uuid))
             {
@@ -535,8 +535,12 @@ namespace Netinfo.Services
 
             if (match != null && match.TryGetValue("deviceid", out var deviceId))
             {
-                _logger.Information("Device found for UUID {UUID}: {DeviceId}", uuid, deviceId);
-                return GetDeviceById(deviceId.ToString());
+                var deviceIdStr = deviceId?.ToString();
+                if (deviceIdStr != null)
+                {
+                    _logger.Information("Device found for UUID {UUID}: {DeviceId}", uuid, deviceId);
+                    return GetDeviceById(deviceIdStr);
+                }
             }
 
             _logger.Warning("No device found for UUID: {UUID}", uuid);
@@ -584,7 +588,7 @@ namespace Netinfo.Services
                     return;
                 }
 
-                var uuidMapping = uuidMappingRaw.ToObject<Dictionary<string, string>>();
+                var uuidMapping = uuidMappingRaw.ToObject<Dictionary<string, string>>() ?? new Dictionary<string, string>();
 
                 _uuidPoolData = uuidMapping
                     .Select(kvp => new Dictionary<string, object>
@@ -632,8 +636,11 @@ namespace Netinfo.Services
                         foreach (var vlanProp in vlanDict.Properties())
                         {
                             var vlanInfo = vlanProp.Value.ToObject<Dictionary<string, object>>();
-                            vlanInfo["hostname"] = device["hostname"];
-                            vlanList.Add(vlanInfo);
+                            if (vlanInfo != null)
+                            {
+                                vlanInfo["hostname"] = device["hostname"];
+                                vlanList.Add(vlanInfo);
+                            }
                         }
                     }
                 }
@@ -695,7 +702,7 @@ namespace Netinfo.Services
             }
         }
 
-        public string GetLastAvailableRushHourData()
+        public string? GetLastAvailableRushHourData()
         {
             var files = Directory.GetFiles(_paths.DataDir, "network_rush_hour_*.json")
                                  .OrderByDescending(f => f)
@@ -848,11 +855,11 @@ namespace Netinfo.Services
                     var entry = kv.Value;
                     entry["device_id"] = kv.Key;
 
-                    string mostProblematicPortRaw = entry.ContainsKey("most_problematic_port")
-                        ? entry["most_problematic_port"].ToString()
+                    string? mostProblematicPortRaw = entry.ContainsKey("most_problematic_port")
+                        ? entry["most_problematic_port"]?.ToString()
                         : null;
 
-                    string mostProblematicPort = mostProblematicPortRaw?.Split(':')[0].Trim();
+                    string? mostProblematicPort = mostProblematicPortRaw?.Split(':')[0].Trim();
 
                     string solution = "Cozum belirtilmemis";
 
@@ -865,13 +872,13 @@ namespace Netinfo.Services
                             var logEntry = log.Value as JObject;
                             if (logEntry != null && logEntry.ContainsKey("port"))
                             {
-                                string logPort = logEntry["port"].ToString().Trim();
+                                string logPort = logEntry["port"]?.ToString()?.Trim() ?? "";
                                 if (logPort == mostProblematicPort && logEntry.ContainsKey("latest_log"))
                                 {
                                     var latestLog = logEntry["latest_log"] as JObject;
                                     if (latestLog != null && latestLog.ContainsKey("solution"))
                                     {
-                                        solution = latestLog["solution"].ToString();
+                                        solution = latestLog["solution"]?.ToString() ?? "Cozum belirtilmemis";
                                         break;
                                     }
                                 }
@@ -911,8 +918,8 @@ namespace Netinfo.Services
 
                 if (entry.ContainsKey("most_problematic_port") && entry.ContainsKey("logs") && entry["logs"] is JObject logsDict)
                 {
-                    string mostProblematicPortRaw = entry["most_problematic_port"].ToString();
-                    var match = Regex.Match(mostProblematicPortRaw, @"(.*):\s*\((\d+)\s*occurrences\)");
+                    string? mostProblematicPortRaw = entry["most_problematic_port"]?.ToString();
+                    var match = Regex.Match(mostProblematicPortRaw ?? "", @"(.*):\s*\((\d+)\s*occurrences\)");
                     if (match.Success)
                     {
                         mostProblematicPort = match.Groups[1].Value.Trim();
@@ -920,7 +927,7 @@ namespace Netinfo.Services
                     }
                     else
                     {
-                        mostProblematicPort = mostProblematicPortRaw.Trim();
+                        mostProblematicPort = mostProblematicPortRaw?.Trim() ?? "N/A";
                     }
 
                     if (mostProblematicPortOccurrences == 0)
@@ -929,7 +936,7 @@ namespace Netinfo.Services
                         {
                             if (logEntry.Value is JObject logObject &&
                                 logObject.ContainsKey("port") &&
-                                logObject["port"].ToString().Trim() == mostProblematicPort &&
+                                (logObject["port"]?.ToString()?.Trim() ?? "") == mostProblematicPort &&
                                 logObject.ContainsKey("occurrences"))
                             {
                                 mostProblematicPortOccurrences = Convert.ToInt32(logObject["occurrences"]);
@@ -942,12 +949,12 @@ namespace Netinfo.Services
                     {
                         if (logEntry.Value is JObject logObject &&
                             logObject.ContainsKey("port") &&
-                            logObject["port"].ToString().Trim() == mostProblematicPort &&
+                            (logObject["port"]?.ToString()?.Trim() ?? "") == mostProblematicPort &&
                             logObject.ContainsKey("latest_log") &&
                             logObject["latest_log"] is JObject latestLog &&
                             latestLog.ContainsKey("solution"))
                         {
-                            mostProblematicPortSolution = latestLog["solution"].ToString();
+                            mostProblematicPortSolution = latestLog["solution"]?.ToString() ?? "Cozum belirtilmemis";
                             break;
                         }
                     }
@@ -1029,7 +1036,7 @@ namespace Netinfo.Services
             }
         }
 
-        public InsightSummary GetLatestInsightSummary()
+        public InsightSummary? GetLatestInsightSummary()
         {
             try
             {
@@ -1064,7 +1071,7 @@ namespace Netinfo.Services
             public List<StatusChange> RecentStatusChanges { get; set; } = new List<StatusChange>();
 
             [JsonProperty("rush_hour")]
-            public RushHourData RushHour { get; set; }
+            public RushHourData? RushHour { get; set; }
 
             [JsonProperty("insights")]
             public List<string> Insights { get; set; } = new List<string>();
@@ -1073,31 +1080,31 @@ namespace Netinfo.Services
         public class StatusChange
         {
             [JsonProperty("hostname")]
-            public string Hostname { get; set; }
+            public string Hostname { get; set; } = string.Empty;
 
             [JsonProperty("serial")]
-            public string Serial { get; set; }
+            public string Serial { get; set; } = string.Empty;
 
             [JsonProperty("timestamp")]
             public DateTime Timestamp { get; set; }
 
             [JsonProperty("status_change")]
-            public string StatusChangeDescription { get; set; }
+            public string StatusChangeDescription { get; set; } = string.Empty;
         }
 
         public class RushHourData
         {
             [JsonProperty("min")]
-            public HourRangeData Min { get; set; }
+            public HourRangeData? Min { get; set; }
 
             [JsonProperty("max")]
-            public HourRangeData Max { get; set; }
+            public HourRangeData? Max { get; set; }
         }
 
         public class HourRangeData
         {
             [JsonProperty("hour_range")]
-            public string HourRange { get; set; }
+            public string HourRange { get; set; } = string.Empty;
 
             [JsonProperty("input")]
             public double Input { get; set; }
