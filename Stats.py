@@ -6,11 +6,9 @@ import pytz
 import json
 import os
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 base_url = 'https://statseeker.emea.fedex.com/api/v2.1/'
-user = 'tr-api'
-password = 'F3xpres!'
+user = os.environ.get("STATSEEKER_USERNAME", "")
+password = os.environ.get("STATSEEKER_PASSWORD", "")
 
 fields = {
     'device': 'id,deviceid,hostname,ipaddress,ping_state',
@@ -23,7 +21,7 @@ urls = {
 }
 
 def fetch_data(url):
-    response = requests.get(url, auth=(user, password), verify=False)
+    response = requests.get(url, auth=(user, password), verify=True)
     if response.status_code == 200:
         return response.json()
     else:

@@ -1,17 +1,22 @@
 ﻿import requests
 import json
+import os
 import pandas as pd
 
 
 def fetch_device_data(device_id):
     # API URL'si
     api_url = f"https://statseeker.emea.fedex.com/api/v2.1/cdt_port/?fields=deviceid,name,ifTitle,ifSpeed,ifDescr,ifAdminStatus,ifOperStatus,if90day&deviceid={device_id}"
-    username = "tr-api"
-    password = "F3xpres!"
+    username = os.environ.get("STATSEEKER_USERNAME", "")
+    password = os.environ.get("STATSEEKER_PASSWORD", "")
+
+    if not username or not password:
+        print("STATSEEKER_USERNAME ve STATSEEKER_PASSWORD environment variable'lari tanimlanmali.")
+        return
 
     try:
         # API'ye istek gönder
-        response = requests.get(api_url, auth=(username, password), verify=False)
+        response = requests.get(api_url, auth=(username, password), verify=True)
         response.raise_for_status()
         data = response.json()
 

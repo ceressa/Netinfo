@@ -16,6 +16,37 @@ namespace Netinfo.Controllers
         private static DateTime? _lockoutEndTime;
         private static DateTime? _lastActivityTime;
 
+        // Admin session tracking - used by other controllers to verify admin access
+        private static readonly HashSet<string> _activeAdminSessions = new();
+        private static readonly object _sessionLock = new();
+
+        public static bool IsAdminSession(string? clientIp)
+        {
+            if (string.IsNullOrEmpty(clientIp)) return false;
+            lock (_sessionLock)
+            {
+                return _activeAdminSessions.Contains(clientIp);
+            }
+        }
+
+        private static void GrantAdminSession(string? clientIp)
+        {
+            if (string.IsNullOrEmpty(clientIp)) return;
+            lock (_sessionLock)
+            {
+                _activeAdminSessions.Add(clientIp);
+            }
+        }
+
+        private static void RevokeAdminSession(string? clientIp)
+        {
+            if (string.IsNullOrEmpty(clientIp)) return;
+            lock (_sessionLock)
+            {
+                _activeAdminSessions.Remove(clientIp);
+            }
+        }
+
         public AdminController(IAdminAuthService authService, Serilog.ILogger logger)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
@@ -48,10 +79,11 @@ namespace Netinfo.Controllers
 
             if (isValid)
             {
-                _failedAttempts = 0; // Başarılı girişte sayaç sıfırlanır
-                _lastActivityTime = DateTime.UtcNow; // Son aktivite zamanını güncelle
-                _logger.Information("Başarılı admin girişi. Zaman: {Time}", logTime);
-                return Ok(new { success = true, message = "Admin giriş başarılı." });
+                _failedAttempts = 0;
+                _lastActivityTime = DateTime.UtcNow;
+                GrantAdminSession(HttpContext.Connection.RemoteIpAddress?.ToString());
+                _logger.Information("Basarili admin girisi. Zaman: {Time}", logTime);
+                return Ok(new { success = true, message = "Admin giris basarili." });
             }
 
             // Başarısız giriş işlemleri
@@ -73,26 +105,28 @@ namespace Netinfo.Controllers
         }
 
         [HttpPost("check_activity")]
-public IActionResult CheckActivity()
-{
-    try
-    {
-        if (_lastActivityTime.HasValue && DateTime.UtcNow - _lastActivityTime.Value > TimeSpan.FromMinutes(5))
+        public IActionResult CheckActivity()
         {
-            _logger.Information("Kullanıcı inaktif olduğu için oturumu kapatıldı. Son aktivite: {LastActivity}", _lastActivityTime);
-            _lastActivityTime = null;
-            return Unauthorized(new { success = false, message = "5 dakikadan fazla inaktif olduğunuz için oturum kapatıldı." });
-        }
+            try
+            {
+                var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+                if (_lastActivityTime.HasValue && DateTime.UtcNow - _lastActivityTime.Value > TimeSpan.FromMinutes(5))
+                {
+                    _logger.Information("Inaktif oturum kapatildi. Son aktivite: {LastActivity}", _lastActivityTime);
+                    _lastActivityTime = null;
+                    RevokeAdminSession(clientIp);
+                    return Unauthorized(new { success = false, message = "Inaktif oturum kapatildi." });
+                }
 
-        _lastActivityTime = DateTime.UtcNow; // Aktiviteyi güncelle
-        return Ok(new { success = true });
-    }
-    catch (Exception ex)
-    {
-        _logger.Error(ex, "CheckActivity sırasında bir hata oluştu.");
-        return StatusCode(500, new { success = false, message = "Bir iç sunucu hatası oluştu." });
-    }
-}
+                _lastActivityTime = DateTime.UtcNow;
+                return Ok(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "CheckActivity hatasi.");
+                return StatusCode(500, new { success = false, message = "Internal server error." });
+            }
+        }
     }
 
     public class PasswordModel

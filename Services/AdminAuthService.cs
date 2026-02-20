@@ -1,5 +1,3 @@
-﻿using System.Security.Cryptography;
-using System.Text;
 using Serilog;
 
 namespace Netinfo.Services
@@ -16,34 +14,29 @@ namespace Netinfo.Services
         }
 
         public bool ValidatePassword(string password)
-{
-    if (string.IsNullOrWhiteSpace(password))
-    {
-        _logger.Warning("Şifre doğrulama boş veya geçersiz bir şifre ile denendi.");
-        return false;
-    }
-    
-    string hashedPassword = ComputeSha256Hash(password);
-    
-    bool isValid = hashedPassword == _adminPasswordHash;
-    
-    if (isValid)
-    {
-        _logger.Information("Şifre doğrulama başarılı.");
-    }
-    else
-    {
-        _logger.Warning("Şifre doğrulama başarısız.");
-    }
-    
-    return isValid;
-}
-
-        private static string ComputeSha256Hash(string rawData)
         {
-            using var sha256 = SHA256.Create();
-            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-            return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                _logger.Warning("Empty or invalid password validation attempt.");
+                return false;
+            }
+
+            try
+            {
+                bool isValid = BCrypt.Net.BCrypt.Verify(password, _adminPasswordHash);
+
+                if (isValid)
+                    _logger.Information("Password validation successful.");
+                else
+                    _logger.Warning("Password validation failed.");
+
+                return isValid;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Password validation error.");
+                return false;
+            }
         }
     }
 }

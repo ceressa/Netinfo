@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Netinfo.Services;
@@ -17,6 +18,14 @@ namespace Netinfo.Controllers
         private readonly DataPathsConfig _dataPaths;
         private readonly Serilog.ILogger _logger;
 
+        // Input validation: alphanumeric + dash/underscore, max 100 chars
+        private static readonly Regex SafeIdPattern = new Regex(@"^[a-zA-Z0-9_\-\.]{1,100}$", RegexOptions.Compiled);
+
+        private bool IsValidId(string? value)
+        {
+            return !string.IsNullOrEmpty(value) && SafeIdPattern.IsMatch(value);
+        }
+
         public DeviceController(DeviceDataService deviceDataService, DataPathsConfig dataPaths, Serilog.ILogger logger)
         {
             _deviceDataService = deviceDataService ?? throw new ArgumentNullException(nameof(deviceDataService));
@@ -27,6 +36,10 @@ namespace Netinfo.Controllers
         [HttpGet("token_list")]
         public IActionResult GetTokenList()
         {
+            var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (!AdminController.IsAdminSession(clientIp))
+                return Unauthorized(new { success = false, error = "Admin authentication required." });
+
             try
             {
                 var filePath = Path.Combine(_dataPaths.DataDir, _dataPaths.TokenList);
@@ -40,7 +53,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error loading token_list.json");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -49,6 +62,12 @@ namespace Netinfo.Controllers
         {
             try
             {
+                // Input validation
+                if (!string.IsNullOrEmpty(id) && !IsValidId(id))
+                    return BadRequest(new { success = false, error = "Invalid ID format." });
+                if (!string.IsNullOrEmpty(uid) && !IsValidId(uid))
+                    return BadRequest(new { success = false, error = "Invalid UUID format." });
+
                 // If UUID provided, resolve to device ID first
                 if (!string.IsNullOrEmpty(uid))
                 {
@@ -79,7 +98,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while retrieving device info for ID {Id} / UUID {UUID}.", id, uid);
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -103,6 +122,11 @@ namespace Netinfo.Controllers
         {
             try
             {
+                if (!string.IsNullOrEmpty(id) && !IsValidId(id))
+                    return BadRequest(new { success = false, error = "Invalid ID format." });
+                if (!string.IsNullOrEmpty(uid) && !IsValidId(uid))
+                    return BadRequest(new { success = false, error = "Invalid UUID format." });
+
                 if (!string.IsNullOrEmpty(uid))
                 {
                     id = _deviceDataService.GetDeviceIdByUUID(uid);
@@ -126,7 +150,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while retrieving ports for Device ID {Id}.", id);
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -165,7 +189,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while retrieving all devices.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -185,7 +209,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error reading device status changes log.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -214,13 +238,17 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error reading archived status logs.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
         [HttpGet("reload_device_data")]
         public IActionResult ReloadDeviceData()
         {
+            var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (!AdminController.IsAdminSession(clientIp))
+                return Unauthorized(new { success = false, error = "Admin authentication required." });
+
             try
             {
                 _logger.Information("Reloading device data from JSON...");
@@ -235,7 +263,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while reloading device data.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -244,6 +272,9 @@ namespace Netinfo.Controllers
         {
             try
             {
+                if (!IsValidId(id))
+                    return BadRequest(new { success = false, error = "Invalid ID format." });
+
                 var logFilePath = _dataPaths.PingLogPath;
 
                 if (!System.IO.File.Exists(logFilePath))
@@ -265,7 +296,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error while fetching ping log for device ID: {Id}", id);
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -274,10 +305,10 @@ namespace Netinfo.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(uuid))
+                if (string.IsNullOrEmpty(uuid) || !IsValidId(uuid))
                 {
-                    _logger.Warning("UUID is null or empty.");
-                    return BadRequest(new { success = false, error = "UUID is required." });
+                    _logger.Warning("UUID is null, empty, or invalid format.");
+                    return BadRequest(new { success = false, error = "Valid UUID is required." });
                 }
 
                 var deviceId = _deviceDataService.GetDeviceIdByUUID(uuid);
@@ -293,7 +324,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while fetching Device ID for UUID: {UUID}.", uuid);
-                return StatusCode(500, new { success = false, error = ex.Message, detail = ex.ToString() });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -323,7 +354,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error fetching location info for code: {LocationCode}", request.LocationCode);
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -353,7 +384,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error fetching devices for Location Code: {LocationCode}", locationCode);
-                return StatusCode(500, new { success = false, error = "An internal server error occurred.", details = ex.Message });
+                return StatusCode(500, new { success = false, error = "An internal server error occurred." });
             }
         }
 
@@ -376,7 +407,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while retrieving VLAN data.");
-                return StatusCode(500, new { success = false, error = "An error occurred while fetching VLAN data.", details = ex.Message });
+                return StatusCode(500, new { success = false, error = "An error occurred while fetching VLAN data." });
             }
         }
 
@@ -402,7 +433,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while retrieving all device ports.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -456,7 +487,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error occurred while fetching Network Rush Hour.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -480,7 +511,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error retrieving available rush hour data dates.");
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal server error." });
             }
         }
 
@@ -504,7 +535,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error retrieving log analysis data.");
-                return StatusCode(500, new { success = false, error = "Internal Server Error", details = ex.Message });
+                return StatusCode(500, new { success = false, error = "Internal Server Error" });
             }
         }
 
