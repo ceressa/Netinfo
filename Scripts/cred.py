@@ -1,6 +1,6 @@
 import json
 import os
-import hashlib
+import bcrypt
 from cryptography.fernet import Fernet
 from datetime import datetime
 import subprocess
@@ -54,8 +54,8 @@ def decrypt_data(encrypted_data):
 
 
 def hash_password(password):
-    """Hash a password."""
-    return hashlib.sha256(password.encode()).hexdigest()
+    """Hash a password using bcrypt."""
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 def load_master_password_hash():
@@ -69,9 +69,9 @@ def verify_master_password(max_attempts=3):
     for attempt in range(max_attempts):
         try:
             password = input("Enter the master password: ").strip()
-            hashed_input = hash_password(password)
+            stored_hash = load_master_password_hash()
 
-            if hashed_input == load_master_password_hash():
+            if stored_hash and bcrypt.checkpw(password.encode(), stored_hash.encode()):
                 return True
             else:
                 remaining = max_attempts - attempt - 1
