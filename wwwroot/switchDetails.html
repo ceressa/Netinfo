@@ -14,15 +14,15 @@
     --purple-light: #6B2FAD;
     --orange: #FF6600;
     --orange-light: #FF8533;
-    --bg-dark: #0a0a1a;
-    --bg-card: #12122a;
-    --bg-surface: #1a1a3e;
-    --text: #e8e8f0;
-    --text-muted: #8888aa;
+    --bg-dark: #2a0845;
+    --bg-card: rgba(255,255,255,0.08);
+    --bg-surface: rgba(255,255,255,0.12);
+    --text: #fefefe;
+    --text-muted: rgba(255,255,255,0.55);
     --green: #00e676;
-    --green-dim: #004d25;
+    --green-dim: rgba(0,230,118,0.2);
     --red: #ff1744;
-    --red-dim: #4d0014;
+    --red-dim: rgba(255,23,68,0.2);
     --yellow: #ffab00;
     --blue: #448aff;
     --radius: 12px;
@@ -30,29 +30,11 @@
 }
 
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg-dark);
+    font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #4D148C, #FF6600);
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
-}
-
-/* Background animation */
-body::before {
-    content: '';
-    position: fixed;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(ellipse at 20% 50%, rgba(77,20,140,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(255,102,0,0.1) 0%, transparent 50%);
-    animation: bgPulse 8s ease-in-out infinite alternate;
-    z-index: 0;
-    pointer-events: none;
-}
-
-@keyframes bgPulse {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(-2%, 2%) scale(1.05); }
 }
 
 /* ========== HEADER ========== */
@@ -60,10 +42,10 @@ body::before {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(10,10,26,0.85);
+    background: rgba(77,20,140,0.6);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding: 12px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -137,7 +119,7 @@ body::before {
 .loading-overlay {
     position: fixed;
     inset: 0;
-    background: var(--bg-dark);
+    background: linear-gradient(135deg, #4D148C, #FF6600);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -171,24 +153,24 @@ body::before {
 .main {
     position: relative;
     z-index: 1;
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 24px;
+    padding: 12px 16px;
 }
 
 /* ========== STATS BAR ========== */
 .stats-bar {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
 }
 
 .stat-card {
     background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: var(--radius);
-    padding: 16px 20px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -230,7 +212,7 @@ body::before {
 
 /* ========== SWITCH CHASSIS ========== */
 .chassis-section {
-    margin-bottom: 24px;
+    margin-bottom: 14px;
 }
 
 .chassis-label {
@@ -253,9 +235,9 @@ body::before {
 
 .chassis {
     background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: var(--radius);
-    padding: 24px;
+    padding: 16px;
     position: relative;
     overflow-x: auto;
 }
@@ -300,18 +282,18 @@ body::before {
 .port-grid {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
 }
 
 .port-row {
     display: flex;
-    gap: 3px;
+    gap: 4px;
 }
 
 .port-group {
     display: flex;
-    gap: 3px;
-    margin-right: 14px;
+    gap: 4px;
+    margin-right: 16px;
 }
 
 .port-group:last-child {
@@ -320,9 +302,9 @@ body::before {
 
 /* SFP/Uplink modules - smaller layout */
 .module-panel.sfp .port {
-    width: 44px;
-    height: 28px;
-    font-size: 10px;
+    width: 50px;
+    height: 34px;
+    font-size: 12px;
     border-radius: 3px;
 }
 
@@ -338,14 +320,14 @@ body::before {
 
 /* ========== PORT ========== */
 .port {
-    width: 52px;
-    height: 32px;
-    border-radius: 4px;
+    width: 56px;
+    height: 38px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s;
     position: relative;
@@ -409,7 +391,7 @@ body::before {
 /* ========== PORT DETAIL PANEL ========== */
 .detail-panel {
     background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: var(--radius);
     overflow: hidden;
     transition: all 0.3s;
@@ -608,11 +590,11 @@ body::before {
     background: var(--bg-card);
     border-radius: var(--radius);
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
 .port-table thead th {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.06);
     padding: 10px 14px;
     text-align: left;
     font-size: 11px;
@@ -687,22 +669,21 @@ body::before {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
-    .header { padding: 10px 16px; }
-    .main { padding: 16px; }
+    .header { padding: 8px 12px; }
+    .main { padding: 10px; }
     .stats-bar { grid-template-columns: repeat(2, 1fr); }
-    .port { width: 40px; height: 26px; font-size: 10px; }
-    .chassis { padding: 16px; }
+    .port { width: 44px; height: 30px; font-size: 11px; }
+    .chassis { padding: 12px; }
     .detail-body { grid-template-columns: 1fr; }
     .search-input { width: 150px; }
     .header-title { font-size: 15px; }
-
     .port-table thead th,
     .port-table tbody td { padding: 6px 10px; font-size: 12px; }
 }
 
 @media (max-width: 480px) {
-    .stats-bar { grid-template-columns: 1fr; }
-    .port { width: 34px; height: 24px; font-size: 9px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .port { width: 36px; height: 26px; font-size: 10px; }
     .port-group { margin-right: 6px; gap: 2px; }
 }
 
@@ -725,9 +706,118 @@ body::before {
 .animate-in:nth-child(2) { animation-delay: 0.05s; }
 .animate-in:nth-child(3) { animation-delay: 0.1s; }
 .animate-in:nth-child(4) { animation-delay: 0.15s; }
+
+/* ========== AUTH GATE ========== */
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #4D148C, #FF6600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.4s;
+}
+
+.auth-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.auth-box {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.auth-box i.lock-icon {
+    font-size: 36px;
+    color: var(--orange);
+    margin-bottom: 16px;
+}
+
+.auth-box h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.auth-box p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 20px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+}
+
+.auth-input:focus {
+    border-color: var(--orange);
+}
+
+.auth-input::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.auth-btn:hover {
+    background: var(--orange-light);
+}
+
+.auth-btn:active {
+    transform: scale(0.98);
+}
+
+.auth-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 10px;
+    min-height: 20px;
+}
     </style>
 </head>
 <body>
+
+<!-- Auth Gate -->
+<div class="auth-overlay" id="authOverlay" style="display:none;">
+    <div class="auth-box">
+        <i class="fas fa-lock lock-icon"></i>
+        <h2>Yetkilendirme Gerekli</h2>
+        <p>Bu sayfaya erismek icin sifrenizi girin.</p>
+        <input type="password" class="auth-input" id="authPassword" placeholder="Sifre" autocomplete="off">
+        <button class="auth-btn" id="authBtn" onclick="handleAuth()">Giris Yap</button>
+        <div class="auth-error" id="authError"></div>
+    </div>
+</div>
 
 <!-- Loading -->
 <div class="loading-overlay" id="loadingOverlay">
@@ -865,21 +955,80 @@ let currentFilter = 'all';
 let sortCol = -1;
 let sortAsc = true;
 
-// ========== INIT ==========
-document.addEventListener('DOMContentLoaded', init);
+// ========== AUTH ==========
+function isAuthorized() {
+    return sessionStorage.getItem('netinfo_switch_auth') === 'granted';
+}
 
-async function init() {
+function grantAccess() {
+    sessionStorage.setItem('netinfo_switch_auth', 'granted');
+}
+
+async function handleAuth() {
+    var pw = document.getElementById('authPassword').value;
+    var errEl = document.getElementById('authError');
+    errEl.textContent = '';
+
+    if (!pw) { errEl.textContent = 'Sifre bos birakilamaz.'; return; }
+
+    try {
+        var resp = await fetch('/Netinfo/api/environment/validate_admin_password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pw })
+        });
+        var result = await resp.json();
+        if (result.success) {
+            grantAccess();
+            document.getElementById('authOverlay').classList.add('hidden');
+            loadPageData();
+        } else {
+            errEl.textContent = 'Hatali sifre.';
+        }
+    } catch (e) {
+        errEl.textContent = 'Baglanti hatasi: ' + e.message;
+    }
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', function() {
+    // Check: came from index (referrer) or already authed
+    var fromIndex = document.referrer && document.referrer.indexOf('/Netinfo/') !== -1 &&
+                    document.referrer.indexOf('switchDetails') === -1;
+
+    if (fromIndex) {
+        grantAccess();
+    }
+
+    if (isAuthorized()) {
+        loadPageData();
+    } else {
+        // Show auth gate, hide loading
+        hideLoading();
+        document.getElementById('authOverlay').style.display = 'flex';
+        setTimeout(function() {
+            document.getElementById('authPassword').focus();
+        }, 100);
+        // Enter key
+        document.getElementById('authPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleAuth();
+        });
+    }
+});
+
+async function loadPageData() {
+    document.getElementById('authOverlay').style.display = 'none';
+
     const params = new URLSearchParams(window.location.search);
     const uid = params.get('uid');
 
     if (!uid) {
         hideLoading();
-        document.getElementById('headerTitle').textContent = 'UUID belirtilmemiş';
+        document.getElementById('headerTitle').textContent = 'UUID belirtilmemis';
         return;
     }
 
     try {
-        // Fetch device info and ports in parallel
         const [deviceRes, portsRes] = await Promise.all([
             fetchAPI('/Netinfo/api/device/get_device_info?uid=' + encodeURIComponent(uid)),
             fetchAPI('/Netinfo/api/device/get_device_ports?uid=' + encodeURIComponent(uid))
@@ -909,7 +1058,6 @@ async function init() {
 
     hideLoading();
 
-    // Search
     document.getElementById('searchInput').addEventListener('input', function() {
         renderTable();
     });

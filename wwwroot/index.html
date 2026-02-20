@@ -983,6 +983,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (switchIcon) {
         switchIcon.addEventListener('click', function() {
             var uid = new URLSearchParams(window.location.search).get('uid');
+            sessionStorage.setItem('netinfo_switch_auth', 'granted');
             window.location.href = "/Netinfo/switchDetails.html" + (uid ? "?uid=" + encodeURIComponent(uid) : "");
         });
     } else {
