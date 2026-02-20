@@ -4360,19 +4360,20 @@ const lastUpdateTime = document.getElementById('lastUpdateTime');
 
 async function fetchAllDevices() {
     try {
-        // **Yeni JSON dosyalarını kullanarak cihaz verilerini yükle**
-        const response = await fetch(`/Netinfo/api/device/get_all_devices?nocache=${Date.now()}`, {
+        const response = await fetch(`/Netinfo/api/device/get_all_devices?pageSize=500&nocache=${Date.now()}`, {
             cache: "no-store"
         });
 
         if (!response.ok) throw new Error(`Veri alınamadı: ${response.status}`);
 
-        const newDevices = await response.json();
+        const result = await response.json();
 
-        // Eğer veri değişmediyse güncelleme yapma
+        // API { data: [...], total, page, pageSize } formatında dönüyor
+        const newDevices = Array.isArray(result) ? result : (result.data || []);
+
         if (JSON.stringify(newDevices) !== JSON.stringify(devices)) {
             devices = newDevices;
-            syncAllComponents(devices); // ✅ Parametre olarak gönderiyoruz
+            syncAllComponents(devices);
         }
     } catch (error) {
         console.error("❌ Cihazları alırken hata oluştu:", error);
@@ -5046,9 +5047,10 @@ async function createRecentChangesTable(devices) {
 // Tüm cihaz verilerini getir
 async function fetchDevices() {
     try {
-        const response = await fetch('/Netinfo/api/device/get_all_devices');
+        const response = await fetch('/Netinfo/api/device/get_all_devices?pageSize=500');
         if (!response.ok) throw new Error("Cihaz verileri alınamadı.");
-        devices = await response.json();
+        const result = await response.json();
+        devices = Array.isArray(result) ? result : (result.data || []);
     } catch (error) {
         console.error("Cihaz verileri alınırken hata:", error);
     }
@@ -5921,6 +5923,24 @@ function showNoDataMessage(date) {
 
 let availableDates = new Set();
 
+async function loadAvailableDates() {
+    try {
+        const response = await fetch('/Netinfo/api/device/available_rush_hour_dates');
+        if (!response.ok) {
+            console.warn("Rush hour tarih verisi alınamadı:", response.status);
+            return;
+        }
+        const result = await response.json();
+        const dates = result.available_dates || result || [];
+        if (Array.isArray(dates)) {
+            dates.forEach(d => availableDates.add(d));
+        }
+        console.log("✅ Kullanılabilir tarihler yüklendi:", availableDates.size);
+    } catch (error) {
+        console.warn("Rush hour tarih verisi yüklenemedi:", error.message);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     await loadAvailableDates();
 
@@ -6202,45 +6222,51 @@ async function fetchAPDashboard() {
         if (!response.ok) throw new Error("AP verisi alınamadı");
         const data = await response.json();
 
-        // Özet istatistikler
-        const summary = data.summary || {};
+        // Özet istatistikler (statistics veya summary objesi)
+        const stats = data.statistics || data.summary || {};
         const onlineEl = document.getElementById('apOnlineCount');
         const offlineEl = document.getElementById('apOfflineCount');
         const clientEl = document.getElementById('apClientCount');
 
-        if (onlineEl) onlineEl.textContent = summary.onlineCount ?? '-';
-        if (offlineEl) offlineEl.textContent = summary.offlineCount ?? '-';
-        if (clientEl) clientEl.textContent = summary.totalClients ?? '-';
+        if (onlineEl) onlineEl.textContent = stats.onlineCount ?? stats.online_count ?? '-';
+        if (offlineEl) offlineEl.textContent = stats.offlineCount ?? stats.offline_count ?? '-';
+        if (clientEl) clientEl.textContent = stats.totalClients ?? stats.total_clients ?? '-';
 
-        // AP Tablosu
+        // AP Tablosu - inventory array veya obje olabilir
         const tbody = document.querySelector('#apTable tbody');
         if (!tbody) return;
 
-        const apList = data.inventory || [];
-        if (apList.length === 0) {
+        let apList = data.inventory || [];
+        if (!Array.isArray(apList)) apList = apList.data || Object.values(apList) || [];
+
+        if (!Array.isArray(apList) || apList.length === 0) {
             tbody.innerHTML = '<tr><td colspan="4" class="text-center text-gray-400">AP verisi bulunamadı</td></tr>';
             return;
         }
 
         // Duruma göre sırala (offline olanlar üstte)
-        apList.sort((a, b) => {
-            if (a.status === 'offline' && b.status !== 'offline') return -1;
-            if (a.status !== 'offline' && b.status === 'offline') return 1;
-            return (a.name || '').localeCompare(b.name || '');
+        const sortedList = [...apList].sort((a, b) => {
+            const aOff = (a.status || '').toLowerCase() !== 'online';
+            const bOff = (b.status || '').toLowerCase() !== 'online';
+            if (aOff && !bOff) return -1;
+            if (!aOff && bOff) return 1;
+            return (a.name || a.hostname || '').localeCompare(b.name || b.hostname || '');
         });
 
-        tbody.innerHTML = apList.slice(0, 20).map(ap => `
+        tbody.innerHTML = sortedList.slice(0, 20).map(ap => {
+            const isOnline = (ap.status || '').toLowerCase() === 'online';
+            return `
             <tr>
-                <td class="p-2 border">${ap.name || 'Bilinmiyor'}</td>
+                <td class="p-2 border">${ap.name || ap.hostname || 'Bilinmiyor'}</td>
                 <td class="p-2 border">${ap.model || '-'}</td>
                 <td class="p-2 border">
-                    <span style="color: ${ap.status === 'online' ? '#22c55e' : '#ef4444'}; font-weight: bold;">
-                        ${ap.status === 'online' ? 'Aktif' : 'Pasif'}
+                    <span style="color: ${isOnline ? '#22c55e' : '#ef4444'}; font-weight: bold;">
+                        ${isOnline ? 'Aktif' : 'Pasif'}
                     </span>
                 </td>
-                <td class="p-2 border">${ap.clientCount ?? '-'}</td>
-            </tr>
-        `).join('');
+                <td class="p-2 border">${ap.clientCount ?? ap.client_count ?? '-'}</td>
+            </tr>`;
+        }).join('');
     } catch (error) {
         console.warn("AP dashboard yüklenemedi:", error.message);
         const tbody = document.querySelector('#apTable tbody');
@@ -6302,7 +6328,7 @@ async function fetchVLANOverview() {
 // ============================
 function updateLocationDistribution() {
     const tbody = document.querySelector('#locationTable tbody');
-    if (!tbody || !devices || devices.length === 0) return;
+    if (!tbody || !Array.isArray(devices) || devices.length === 0) return;
 
     // Lokasyona göre grupla
     const locationMap = {};
