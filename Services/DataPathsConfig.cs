@@ -22,6 +22,7 @@ namespace Netinfo.Services
         public string EnhancedWirelessData { get; set; } = "enhanced_wireless_data.json";
         public string HourlyClientStats { get; set; } = "hourly_client_stats.json";
         public string StatusChangesLog { get; set; } = "device_status_changes.json";
+        public string TimeZoneId { get; set; } = "Turkey Standard Time";
 
         public string GetFullDataPath(string fileName) => Path.Combine(DataDir, fileName);
         public string GetFullLogPath(string fileName) => Path.Combine(LogDir, fileName);

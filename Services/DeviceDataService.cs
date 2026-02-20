@@ -16,6 +16,7 @@ namespace Netinfo.Services
     {
         private readonly Serilog.ILogger _logger;
         private readonly DataPathsConfig _paths;
+        private readonly TimeZoneInfo _timeZone;
         private List<Dictionary<string, object>> _deviceData;
         private List<Dictionary<string, object>> _portData;
         private List<Dictionary<string, object>> _routerPortData;
@@ -32,6 +33,7 @@ namespace Netinfo.Services
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paths = paths ?? throw new ArgumentNullException(nameof(paths));
+            _timeZone = TimeZoneInfo.FindSystemTimeZoneById(paths.TimeZoneId);
             _deviceData = new List<Dictionary<string, object>>();
             _portData = new List<Dictionary<string, object>>();
             _routerPortData = new List<Dictionary<string, object>>();
@@ -660,7 +662,7 @@ namespace Netinfo.Services
                 }
 
                 DateTime nowUtc = DateTime.UtcNow;
-                DateTime nowTR = nowUtc.AddHours(3);
+                DateTime nowTR = TimeZoneInfo.ConvertTimeFromUtc(nowUtc, _timeZone);
 
                 int currentHour = nowTR.Hour;
                 string currentHourRange = $"{currentHour:00}:00 - {currentHour + 1:00}:00";
@@ -725,7 +727,7 @@ namespace Netinfo.Services
                     existingData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(existingContent) ?? new List<Dictionary<string, object>>();
                 }
 
-                DateTime nowTR = DateTime.UtcNow.AddHours(3);
+                DateTime nowTR = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZone);
                 int currentHour = nowTR.Hour;
                 string currentHourRange = $"{currentHour:00}:00 - {currentHour + 1:00}:00";
 
@@ -774,7 +776,7 @@ namespace Netinfo.Services
 
                 mainData["cumulated_input_mbps"] = totalInputTraffic;
                 mainData["cumulated_output_mbps"] = totalOutputTraffic;
-                mainData["last_whole_data_updated"] = DateTime.UtcNow.AddHours(3).ToString("dd.MM.yyyy HH:mm");
+                mainData["last_whole_data_updated"] = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZone).ToString("dd.MM.yyyy HH:mm");
 
                 File.WriteAllText(filePath, JsonConvert.SerializeObject(mainData, Formatting.Indented));
                 _logger.Information("main_data.json updated. Input: {Input}, Output: {Output}", totalInputTraffic, totalOutputTraffic);

@@ -102,7 +102,8 @@ var dataPaths = new DataPathsConfig
     APInventory = config["DataPaths:APInventory"] ?? "access_point_inventory.json",
     EnhancedWirelessData = config["DataPaths:EnhancedWirelessData"] ?? "enhanced_wireless_data.json",
     HourlyClientStats = config["DataPaths:HourlyClientStats"] ?? "hourly_client_stats.json",
-    StatusChangesLog = config["DataPaths:StatusChangesLog"] ?? "device_status_changes.json"
+    StatusChangesLog = config["DataPaths:StatusChangesLog"] ?? "device_status_changes.json",
+    TimeZoneId = config["DataPaths:TimeZoneId"] ?? "Turkey Standard Time"
 };
 builder.Services.AddSingleton(dataPaths);
 
@@ -154,6 +155,73 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.UsePathBase("/Netinfo");
+
+// Security headers middleware
+app.Use(async (context, next) =>
+{
+    var headers = context.Response.Headers;
+    headers["X-Content-Type-Options"] = "nosniff";
+    headers["X-Frame-Options"] = "DENY";
+    headers["X-XSS-Protection"] = "1; mode=block";
+    headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+    headers["Content-Security-Policy"] =
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline' https://code.jquery.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com; " +
+        "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com; " +
+        "img-src 'self' https://tr.eu.fedex.com data:; " +
+        "font-src 'self' https://cdnjs.cloudflare.com;";
+    await next();
+});
+
+// API rate limiting middleware (100 requests/minute per IP)
+var _rateLimitStore = new System.Collections.Concurrent.ConcurrentDictionary<string, (int count, DateTime windowStart)>();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/api"))
+    {
+        var clientIp = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var now = DateTime.UtcNow;
+        var window = TimeSpan.FromMinutes(1);
+        const int maxRequests = 100;
+
+        var entry = _rateLimitStore.AddOrUpdate(clientIp,
+            _ => (1, now),
+            (_, existing) =>
+            {
+                if (now - existing.windowStart > window)
+                    return (1, now);
+                return (existing.count + 1, existing.windowStart);
+            });
+
+        if (entry.count > maxRequests)
+        {
+            context.Response.StatusCode = 429;
+            context.Response.Headers["Retry-After"] = "60";
+            await context.Response.WriteAsJsonAsync(new { success = false, error = "Too many requests. Please try again later." });
+            return;
+        }
+    }
+    await next();
+});
+
+// API cache control middleware
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/api"))
+    {
+        context.Response.OnStarting(() =>
+        {
+            if (!context.Response.Headers.ContainsKey("Cache-Control"))
+            {
+                context.Response.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate";
+                context.Response.Headers["Pragma"] = "no-cache";
+            }
+            return Task.CompletedTask;
+        });
+    }
+    await next();
+});
 
 app.UseRouting();
 app.UseCors();

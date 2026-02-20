@@ -563,15 +563,26 @@ body {
 }
 
 @media (max-width: 768px) {
-	.info-grid {
+    .flip-card {
+        width: 95%;
+        max-width: 100%;
+    }
+
+    .info-grid {
         flex-direction: column;
         align-items: center;
     }
 
     .info-card {
         width: 100%;
+        max-width: 100%;
         padding: 15px;
     }
+
+    .fullscreen-report {
+        padding: 10px;
+    }
+
     .toolbar {
         flex-direction: row;
         flex-wrap: wrap;
@@ -900,6 +911,17 @@ body {
 <!-- Tam Ekran Rapor -->
 <div class="fullscreen-report" id="fullscreenReport">
 	<i class="fas fa-times close-icon" id="closeTableIcon" title="Kapat" tabindex="0"></i>
+    <div class="filter-container" style="margin-top: 40px;">
+        <input type="text" id="reportSearchInput" class="filter-input"
+               placeholder="Ara... (port, durum, hostname)"
+               aria-label="Tablo arama" style="width: 300px; border-radius: 8px;">
+        <select id="reportStatusFilter" class="filter-select"
+                aria-label="Durum filtresi" style="border-radius: 8px;">
+            <option value="">Tum Durumlar</option>
+            <option value="up">Up</option>
+            <option value="down">Down</option>
+        </select>
+    </div>
     <div class="report-content" id="reportContent">
         <!-- Tablo içeriği buraya gelecek -->
     </div>
@@ -1159,18 +1181,46 @@ document.getElementById("closeTableIcon").addEventListener("click", function () 
     devLog("Tablo ekranı kapatıldı.");
 });
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const response = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+    }
+}
+
+async function fetchWithRetry(url, options = {}, retries = 3, timeoutMs = 15000) {
+    for (var attempt = 0; attempt < retries; attempt++) {
+        try {
+            var response = await fetchWithTimeout(url, options, timeoutMs);
+            if (response.ok) return response;
+            if (response.status >= 400 && response.status < 500) {
+                throw new Error("Client error: " + response.status);
+            }
+        } catch (error) {
+            if (attempt === retries - 1) throw error;
+            var delay = Math.pow(2, attempt) * 1000;
+            devLog("Fetch attempt " + (attempt + 1) + " failed, retrying in " + delay + "ms...");
+            await new Promise(function(resolve) { setTimeout(resolve, delay); });
+        }
+    }
+    throw new Error("All fetch attempts failed");
+}
+
 async function fetchDeviceData(id) {
    if (!id) {
        devLog("ID is required.");
        return null;
    }
 
-   const url = "/Netinfo/api/device/get_device_info?id=" + id;
+   var url = "/Netinfo/api/device/get_device_info?id=" + id;
    try {
-       const response = await fetch(url);
-       if (!response.ok) {
-           throw new Error("HTTP error! status: " + response.status);
-       }
+       var response = await fetchWithRetry(url);
        return await response.json();
    } catch (error) {
        devLog("Error fetching device data for ID " + id + ": " + error.message);
@@ -1466,22 +1516,7 @@ function closeReportPanel() {
     }, 500);
 }
 
-function adjustForMobileView() {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const flipCard = document.querySelector('.flip-card');
-    const fullscreenReport = document.getElementById('fullscreenReport');
-
-    if (isMobile) {
-        flipCard.style.transform = "scale(0.8)";
-        fullscreenReport.style.transform = "scale(0.9)";
-    } else {
-        flipCard.style.transform = "scale(1)";
-        fullscreenReport.style.transform = "scale(1)";
-    }
-}
-
-window.addEventListener('resize', adjustForMobileView);
-document.addEventListener('DOMContentLoaded', adjustForMobileView);
+// Responsive design handled via CSS media queries (no JS scale hacks)
 
 
 
@@ -1693,6 +1728,39 @@ function handleEnterKey(event) {
             checkAdminPassword();
         }
     }
+
+// Search/filter functionality for report tables
+(function() {
+    var searchInput = document.getElementById('reportSearchInput');
+    var statusFilter = document.getElementById('reportStatusFilter');
+
+    function filterReportTable() {
+        var reportContent = document.getElementById('reportContent');
+        if (!reportContent) return;
+
+        var rows = reportContent.querySelectorAll('table tbody tr, div.port-row');
+        if (!rows.length) {
+            rows = reportContent.querySelectorAll('div > div');
+        }
+
+        var searchTerm = (searchInput ? searchInput.value : '').toLowerCase();
+        var statusValue = (statusFilter ? statusFilter.value : '').toLowerCase();
+
+        rows.forEach(function(row) {
+            var text = row.textContent.toLowerCase();
+            var matchesSearch = !searchTerm || text.indexOf(searchTerm) !== -1;
+            var matchesStatus = !statusValue || text.indexOf(statusValue) !== -1;
+            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterReportTable);
+    }
+    if (statusFilter) {
+        statusFilter.addEventListener('change', filterReportTable);
+    }
+})();
 
 function copyDeviceInfo() {
     const flipCard = document.getElementById("flipCard");

@@ -2,20 +2,34 @@
 // Credentials artik backend tarafinda yonetiliyor
 async function getStatseekerReport(hostname) {
     const deviceName = hostname;
+    const url = `/Netinfo/api/get_report?deviceid=${encodeURIComponent(deviceName)}`;
+    const maxRetries = 3;
+    const timeoutMs = 15000;
 
-    try {
-        const response = await fetch(`/Netinfo/api/get_report?deviceid=${encodeURIComponent(deviceName)}`);
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (attempt === maxRetries - 1) {
+                console.error('Fetch error after retries:', error);
+                return [];
+            }
+            const delay = Math.pow(2, attempt) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
         }
-
-        const reportData = await response.json();
-        return reportData;
-    } catch (error) {
-        console.error('Fetch error:', error);
-        return [];
     }
+    return [];
 }
 
 // Excel'deki hostname ile eslestirip raporu admin ekranina yansitma
