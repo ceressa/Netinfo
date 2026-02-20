@@ -1068,15 +1068,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
 
-    // Resolve UUID to device ID, then fetch data
-    const deviceId = await resolveUUIDtoDeviceId(uuid);
-    if (!deviceId) {
-        basicDeviceInfoDiv.textContent = "UUID ile eşleşen cihaz bulunamadı.";
-        hideLoadingScreen();
-        return;
-    }
-
-    deviceData = await fetchDeviceData(deviceId);
+    // Fetch device data directly by UUID (single API call)
+    deviceData = await fetchDeviceDataByUUID(uuid);
     if (deviceData) {
         displayBasicDeviceInfo(deviceData);
     } else {
@@ -1094,16 +1087,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // UUID'den device ID'ye çevir, sonra veri çek
-    const deviceId = await resolveUUIDtoDeviceId(uuid);
-    if (!deviceId) {
-        devLog("UUID ile eşleşen cihaz bulunamadı: " + uuid);
-        return;
-    }
+    // Fetch device data directly by UUID (single API call)
+    deviceData = await fetchDeviceDataByUUID(uuid);
 
-    deviceData = await fetchDeviceData(deviceId);
-
-    // Veri kontrolü ve görüntüleme
     if (deviceData) {
         displayAdminDeviceInfo();
     } else {
@@ -1231,19 +1217,18 @@ async function fetchWithRetry(url, options = {}, retries = 3, timeoutMs = 15000)
     throw new Error("All fetch attempts failed");
 }
 
-async function resolveUUIDtoDeviceId(uuid) {
-   if (!uuid) return null;
-   try {
-       var response = await fetchWithRetry("/Netinfo/api/device/uuid_to_deviceid?uuid=" + encodeURIComponent(uuid));
-       var data = await response.json();
-       if (data && data.device_id) {
-           devLog("UUID resolved: " + uuid + " -> " + data.device_id);
-           return String(data.device_id);
-       }
-       devLog("UUID resolution failed for: " + uuid);
+async function fetchDeviceDataByUUID(uuid) {
+   if (!uuid) {
+       devLog("UUID is required.");
        return null;
+   }
+
+   var url = "/Netinfo/api/device/get_device_info?uid=" + encodeURIComponent(uuid);
+   try {
+       var response = await fetchWithRetry(url);
+       return await response.json();
    } catch (error) {
-       devLog("Error resolving UUID " + uuid + ": " + error.message);
+       devLog("Error fetching device data for UUID " + uuid + ": " + error.message);
        return null;
    }
 }
