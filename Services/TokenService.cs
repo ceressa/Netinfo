@@ -14,7 +14,7 @@ namespace Netinfo.Services
         private readonly string _tokenFilePath;
         private readonly Serilog.ILogger _logger;  // Serilog.ILogger kullan
         private readonly DataPathsConfig _paths;
-        private List<TokenInfo> _tokens;
+        private List<TokenInfo> _tokens = new();
 
         public TokenService(Serilog.ILogger logger, DataPathsConfig paths)  // Serilog.ILogger parametre
         {
@@ -50,7 +50,7 @@ namespace Netinfo.Services
             return token != null && token.ExpiresAt > DateTime.UtcNow;
         }
 
-        public TokenInfo GetTokenInfo(string tokenValue)
+        public TokenInfo? GetTokenInfo(string tokenValue)
         {
             return _tokens.FirstOrDefault(t => t.TokenValue == tokenValue && t.IsActive);
         }
@@ -118,7 +118,7 @@ namespace Netinfo.Services
             try
             {
                 var directory = Path.GetDirectoryName(_tokenFilePath);
-                if (!Directory.Exists(directory))
+                if (directory != null && !Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
 
                 var json = JsonConvert.SerializeObject(_tokens, Formatting.Indented);
@@ -144,11 +144,11 @@ namespace Netinfo.Services
 
     public class TokenInfo
     {
-        public string Id { get; set; }
-        public string TokenValue { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string TokenValue { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime ExpiresAt { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public bool IsActive { get; set; }
     }
 }
