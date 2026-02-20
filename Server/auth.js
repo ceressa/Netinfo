@@ -2,11 +2,14 @@
 const bcrypt = require('bcrypt');
 const { addFailedAttempt, isLockedOut } = require('./utils/limiter');
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key'; // .env dosyasından alınır
-const HASHED_PASSWORD = '$2b$10$yourHashedPassword'; // Conquer34 için hashlenmiş hali
-
-// Şifre hashleme (Bir kere çalıştır, .env'e koy)
-bcrypt.hash('Conquer34', 10).then(console.log); // => Hash sonucu
+const SECRET_KEY = process.env.JWT_SECRET;
+if (!SECRET_KEY) {
+    throw new Error('JWT_SECRET environment variable is required');
+}
+const HASHED_PASSWORD = process.env.ADMIN_BCRYPT_HASH;
+if (!HASHED_PASSWORD) {
+    throw new Error('ADMIN_BCRYPT_HASH environment variable is required');
+}
 
 async function login(req, res) {
     const { username, password } = req.body;

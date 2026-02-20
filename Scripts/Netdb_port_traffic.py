@@ -3,6 +3,10 @@ import json
 import logging
 from datetime import datetime
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API ve dosya yolları
 API_AUTH_URL = "https://network-api.npe.fedex.com/v1/authorize"
@@ -11,8 +15,8 @@ OUTPUT_JSON_FILE = "filtered_switch_interfaces.json"
 OUTPUT_EXCEL_FILE = "filtered_switch_interfaces.xlsx"
 
 # Kullanıcı bilgileri
-USERNAME = "3723002"
-PASSWORD = "Xerez386251-"
+USERNAME = os.environ.get("NETDB_USERNAME")
+PASSWORD = os.environ.get("NETDB_PASSWORD")
 
 # Loglama ayarları
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

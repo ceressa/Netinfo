@@ -6,8 +6,13 @@ import json
 import urllib3
 import os
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 # Proxy settings
 PROXY = {
@@ -17,8 +22,8 @@ PROXY = {
 
 # API connection details
 base_url = 'https://statseeker.emea.fedex.com/api/v2.1/'
-user = 'tr-api'
-password = 'F3xpres!'
+user = os.environ.get("STATSEEKER_USERNAME")
+password = os.environ.get("STATSEEKER_PASSWORD")
 
 fields = {
     'device': 'id,deviceid,hostname,ipaddress,ping_state',
@@ -55,7 +60,7 @@ def log_message(message):
 def fetch_data(url):
     """Fetch data from API."""
     try:
-        response = requests.get(url, auth=(user, password), verify=False, timeout=60)
+        response = requests.get(url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
         if response.status_code == 200:
             log_message(f"Data fetched successfully from {url}")
             return response.json()

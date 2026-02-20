@@ -25,11 +25,6 @@ namespace Netinfo.Services
     
     string hashedPassword = ComputeSha256Hash(password);
     
-    // DEBUG: Hash değerlerini loglayın
-    _logger.Information($"Girilen şifre: {password}");
-    _logger.Information($"Girilen şifrenin hash'i: {hashedPassword}");
-    _logger.Information($"Beklenen hash: {_adminPasswordHash}");
-    
     bool isValid = hashedPassword == _adminPasswordHash;
     
     if (isValid)

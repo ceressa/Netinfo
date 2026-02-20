@@ -12,9 +12,14 @@ from tqdm import tqdm
 from functools import lru_cache
 from cryptography.fernet import Fernet
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 sys.stdout.reconfigure(encoding='utf-8')
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 # File paths for NetDB authentication
 CREDENTIALS_FILE = "D:/INTRANET/Netinfo/Config/credentials.json"
@@ -28,8 +33,8 @@ PROXY = {
 
 # Statseeker API connection details
 statseeker_base_url = 'https://statseeker.emea.fedex.com/api/v2.1/'
-statseeker_user = 'tr-api'
-statseeker_password = 'F3xpres!'
+statseeker_user = os.environ.get("STATSEEKER_USERNAME")
+statseeker_password = os.environ.get("STATSEEKER_PASSWORD")
 
 # NetDB API URLs
 NETDB_AUTH_URL = "https://network-api.npe.fedex.com/v1/authorize"
@@ -141,7 +146,7 @@ def fetch_statseeker_ap_data():
 
     try:
         log_message(f"Fetching data from Statseeker: NOC-Turkey group")
-        response = requests.get(url, auth=(statseeker_user, statseeker_password), verify=False, timeout=60,
+        response = requests.get(url, auth=(statseeker_user, statseeker_password), verify=SSL_VERIFY, timeout=60,
 )
 
         if response.status_code == 200:
@@ -212,7 +217,7 @@ def fetch_netdb_data_sync(hostname, bearer_token):
 
     for endpoint_name, url in endpoints:
         try:
-            response = requests.get(url, headers=headers, timeout=15, verify=False)
+            response = requests.get(url, headers=headers, timeout=15, verify=SSL_VERIFY)
             if response.status_code == 200:
                 data = response.json()
                 if data.get('success') and 'results' in data:
@@ -477,7 +482,7 @@ def fetch_enhanced_wireless_data_v2(hostname, bearer_token):
 
     for endpoint_name, url in endpoints:
         try:
-            response = requests.get(url, headers=headers, timeout=15, verify=False)
+            response = requests.get(url, headers=headers, timeout=15, verify=SSL_VERIFY)
             if response.status_code == 200:
                 data = response.json()
                 if data.get('success') and 'results' in data:

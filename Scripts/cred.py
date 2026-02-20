@@ -6,6 +6,9 @@ from datetime import datetime
 import subprocess
 import getpass
 import sys
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CREDENTIALS_FILE = "D:/INTRANET/Netinfo/Config/credentials.json"
 KEY_FILE = "D:/INTRANET/Netinfo/Config/secret.key"
@@ -57,7 +60,7 @@ def hash_password(password):
 
 def load_master_password_hash():
     """Load the hashed master password."""
-    stored_master_password_hash = "7aa4d3bd82c888746646603025600011c291dd4dbd8dc2874d2f9c698ecbccf2"
+    stored_master_password_hash = os.environ.get("MASTER_PASSWORD_HASH", "")
     return stored_master_password_hash
 
 

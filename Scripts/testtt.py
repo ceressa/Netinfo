@@ -2,6 +2,11 @@ import requests
 import json
 import sys
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
 
 # Mevcut dosyandan import et
 sys.path.append('D:/INTRANET/Netinfo/Scripts')
@@ -43,7 +48,7 @@ def get_token():
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
         response = requests.post(auth_url, data=auth_data, headers=headers,
- timeout=60, verify=False)
+ timeout=60, verify=SSL_VERIFY)
         if response.status_code == 200:
             return response.json().get("access_token")
         else:
@@ -81,7 +86,7 @@ def test_all_endpoints():
     for name, url in endpoints.items():
         print(f"\n🔍 Testing: {name}")
         try:
-            response = requests.get(url, headers=headers, timeout=30, verify=False)
+            response = requests.get(url, headers=headers, timeout=30, verify=SSL_VERIFY)
 
             if response.status_code == 200:
                 data = response.json()

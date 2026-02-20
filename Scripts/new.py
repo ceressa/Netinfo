@@ -9,6 +9,9 @@ import os
 import time
 from functools import lru_cache
 from macarna import mac_lookup
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Proxy ayarları
 PROXY = {
@@ -25,8 +28,8 @@ output_excel_file = "D:/INTRANET/Netinfo/Data/main_data1.xlsx"
 log_dir = "D:/INTRANET/Netinfo/Logs/New_logs/"
 
 # Kullanıcı bilgileri
-netdb_username = "3723002"
-netdb_password = "Xerez386251-"
+netdb_username = os.environ.get("NETDB_USERNAME")
+netdb_password = os.environ.get("NETDB_PASSWORD")
 
 # Loglama ayarları
 os.makedirs(log_dir, exist_ok=True)

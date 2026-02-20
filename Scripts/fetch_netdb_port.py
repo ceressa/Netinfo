@@ -3,6 +3,10 @@ import json
 import logging
 from datetime import datetime
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API ve dosya yollari
 api_auth_url = "https://network-api.npe.fedex.com/v1/authorize"
@@ -11,8 +15,8 @@ output_json_file = "main_data.json"
 output_excel_file = "main_data.xlsx"
 
 # Kullanici bilgileri
-username = "3723002"
-password = "Xerez386251-"
+username = os.environ.get("NETDB_USERNAME")
+password = os.environ.get("NETDB_PASSWORD")
 
 # Loglama ayarlari
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -31,20 +35,20 @@ def get_bearer_token():
         logging.error(f"NetDB Bearer token alma hatasi: {e}")
     return None
 
-# Cihaz arayüz verilerini çekme
+# Cihaz arayï¿½z verilerini ï¿½ekme
 def get_device_interfaces(hostname, token):
     url = device_interfaces_url_template.format(hostname=hostname)
     headers = {'Authorization': f'Bearer {token}', 'Accept': 'application/json'}
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
-        logging.info(f"{hostname} arayüz verileri basariyla alindi.")
+        logging.info(f"{hostname} arayï¿½z verileri basariyla alindi.")
         return response.json()
     except requests.RequestException as e:
-        logging.error(f"{hostname} arayüz verileri alinamadi: {e}")
+        logging.error(f"{hostname} arayï¿½z verileri alinamadi: {e}")
         return None
 
-# Sadece `is_up = True` olan portlari filtreleme ve Mbps'ye çevirme
+# Sadece `is_up = True` olan portlari filtreleme ve Mbps'ye ï¿½evirme
 def filter_active_ports(interface_data):
     active_ports = []
     for interface_name, details in interface_data.get("results", {}).items():
@@ -87,7 +91,7 @@ def main():
     hostname = "TrCHO1104sw06"  # Test edilen hostname
     interface_data = get_device_interfaces(hostname, token)
     if not interface_data:
-        logging.error(f"{hostname} için veri alinamadi, islem sonlandiriliyor.")
+        logging.error(f"{hostname} iï¿½in veri alinamadi, islem sonlandiriliyor.")
         return
 
     active_ports = filter_active_ports(interface_data)

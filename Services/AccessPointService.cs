@@ -7,19 +7,21 @@ namespace Netinfo.Services
     public class AccessPointService
     {
         private readonly Serilog.ILogger _logger; // Explicit Serilog reference
+        private readonly DataPathsConfig _paths;
         private List<object> _apInventory = new List<object>();
         private List<object> _enhancedWirelessData = new List<object>();
         private DateTime _lastDataLoad = DateTime.MinValue;
 
-        public AccessPointService(Serilog.ILogger logger) // Explicit Serilog
+        public AccessPointService(Serilog.ILogger logger, DataPathsConfig paths) // Explicit Serilog
         {
             _logger = logger.ForContext<AccessPointService>();
+            _paths = paths;
             LoadAllAPData();
         }
 
         public void LoadAllAPData()
         {
-            try 
+            try
             {
                 LoadAPInventory();
                 LoadEnhancedWirelessData();
@@ -34,8 +36,8 @@ namespace Netinfo.Services
 
         private void LoadAPInventory()
         {
-            string apInventoryPath = @"D:\INTRANET\Netinfo\Data\access_point_inventory.json";
-            
+            string apInventoryPath = Path.Combine(_paths.DataDir, _paths.APInventory);
+
             if (File.Exists(apInventoryPath))
             {
                 string jsonContent = File.ReadAllText(apInventoryPath);
@@ -51,20 +53,20 @@ namespace Netinfo.Services
 
         private void LoadEnhancedWirelessData()
         {
-            string enhancedDataPath = @"D:\INTRANET\Netinfo\Data\enhanced_wireless_data.json";
-            
+            string enhancedDataPath = Path.Combine(_paths.DataDir, _paths.EnhancedWirelessData);
+
             if (File.Exists(enhancedDataPath))
             {
                 try
                 {
                     string jsonContent = File.ReadAllText(enhancedDataPath);
                     var data = JsonSerializer.Deserialize<JsonElement>(jsonContent);
-                    
+
                     if (data.TryGetProperty("enhanced_wireless_data", out var enhancedData))
                     {
                         _enhancedWirelessData = JsonSerializer.Deserialize<List<dynamic>>(enhancedData.GetRawText()) ?? new List<dynamic>();
                     }
-                    
+
                     _logger.Information($"Loaded enhanced wireless data for {_enhancedWirelessData.Count} APs");
                 }
                 catch (Exception ex)
@@ -88,7 +90,7 @@ namespace Netinfo.Services
                 await Task.Run(LoadAllAPData);
             }
 
-            var activeAPs = _apInventory.Where(ap => 
+            var activeAPs = _apInventory.Where(ap =>
             {
                 var element = (JsonElement)ap;
                 return element.TryGetProperty("is_up", out var isUp) && isUp.GetBoolean();
@@ -113,26 +115,26 @@ namespace Netinfo.Services
                 }
             };
         }
-		
+
 		public async Task<object> GetHourlyClientStats()
 {
     try
     {
-        var hourlyStatsPath = @"D:\INTRANET\Netinfo\Data\hourly_client_stats.json";
-        
+        var hourlyStatsPath = Path.Combine(_paths.DataDir, _paths.HourlyClientStats);
+
         if (!File.Exists(hourlyStatsPath))
         {
             return new Dictionary<string, object>();
         }
-        
+
         var json = await File.ReadAllTextAsync(hourlyStatsPath);
-        
+
         // Mixed format için JsonElement kullan
         var hourlyStats = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
-        
+
         // JsonElement'leri object'e dönüştür
         var result = new Dictionary<string, object>();
-        
+
         foreach (var kvp in hourlyStats)
         {
             if (kvp.Value.ValueKind == JsonValueKind.Number)
@@ -148,7 +150,7 @@ namespace Netinfo.Services
                 result[kvp.Key] = obj;
             }
         }
-        
+
         return result;
     }
     catch (Exception ex)
@@ -165,8 +167,8 @@ namespace Netinfo.Services
             foreach (var ap in _apInventory)
             {
                 var element = (JsonElement)ap;
-                
-                if (element.TryGetProperty("wireless_clients", out var clientsProperty) && 
+
+                if (element.TryGetProperty("wireless_clients", out var clientsProperty) &&
                     clientsProperty.ValueKind == JsonValueKind.Array)
                 {
                     foreach (var client in clientsProperty.EnumerateArray())
@@ -203,7 +205,7 @@ namespace Netinfo.Services
         {
             // Top 10 busiest APs
             var topAPs = _apInventory
-                .Where(ap => 
+                .Where(ap =>
                 {
                     var element = (JsonElement)ap;
                     return element.TryGetProperty("wireless_clients_numbers", out var count) && count.GetInt32() > 0;
@@ -228,7 +230,7 @@ namespace Netinfo.Services
                     var element = (JsonElement)ap;
                     var uptimeStr = element.GetProperty("uptime").GetString();
                     var hostname = element.TryGetProperty("hostname", out var h) ? h.GetString() : "Unknown";
-                    
+
                     return new
                     {
                         hostname,
@@ -266,7 +268,7 @@ namespace Netinfo.Services
                             total_radios = radioInfo.GetArrayLength(),
                             avg_power_dbm = Math.Round(avgPower, 1),
                             client_count = element.TryGetProperty("wireless_clients_numbers", out var count) ? count.GetInt32() : 0,
-                            clients_per_radio = activeRadios.Count() > 0 ? 
+                            clients_per_radio = activeRadios.Count() > 0 ?
                                 Math.Round((double)(element.TryGetProperty("wireless_clients_numbers", out var c) ? c.GetInt32() : 0) / activeRadios.Count(), 1) : 0
                         });
                     }
@@ -284,7 +286,7 @@ namespace Netinfo.Services
                     summary = new
                     {
                         total_aps = _apInventory.Count,
-                        active_aps = _apInventory.Count(ap => 
+                        active_aps = _apInventory.Count(ap =>
                         {
                             var element = (JsonElement)ap;
                             return element.TryGetProperty("is_up", out var isUp) && isUp.GetBoolean();
@@ -305,7 +307,7 @@ namespace Netinfo.Services
         {
             if (string.IsNullOrEmpty(uptime)) return 0;
 
-            var regex = new System.Text.RegularExpressions.Regex(@"(\d+)\s*days?,?\s*(\d+)\s*hours?", 
+            var regex = new System.Text.RegularExpressions.Regex(@"(\d+)\s*days?,?\s*(\d+)\s*hours?",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             var match = regex.Match(uptime);
 

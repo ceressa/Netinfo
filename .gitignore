@@ -1,14 +1,30 @@
+# Environment & Secrets
 .env
-.idea/
-.pytest_cache/
-pycache/
+.env.*
+!.env.example
 
+# IDE
+.idea/
+.vscode/
+*.suo
+*.user
+
+# Python
+.pytest_cache/
+__pycache__/
+pycache/
+*.pyc
+
+# .NET Build
 bin/
 obj/
 publish/
 dist/
+
+# Node
 node_modules/
 
+# .NET Artifacts
 *.dll
 *.exe
 *.pdb
@@ -16,27 +32,34 @@ node_modules/
 *.runtimeconfig.json
 *.staticwebassets.runtime.json
 
+# Logs
 logs/
 *.log
 
+# Config & Credentials
 Config/*.key
 Config/credentials.json
 
-Data/.xlsx
-Data/.json
+# Data files
+Data/*.xlsx
+Data/*.json
 Data/Archives/
 Data/network_rush_hour_*.json
 
+# Office files
 *.xlsx
-*.log
 
+# Test files
 app - Copy.py
 Test.py
 TEst2.py
 Testt.py
 tttte.py
+
+# Generated docs
 directory_structure.txt
 publish_structure.txt
 publish_structure2.txt
 filelist.txt
 handle_output.txt
+project_structure.txt

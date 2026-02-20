@@ -4,14 +4,20 @@ from datetime import datetime
 import pytz
 import json
 import urllib3
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # SSL uyarılarını devre dışı bırakma (güvenlik açısından dikkatli kullanın)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+SSL_VERIFY = os.environ.get("SSL_CERT_PATH", True)
+
 # API bağlantı bilgileri
 base_url = 'https://statseeker.emea.fedex.com/api/v2.1/'
-user = 'tr-api'
-password = 'F3xpres!'
+user = os.environ.get("STATSEEKER_USERNAME")
+password = os.environ.get("STATSEEKER_PASSWORD")
 
 fields = {
     'device': 'id,deviceid,hostname,ipaddress,ping_state',
@@ -29,7 +35,7 @@ def fetch_data(url):
     """API'den veri çekme."""
     try:
         print(f"Fetching data from {url}")
-        response = requests.get(url, auth=(user, password), verify=False, timeout=60)
+        response = requests.get(url, auth=(user, password), verify=SSL_VERIFY, timeout=60)
         print(f"Response code: {response.status_code}")
         if response.status_code == 200:
             return response.json()
