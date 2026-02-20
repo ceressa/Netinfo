@@ -278,7 +278,7 @@ namespace Netinfo.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "An error occurred while fetching Device ID for UUID: {UUID}.", uuid);
-                return StatusCode(500, new { success = false, error = ex.Message });
+                return StatusCode(500, new { success = false, error = ex.Message, detail = ex.ToString() });
             }
         }
 

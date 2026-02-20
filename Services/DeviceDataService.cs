@@ -549,14 +549,25 @@ namespace Netinfo.Services
 
         public void CheckAndReloadUUIDPool()
         {
-            var uuidPoolFilePath = Path.Combine(_paths.DataDir, _paths.UUIDPool);
-            var lastModifiedTime = File.GetLastWriteTime(uuidPoolFilePath);
-
-            if (_uuidPoolData == null || lastModifiedTime > _lastUuidPoolLoadTime)
+            try
             {
-                _logger.Information("UUID Pool file has changed. Reloading...");
-                LoadUUIDPool(uuidPoolFilePath);
-                _lastUuidPoolLoadTime = lastModifiedTime;
+                var uuidPoolFilePath = Path.Combine(_paths.DataDir, _paths.UUIDPool);
+                var lastModifiedTime = File.GetLastWriteTime(uuidPoolFilePath);
+
+                if (_uuidPoolData == null || !_uuidPoolData.Any() || lastModifiedTime > _lastUuidPoolLoadTime)
+                {
+                    _logger.Information("UUID Pool file has changed. Reloading...");
+                    LoadUUIDPool(uuidPoolFilePath);
+                    _lastUuidPoolLoadTime = lastModifiedTime;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to reload UUID Pool. Using existing data if available.");
+                if (_uuidPoolData == null || !_uuidPoolData.Any())
+                {
+                    throw;
+                }
             }
         }
 
