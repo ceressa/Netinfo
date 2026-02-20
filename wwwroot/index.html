@@ -1291,7 +1291,7 @@ function displayBasicDeviceInfo(device) {
         { icon: 'fa-server', label: 'Hostname', value: device.hostname },
         { icon: 'fa-network-wired', label: 'IP Adresi', value: device.ipaddress },
         { icon: 'fa-microchip', label: 'Model', value: device.model },
-        { icon: 'fa-signal', label: 'Durum', value: device.status, isStatus: true },
+        { icon: 'fa-signal', label: 'Durum', value: device.ping_state || device.status, isStatus: true },
         { icon: 'fa-clock', label: 'Uptime', value: device.uptime },
         { icon: 'fa-map-marker-alt', label: 'Lokasyon', value: device.location || device.sysLocation }
     ];
@@ -1310,7 +1310,8 @@ function displayBasicDeviceInfo(device) {
         p.appendChild(document.createTextNode(f.value));
         if (f.isStatus) {
             var statusSpan = document.createElement('span');
-            statusSpan.className = 'status-indicator ' + (f.value === 'Online' ? 'status-online' : 'status-offline');
+            var isUp = (f.value || '').toLowerCase() === 'up' || (f.value || '').toLowerCase() === 'online';
+            statusSpan.className = 'status-indicator ' + (isUp ? 'status-online' : 'status-offline');
             statusSpan.setAttribute('role', 'status');
             p.appendChild(document.createTextNode(' '));
             p.appendChild(statusSpan);

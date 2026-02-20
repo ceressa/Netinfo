@@ -942,7 +942,8 @@ function renderDeviceHeader(device) {
     title.appendChild(span2);
 
     var badge = document.getElementById('statusBadge');
-    var isOnline = (device.status || '').toLowerCase() === 'online';
+    var pingState = (device.ping_state || device.status || '').toLowerCase();
+    var isOnline = pingState === 'up' || pingState === 'online';
     badge.textContent = isOnline ? 'Online' : 'Offline';
     badge.className = 'status-badge ' + (isOnline ? 'online' : 'offline');
 
