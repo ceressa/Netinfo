@@ -552,6 +552,13 @@ namespace Netinfo.Services
             try
             {
                 var uuidPoolFilePath = Path.Combine(_paths.DataDir, _paths.UUIDPool);
+
+                if (!File.Exists(uuidPoolFilePath))
+                {
+                    _logger.Warning("UUID Pool file not found at {FilePath}. Skipping reload.", uuidPoolFilePath);
+                    return;
+                }
+
                 var lastModifiedTime = File.GetLastWriteTime(uuidPoolFilePath);
 
                 if (_uuidPoolData == null || !_uuidPoolData.Any() || lastModifiedTime > _lastUuidPoolLoadTime)
@@ -564,10 +571,6 @@ namespace Netinfo.Services
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to reload UUID Pool. Using existing data if available.");
-                if (_uuidPoolData == null || !_uuidPoolData.Any())
-                {
-                    throw;
-                }
             }
         }
 

@@ -45,14 +45,25 @@ namespace Netinfo.Controllers
         }
 
         [HttpGet("get_device_info")]
-        public IActionResult GetDeviceInfo(string id)
+        public IActionResult GetDeviceInfo(string id, string uid)
         {
             try
             {
+                // If UUID provided, resolve to device ID first
+                if (!string.IsNullOrEmpty(uid))
+                {
+                    id = _deviceDataService.GetDeviceIdByUUID(uid);
+                    if (string.IsNullOrEmpty(id))
+                    {
+                        _logger.Warning("No device found for UUID: {UUID}", uid);
+                        return NotFound(new { success = false, error = $"No device found for UUID '{uid}'." });
+                    }
+                }
+
                 if (string.IsNullOrEmpty(id))
                 {
-                    _logger.Warning("Device ID is null or empty.");
-                    return BadRequest(new { success = false, error = "Device ID is required." });
+                    _logger.Warning("Device ID and UUID are both null or empty.");
+                    return BadRequest(new { success = false, error = "Device ID (id) or UUID (uid) is required." });
                 }
 
                 var device = _deviceDataService.GetDeviceById(id);
@@ -67,7 +78,7 @@ namespace Netinfo.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "An error occurred while retrieving device info for ID {Id}.", id);
+                _logger.Error(ex, "An error occurred while retrieving device info for ID {Id} / UUID {UUID}.", id, uid);
                 return StatusCode(500, new { success = false, error = ex.Message });
             }
         }

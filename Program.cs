@@ -134,7 +134,8 @@ builder.Services.AddSingleton<DeviceDataService>(provider =>
     deviceService.LoadPreviousDeviceData(Path.Combine(paths.DataDir, paths.PreviousDeviceInventory));
     deviceService.LoadPortData(Path.Combine(paths.DataDir, paths.MainData));
     deviceService.LoadRouterPortData(Path.Combine(paths.DataDir, paths.RouterData));
-    deviceService.LoadUUIDPool(Path.Combine(paths.DataDir, paths.UUIDPool));
+    try { deviceService.LoadUUIDPool(Path.Combine(paths.DataDir, paths.UUIDPool)); }
+    catch (Exception ex) { logger.Warning(ex, "UUID Pool could not be loaded on startup. UUID resolution will retry on demand."); }
     deviceService.LoadLocationData(Path.Combine(paths.DataDir, paths.StationInfo));
     deviceService.LoadLogAnalysisData(Path.Combine(paths.SyslogDir, paths.SyslogSummary));
     deviceService.LoadInsightSummary(Path.Combine(paths.DataDir, paths.InsightSummary));
