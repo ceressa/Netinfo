@@ -81,186 +81,202 @@ def mark_as_sent(entries):
 
 
 def generate_email_content(newly_offline, newly_online):
-    now = datetime.datetime.now().strftime('%B %d, %Y • %H:%M')
+    now = datetime.datetime.now().strftime('%d %B %Y - %H:%M')
+    total = len(newly_offline) + len(newly_online)
 
-    # 📌 Offline devices table rows
-    offline_rows = "".join(
-        f"""<tr style="transition: all 0.3s ease; background: {'#ffffff' if i % 2 == 0 else '#fafafa'};">
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
-                <div style="display: flex; align-items: center;">
-                    <div style="width: 10px; height: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; margin-right: 14px; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);"></div>
-                    <span style="font-weight: 600; color: #1e293b; font-size: 15px;">{device['hostname']}</span>
-                </div>
-            </td>
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
-                <div style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 8px 16px; border-radius: 30px; border: 1px solid #fca5a5;">
-                    <span style="font-size: 12px; margin-right: 6px;">🔴</span>
-                    <span style="color: #dc2626; font-weight: 700; font-size: 13px; letter-spacing: 0.3px;">DOWN</span>
-                </div>
-            </td>
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 14px; font-weight: 500;">
-                {device['timestamp']}
-            </td>
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; color: #94a3b8; font-size: 13px; font-family: 'Courier New', monospace; font-weight: 600;">
-                {device['serial']}
-            </td>
-        </tr>"""
-        for i, device in enumerate(newly_offline)
-    )
+    # --- Offline device cards ---
+    offline_cards = ""
+    for device in newly_offline:
+        offline_cards += f"""
+            <tr><td style="padding: 0 0 10px 0;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background: #fff; border-radius: 10px; border-left: 4px solid #ef4444; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <tr>
+                        <td style="padding: 16px 20px;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="font-size: 16px; font-weight: 700; color: #1e293b; padding-bottom: 6px;">{device['hostname']}</td>
+                                    <td align="right" style="padding-bottom: 6px;">
+                                        <span style="display: inline-block; background: #fef2f2; color: #dc2626; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #fecaca; letter-spacing: 0.5px;">DOWN</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 13px; color: #64748b;">
+                                        <span style="color: #94a3b8; margin-right: 4px;">Seri:</span> {device['serial']}
+                                    </td>
+                                    <td align="right" style="font-size: 12px; color: #94a3b8;">{device['timestamp']}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td></tr>"""
 
-    # 📌 Online devices table rows
-    online_rows = "".join(
-        f"""<tr style="transition: all 0.3s ease; background: {'#ffffff' if i % 2 == 0 else '#fafafa'};">
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
-                <div style="display: flex; align-items: center;">
-                    <div style="width: 10px; height: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; margin-right: 14px; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);"></div>
-                    <span style="font-weight: 600; color: #1e293b; font-size: 15px;">{device['hostname']}</span>
-                </div>
-            </td>
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
-                <div style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 8px 16px; border-radius: 30px; border: 1px solid #86efac;">
-                    <span style="font-size: 12px; margin-right: 6px;">🟢</span>
-                    <span style="color: #16a34a; font-weight: 700; font-size: 13px; letter-spacing: 0.3px;">UP</span>
-                </div>
-            </td>
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 14px; font-weight: 500;">
-                {device['timestamp']}
-            </td>
-            <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; color: #94a3b8; font-size: 13px; font-family: 'Courier New', monospace; font-weight: 600;">
-                {device['serial']}
-            </td>
-        </tr>"""
-        for i, device in enumerate(newly_online)
-    )
+    # --- Online device cards ---
+    online_cards = ""
+    for device in newly_online:
+        online_cards += f"""
+            <tr><td style="padding: 0 0 10px 0;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background: #fff; border-radius: 10px; border-left: 4px solid #22c55e; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <tr>
+                        <td style="padding: 16px 20px;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="font-size: 16px; font-weight: 700; color: #1e293b; padding-bottom: 6px;">{device['hostname']}</td>
+                                    <td align="right" style="padding-bottom: 6px;">
+                                        <span style="display: inline-block; background: #f0fdf4; color: #16a34a; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #bbf7d0; letter-spacing: 0.5px;">UP</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 13px; color: #64748b;">
+                                        <span style="color: #94a3b8; margin-right: 4px;">Seri:</span> {device['serial']}
+                                    </td>
+                                    <td align="right" style="font-size: 12px; color: #94a3b8;">{device['timestamp']}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td></tr>"""
 
-    # 📌 Modern HTML Template
-    # 📌 Modern HTML Template
+    # --- Offline section ---
+    offline_section = ""
+    if offline_cards:
+        offline_section = f"""
+            <!-- Offline Section -->
+            <tr><td style="padding: 0 32px 28px 32px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr><td style="padding-bottom: 14px;">
+                        <table cellpadding="0" cellspacing="0"><tr>
+                            <td style="background: #fef2f2; width: 36px; height: 36px; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 18px;">&#9888;</td>
+                            <td style="padding-left: 12px; font-size: 17px; font-weight: 700; color: #dc2626;">Erisilemeyen Cihazlar
+                                <span style="display: inline-block; background: #fef2f2; color: #dc2626; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 12px; margin-left: 8px; vertical-align: middle;">{len(newly_offline)}</span>
+                            </td>
+                        </tr></table>
+                    </td></tr>
+                    {offline_cards}
+                </table>
+            </td></tr>"""
+
+    # --- Online section ---
+    online_section = ""
+    if online_cards:
+        online_section = f"""
+            <!-- Online Section -->
+            <tr><td style="padding: 0 32px 28px 32px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr><td style="padding-bottom: 14px;">
+                        <table cellpadding="0" cellspacing="0"><tr>
+                            <td style="background: #f0fdf4; width: 36px; height: 36px; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 18px;">&#10004;</td>
+                            <td style="padding-left: 12px; font-size: 17px; font-weight: 700; color: #16a34a;">Duzelen Cihazlar
+                                <span style="display: inline-block; background: #f0fdf4; color: #16a34a; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 12px; margin-left: 8px; vertical-align: middle;">{len(newly_online)}</span>
+                            </td>
+                        </tr></table>
+                    </td></tr>
+                    {online_cards}
+                </table>
+            </td></tr>"""
+
+    # --- Summary counters ---
+    summary_html = f"""
+            <tr><td style="padding: 0 32px 24px 32px;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-radius: 12px; overflow: hidden;">
+                    <tr>
+                        <td width="33%" align="center" style="background: #f8fafc; padding: 18px 12px; border-right: 1px solid #e2e8f0;">
+                            <div style="font-size: 28px; font-weight: 800; color: #4D148C;">{total}</div>
+                            <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Toplam Degisiklik</div>
+                        </td>
+                        <td width="33%" align="center" style="background: #fef2f2; padding: 18px 12px; border-right: 1px solid #e2e8f0;">
+                            <div style="font-size: 28px; font-weight: 800; color: #dc2626;">{len(newly_offline)}</div>
+                            <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Kapanan</div>
+                        </td>
+                        <td width="33%" align="center" style="background: #f0fdf4; padding: 18px 12px;">
+                            <div style="font-size: 28px; font-weight: 800; color: #16a34a;">{len(newly_online)}</div>
+                            <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Acilan</div>
+                        </td>
+                    </tr>
+                </table>
+            </td></tr>"""
+
     html_template = f"""<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Device Status Update</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    </head>
-    <body style="margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cihaz Durum Bildirimi</title>
+</head>
+<body style="margin: 0; padding: 0; background: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; -webkit-font-smoothing: antialiased;">
 
-        <div style="max-width: 720px; margin: 40px auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);">
+    <!-- Outer wrapper -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background: #f1f5f9; padding: 32px 16px;">
+        <tr><td align="center">
 
-            <!-- Header -->
-            <div style="background: linear-gradient(135deg, #4D148C 0%, #2d0a54 100%); padding: 30px 40px 35px 40px; text-align: center; position: relative;">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #f093fb 0%, #f5576c 33%, #4facfe 66%, #00f2fe 100%);"></div>
+            <!-- Main card -->
+            <table width="640" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.1);">
 
-                <!-- Refined Logo -->
-                <div style="background: rgba(255, 255, 255, 0.08); width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);">
-                    <img src="{NETINFO_LOGO_URL}" alt="Netinfo" style="width: 45px; height: auto; filter: brightness(0) invert(1); opacity: 0.95;">
-                </div>
+                <!-- Header with FedEx gradient -->
+                <tr><td style="background: linear-gradient(135deg, #4D148C 0%, #FF6600 100%); padding: 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <!-- Top accent line -->
+                        <tr><td style="height: 4px; background: linear-gradient(90deg, #FF6600, #FFB347, #FF6600);"></td></tr>
 
-                <h1 style="color: #ffffff; font-size: 26px; font-weight: 700; margin: 8px 0 8px 0; letter-spacing: -0.5px;">Device Status Report</h1>
-                <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px; margin: 0; font-weight: 500;">
-                    Real-time Network Monitoring Alert
-                </p>
-                <div style="margin-top: 14px; padding: 8px 18px; background: rgba(255, 255, 255, 0.15); border-radius: 30px; display: inline-block; backdrop-filter: blur(8px);">
-                    <span style="color: rgba(255, 255, 255, 0.95); font-size: 13px; font-weight: 600;">📅 {now}</span>
-                </div>
-            </div>
+                        <!-- Logo + Title -->
+                        <tr><td align="center" style="padding: 28px 32px 12px 32px;">
+                            <table cellpadding="0" cellspacing="0"><tr>
+                                <td style="background: rgba(255,255,255,0.15); width: 52px; height: 52px; border-radius: 14px; text-align: center; vertical-align: middle;">
+                                    <img src="{NETINFO_LOGO_URL}" alt="Netinfo" width="32" style="filter: brightness(0) invert(1); opacity: 0.95;">
+                                </td>
+                                <td style="padding-left: 14px;">
+                                    <div style="font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: -0.3px;">Netinfo</div>
+                                    <div style="font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500;">Network Monitoring</div>
+                                </td>
+                            </tr></table>
+                        </td></tr>
 
-        <!-- Content -->
-        <div style="padding: 50px 40px;">
-
-            {f'''
-            <!-- Offline Devices Section -->
-            <div style="margin-bottom: 40px;">
-                <div style="background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); padding: 24px 28px; border-radius: 16px; border-left: 6px solid #ef4444; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div style="display: flex; align-items: center;">
-                            <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 16px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
-                                <span style="font-size: 24px;">⚠️</span>
+                        <!-- Subtitle -->
+                        <tr><td align="center" style="padding: 10px 32px 24px 32px;">
+                            <div style="font-size: 18px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">Cihaz Durum Bildirimi</div>
+                            <div style="display: inline-block; background: rgba(255,255,255,0.18); padding: 6px 16px; border-radius: 20px;">
+                                <span style="color: rgba(255,255,255,0.9); font-size: 12px; font-weight: 600;">{now}</span>
                             </div>
-                            <h2 style="color: #dc2626; font-size: 20px; font-weight: 700; margin: 0;">Unreachable Devices</h2>
-                        </div>
-                        <div style="background: rgba(239, 68, 68, 0.15); padding: 8px 18px; border-radius: 30px;">
-                            <span style="color: #dc2626; font-size: 14px; font-weight: 700;">{len(newly_offline)} Device{"s" if len(newly_offline) != 1 else ""}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Device Name</th>
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Status</th>
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Timestamp</th>
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Serial Number</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {offline_rows}
-                        </tbody>
+                        </td></tr>
                     </table>
-                </div>
-            </div>
-            ''' if offline_rows else ''}
+                </td></tr>
 
-            {f'''
-            <!-- Online Devices Section -->
-            <div style="margin-bottom: 20px;">
-                <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 24px 28px; border-radius: 16px; border-left: 6px solid #22c55e; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.1);">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div style="display: flex; align-items: center;">
-                            <div style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 16px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);">
-                                <span style="font-size: 24px;">✅</span>
-                            </div>
-                            <h2 style="color: #16a34a; font-size: 20px; font-weight: 700; margin: 0;">Restored Devices</h2>
-                        </div>
-                        <div style="background: rgba(34, 197, 94, 0.15); padding: 8px 18px; border-radius: 30px;">
-                            <span style="color: #16a34a; font-size: 14px; font-weight: 700;">{len(newly_online)} Device{"s" if len(newly_online) != 1 else ""}</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Spacer -->
+                <tr><td style="height: 28px;"></td></tr>
 
-                <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border: 1px solid #f1f5f9;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Device Name</th>
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Status</th>
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Timestamp</th>
-                                <th style="padding: 18px 24px; text-align: left; font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e2e8f0;">Serial Number</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {online_rows}
-                        </tbody>
+                <!-- Summary counters -->
+                {summary_html}
+
+                <!-- Sections -->
+                {offline_section}
+                {online_section}
+
+                <!-- Footer -->
+                <tr><td style="background: #f8fafc; padding: 24px 32px; border-top: 1px solid #e2e8f0;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="font-size: 12px; color: #94a3b8; line-height: 1.6;">
+                                Bu bildirim <strong style="color: #4D148C;">Netinfo Monitoring</strong> tarafindan otomatik olarak gonderilmistir.
+                            </td>
+                            <td align="right">
+                                <span style="display: inline-block; background: linear-gradient(135deg, #4D148C, #FF6600); color: #fff; padding: 6px 16px; border-radius: 16px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;">Netinfo</span>
+                            </td>
+                        </tr>
                     </table>
-                </div>
-            </div>
-            ''' if online_rows else ''}
+                </td></tr>
 
-        </div>
+            </table>
+            <!-- /Main card -->
 
-        <!-- Footer -->
-        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 40px; text-align: center; border-top: 1px solid #e2e8f0;">
-            <p style="color: #64748b; font-size: 14px; margin: 0 0 20px 0; line-height: 1.7; font-weight: 500;">
-                This automated notification was generated by <strong style="color: #4D148C;">Netinfo Monitoring System</strong>
-            </p>
-            <div style="margin-top: 20px;">
-                <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 28px; border-radius: 30px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">Powered by Netinfo</span>
-            </div>
-            <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid #e2e8f0;">
-                <p style="color: #94a3b8; font-size: 12px; margin: 0; font-weight: 500;">
-                    © 2025 Netinfo Network Monitoring • All rights reserved
-                </p>
-            </div>
-        </div>
-
-    </div>
+        </td></tr>
+    </table>
 
 </body>
 </html>"""
 
     return html_template
+
 
 
 # 📌 Send Email
