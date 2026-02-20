@@ -1215,6 +1215,12 @@ async function fetchWithRetry(url, options = {}, retries = 3, timeoutMs = 15000)
             if (response.status >= 400 && response.status < 500) {
                 throw new Error("Client error: " + response.status);
             }
+            if (response.status >= 500) {
+                try {
+                    var errorBody = await response.clone().text();
+                    console.error("Server error " + response.status + " for " + url + ": " + errorBody);
+                } catch (e) { /* ignore parse error */ }
+            }
         } catch (error) {
             if (attempt === retries - 1) throw error;
             var delay = Math.pow(2, attempt) * 1000;
