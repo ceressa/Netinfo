@@ -1,0 +1,6489 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netinfo Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+    display: block; /* Flex yerine block kullanın */
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #4D148C, #FF6600);
+    color: #fff;
+    min-height: 100vh;
+}
+
+		
+		body, html {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.green-bg, 
+.bg-green-800, 
+.bg-green-600,
+.text-green-500,
+li.green {
+    background-color: #22c55e !important; /* Tek standart yeşil */
+    color: white !important;
+}
+
+.card, 
+.chart-container, 
+.traffic-card, 
+.critical-card, 
+.recent-changes-card, 
+.log-analysis-card,
+.table-container {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.card:hover, 
+.chart-container:hover, 
+.traffic-card:hover, 
+.critical-card:hover, 
+.recent-changes-card:hover, 
+.log-analysis-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+.notification-box.show {
+    display: block !important;  /* Eğer başka bir CSS kapatıyorsa */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.notification-icon {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    transition: all 0.3s ease !important;
+}
+
+.notification-icon:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 6px 12px rgba(34, 197, 94, 0.4) !important;
+}
+
+#contentContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ekran boyutunu tam kaplasın */
+}
+
+
+
+.header {
+    height: 80px; /* Başlık için sabit bir yükseklik */
+    line-height: 80px; /* İçeriği dikey ortalar */
+}
+
+
+        .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+	
+.device-list {
+    height: 100%; /* Kutu içinde tam otursun */
+    min-height: 700px; /* Daha düzgün görünmesi için */
+    overflow-y: auto; /* Kaydırma çubuğu olsun */
+}
+
+
+
+		
+@keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    .blink {
+        animation: blink 1s linear infinite;
+    }
+	
+
+.device-list-card, .traffic-card, .chart-card {
+    background: #FFFFFF;
+    color: #333333;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.device-list-card:hover, .traffic-card:hover, .chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+
+         .header {
+            text-align: center;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            color: #ffffffb3;
+        }
+
+        .card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    min-height: 200px;
+    overflow-y: auto;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.card th,
+.card td {
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        li.green {
+            background-color: #4caf50;
+        }
+
+        li.red {
+            background-color: #f44336;
+        }
+
+        li.gray {
+            background-color: #9e9e9e;
+        }
+
+        .popup {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #FFD700;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            position: absolute;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+		
+		.popup h3 {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .popup-content p {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+	/***** 🔵 GRAFİK VE ÇİZELGELERİN AYRILMASI *****/
+.chart-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    text-align: center;
+    min-height: 300px; /* Grafik alanını genişlettim */
+}
+	
+
+	
+
+
+/* Grafikte başlık rengi */
+.chart-container h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+.chart-container canvas {
+    max-height: 250px;
+    width: 100%;
+}
+
+	
+
+.device-list {
+    overflow-y: auto;
+    max-height: 400px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.device-list li {
+    margin: 5px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.device-list li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.device-list::-webkit-scrollbar {
+    width: 8px;
+}
+.device-list::-webkit-scrollbar-thumb {
+    background: #FFD700;
+    border-radius: 4px;
+}
+.device-list::-webkit-scrollbar-thumb:hover {
+    background: #FFA500;
+}
+
+
+.device-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.traffic-card {
+    height: 350px; /* Cihaz Durumları chart'ı ile aynı yükseklik */
+    max-height: 350px;
+    width: 100%; /* Yan yana olacaksa tam genişlik */
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+
+.traffic-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.traffic-card h3   { font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+.traffic-card th,
+.traffic-card td {
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+
+
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .chart-legend {
+        margin-top: 10px;
+    }
+
+        .chart-legend span:hover {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .search-bar {
+            margin-bottom: 15px;
+        }
+
+        .search-bar input {
+            width: 95%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .search-bar input::placeholder {
+            color: #ddd;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #16a085;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+        }
+
+        button:hover {
+            background-color: #1abc9c;
+        }
+
+        canvas {
+        max-width: 100%;
+        height: auto;
+    }
+		
+		/* Loading Spinner */
+.loader-container {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; /* Arka plan olmamalı */
+    z-index: 1000;
+}
+
+.loader-container img {
+    width: 80px;
+    height: auto;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+#clock {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        #date {
+            position: fixed;
+            top: 10px;
+            left: 20px;
+            font-size: 1.5rem;
+        }
+		
+
+/* 🟢 Karbon Ayak İzi Footer Küçültme */
+.bg-gradient-to-br {
+    height: 50px; /* Yükseklik küçültüldü */
+    text-align: center;
+    padding: 5px 0; /* İç boşluk azaltıldı */
+    font-size: 0.9rem; /* Yazı küçültüldü */
+}
+
+
+
+@keyframes pulseRed {
+    0%, 100% {
+        box-shadow: 0 0 15px 2px rgba(255, 0, 0, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.8);
+    }
+}
+
+
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.text-blink {
+    animation: fadeInOut 1s infinite;
+}
+
+
+@keyframes blink {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shrinkToIcon {
+    from {
+        width: 100%;
+        height: auto;
+        opacity: 1;
+    }
+    to {
+        width: 60px;
+        height: 60px;
+        opacity: 0.9;
+    }
+}
+
+.shrink-animation {
+    animation: shrinkToIcon 0.5s forwards;
+}
+
+
+.gray-bg {
+    background: linear-gradient(135deg, #9e9e9e, #cfcfcf);
+}
+
+
+
+#logoutIcon {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#logoutIcon:hover {
+    transform: scale(1.1);
+}
+
+/* 🟠 Netinfo Logosu Küçültme ve Saydamlaştırma */
+.fedex-logo {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; /* Küçültüldü */
+    height: auto;
+    opacity: 0.7; /* Şeffaflaştırıldı */
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.fedex-logo:hover {
+    transform: scale(1.1);
+    opacity: 1; /* Hover'da parlaklık artırıldı */
+}
+
+#loaderContainer {
+        display: none; /* Başlangıçta gizlenir */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        color: #FFD700;
+        font-size: 20px;
+        font-weight: bold;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+    }
+
+    #loaderGif {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+    }
+	
+/* Modal Tasarımı */
+.modal-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; /* Daha küçük genişlik */
+    padding: 15px;
+    background: linear-gradient(135deg, #ffd700, #ffc107);
+    color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px #00000066; /* Şeffaf siyah gölge */
+    z-index: 2000;
+    text-align: center;
+    backdrop-filter: blur(10px); /* Arka planı bulanıklaştır */
+    background-color: #ffffff22; /* Şeffaflık artırıldı */
+}
+
+/* Başlık */
+.modal-container h4 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #4d148c;
+    margin-bottom: 15px;
+}
+
+/* Şifre Giriş Alanı */
+.modal-container input {
+    width: 85%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 2px solid #4d148c;
+    border-radius: 8px;
+    background: #f9f9f9; /* Beyaza yakın */
+    color: #333333;
+    font-size: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 6px #00000033; /* Şeffaf gölge */
+}
+
+.modal-container input:focus {
+    outline: none;
+    border-color: #6c1ca9;
+    box-shadow: 0 0 8px #6c1ca955; /* Şeffaf mor ışık efekti */
+}
+
+/* Giriş Butonu */
+.modal-container button {
+    background: #ff6600;
+    color: #ffffff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px #00000033; /* Şeffaf gölge */
+}
+
+.modal-container button:hover {
+    background: #4d148c;
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px #00000066; /* Daha koyu gölge */
+}
+
+/* Uyarı Mesajı */
+.modal-container .warning-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ff4500cc; /* Şeffaf kırmızı */
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ff4500;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px #00000033; /* Şeffaf gölge */
+}
+
+/* Uyarı İkonu */
+.warning-message .warning-icon {
+    font-size: 2rem;
+    color: #ffd700;
+    animation: pulse 1.5s infinite;
+    margin-bottom: 8px;
+}
+
+/* Uyarı Metni */
+.warning-message p {
+    color: #ffffff;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px #00000066; /* Daha belirgin gölge */
+}
+
+/* Animasyon */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.draggable-icon-container {
+    position: absolute;
+    top: 60px; /* Başlangıç konumu */
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    user-select: none; /* Metin seçimini engelle */
+}
+
+
+
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+}
+
+.dashboard-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px; /* Tablolar arasındaki boşluğu azalttım */
+    padding: 15px; /* Dashboard genel boşluğu azaldı */
+}
+
+
+
+.bg-gradient-to-br.from-green-600 {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* Daha ince bir görünüm için */
+    text-align: center;
+    padding: 10px;
+}
+
+
+.large-card {
+    flex-grow: 1; /* Bulunduğu alanı tamamen kaplasın */
+    height: 100%; /* %100 yükseklik alsın */
+    min-height: 800px; /* Diğer öğelerle orantılı olması için */
+}
+
+.chart-container, .traffic-card {
+    height: 350px; /* Aynı yüksekliği vererek hizala */
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.half-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+    gap: 10px; /* Kartlar arasındaki boşluğu azalttım */
+}
+
+
+.table-container {
+    flex: 1;
+    max-height: 350px; /* Kart içinde fazla büyümesini engelle */
+    overflow-y: auto;
+}
+
+.critical-card, .traffic-card {
+    height: auto; /* Sabit yükseklik kaldırıldı */
+    max-height: 350px; /* Fazla büyümesini önle */
+    overflow-y: auto;
+}
+
+
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.data-table th {
+    background: rgba(128, 0, 128, 0.8);
+    color: #FFD700;
+}
+
+#suggestionBox {
+    display: block;
+    color: #FFD700; /* Altın sarısı */
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.suggestion {
+    font-size: 1rem;
+    color: #FFD700;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    color: #FFA500;
+    text-decoration: underline;
+}
+
+.device-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.device-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+
+
+/* 🔴 Kritik Cihazlar Tablosu */
+.critical-card table {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.critical-card h3   { font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+/* Tablo başlıklarını sabitle */
+.critical-card thead {
+    position: sticky;
+    top: 0;
+    background: rgba(128, 0, 128, 0.9); /* Mor arka plan */
+    z-index: 10;
+}
+
+/* Tablo hücreleri */
+.critical-card th {
+    padding: 10px;
+    color: #FFD700;
+    border-bottom: 2px solid #ffffff50;
+}
+
+.critical-card td {
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Alternatif satır renkleri */
+.critical-card tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.critical-card tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Satır hover efekti */
+.critical-card tbody tr:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+    transition: background 0.3s, transform 0.2s;
+}
+
+
+
+
+/* Kritik cihazlar başlığı ile uyumlu genişlik */
+.table-container {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Scroll çubuğu özelleştirmesi */
+.table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #FFD700;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #FFA500;
+}
+
+
+.feedback-message {
+    position: fixed;
+    bottom: calc(60px + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(50, 50, 50, 0.9);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1500;
+    animation: feedbackAppear 0.3s ease-out, feedbackDisappear 0.5s ease-in 4.5s;
+}
+
+.feedback-message.success {
+    background: rgba(34, 139, 34, 0.9);
+}
+
+.feedback-message.error {
+    background: rgba(178, 34, 34, 0.9);
+}
+
+.feedback-message:before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgba(50, 50, 50, 0.9);
+}
+
+.feedback-message.success:before {
+    border-top-color: rgba(34, 139, 34, 0.9);
+}
+
+.feedback-message.error:before {
+    border-top-color: rgba(178, 34, 34, 0.9);
+}
+
+@keyframes feedbackAppear {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes feedbackDisappear {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.feedback-message::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.7);
+    animation: progressBar 5s linear forwards;
+}
+
+@keyframes progressBar {
+    0% { width: 100%; background-color: rgba(50, 205, 50, 0.9); }
+    100% { width: 0; background-color: rgba(255, 69, 0, 0.9); }
+}
+
+.text-yellow-400 {
+    font-size: 1.5rem; /* Hem boş hem dolu yıldız için sabit font büyüklüğü */
+    transition: color 0.3s ease-in-out;
+}
+.text-yellow-400:hover {
+    color: #FFA500; /* Hover efekti */
+}
+
+@keyframes blinkEffect {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.blink-star {
+    animation: blinkEffect 0.5s ease-in-out;
+}
+
+
+/* Bildirim İkonu */
+.notification-icon {
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.notification-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.notification-container {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    cursor: grab;
+}
+
+.notification-container:active {
+    cursor: grabbing;
+}
+
+
+/* Bildirim Sayı Göstergesi */
+#notificationCount {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 8px;
+    border-radius: 50%;
+}
+
+.notification-box {
+    background: #333;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 120px;
+    right: 30px;
+    width: 250px;
+    visibility: hidden;  /* ⬅ GİZLİYOR! */
+    opacity: 0;         /* ⬅ TAMAMEN ŞEFFAF! */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.notification-box.show {
+    visibility: visible !important; /* ⬅ GÖRÜNÜR YAPIYOR */
+    opacity: 1 !important;          /* ⬅ TAM OPACITY */
+}
+
+
+
+
+/* Yanıp Sönme Efekti */
+@keyframes blinkEffect {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.blink {
+    animation: blinkEffect 1s infinite;
+}
+
+/* Tarih seçicinin genişlik ve hizasını kontrol eder */
+#datePicker {
+    max-width: 120px;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.search-button, 
+.refresh-button,
+.popup-close-btn {
+    background: #FFD700 !important;
+    color: #4D148C !important;
+    border: none !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+.search-button:hover, 
+.refresh-button:hover,
+.popup-close-btn:hover {
+    background: #FFA500 !important;
+    transform: scale(1.05) !important;
+}
+
+
+
+/* 📊 Trafik Yoğunluğu Kartı (Rush Hour Card) */
+.rush-hour-card {
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 🛠 TABLO BAŞLIKLARINI SABİTLEME */
+.rush-hour-card table {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.rush-hour-card h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+/* **Başlık Renkleri ve Sabitleme** */
+.rush-hour-card thead {
+    position: sticky;
+    top: 0;
+    background: rgba(128, 0, 128, 0.9);
+    z-index: 10;
+}
+
+/* **Bağlantılı Başlık Stilleri** */
+.rush-hour-card th {
+    padding: 10px;
+    color: #FFD700;
+    border-bottom: 2px solid #ffffff50;
+}
+
+/* **Veri Hücreleri Stilleri** */
+.rush-hour-card td {
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* **Satır Renkleri ve Hover Efektleri** */
+.rush-hour-card tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.rush-hour-card tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.rush-hour-card tbody tr:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+    transition: background 0.3s, transform 0.2s;
+}
+
+/* **Kaydırma Çubuğu Stilleri** */
+.rush-hour-card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rush-hour-card::-webkit-scrollbar-thumb {
+    background: #FFD700;
+    border-radius: 4px;
+}
+
+.rush-hour-card::-webkit-scrollbar-thumb:hover {
+    background: #FFA500;
+}
+
+/* 📊 Trafik Yoğunluğu Kartı (Rush Hour Card) */
+.log-analysis-card {
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* 🛠 TABLO BAŞLIKLARINI SABİTLEME */
+.log-analysis-card table {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.log-analysis-card h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+/* **Başlık Renkleri ve Sabitleme** */
+.log-analysis-card thead {
+    position: sticky;
+    top: 0;
+    background: rgba(128, 0, 128, 0.9);
+    z-index: 10;
+}
+
+/* **Bağlantılı Başlık Stilleri** */
+.log-analysis-card th {
+    padding: 10px;
+    color: #FFD700;
+    border-bottom: 2px solid #ffffff50;
+}
+
+/* **Veri Hücreleri Stilleri** */
+.log-analysis-card td {
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* **Satır Renkleri ve Hover Efektleri** */
+.log-analysis-card tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.log-analysis-card tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.log-analysis-card tbody tr:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+    transition: background 0.3s, transform 0.2s;
+}
+
+/* **Kaydırma Çubuğu Stilleri** */
+.log-analysis-card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.log-analysis-card::-webkit-scrollbar-thumb {
+    background: #FFD700;
+    border-radius: 4px;
+}
+
+.log-analysis-card::-webkit-scrollbar-thumb:hover {
+    background: #FFA500;
+}
+
+.recent-changes-card {
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* 🛠 TABLO BAŞLIKLARINI SABİTLEME */
+.recent-changes-card table {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.recent-changes-card h3 { font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+.recent-changes-card thead {
+    position: sticky;
+    top: 0;
+    background: rgba(128, 0, 128, 0.9);
+    z-index: 10;
+}
+
+/* **Bağlantılı Başlık Renkleri** */
+.recent-changes-card th {
+    padding: 10px;
+    color: #FFD700;
+    border-bottom: 2px solid #ffffff50;
+}
+
+.recent-changes-card td {
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* **Satır Renkleri ve Hover Efektleri** */
+.recent-changes-card tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.recent-changes-card tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.recent-changes-card tbody tr:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+    transition: background 0.3s, transform 0.2s;
+}
+
+
+/* Tüm kartlar ve tablolar için scroll ayarları */
+.critical-card::-webkit-scrollbar,
+.recent-changes-card::-webkit-scrollbar,
+.chart-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.critical-card::-webkit-scrollbar-thumb,
+.recent-changes-card::-webkit-scrollbar-thumb,
+.chart-container::-webkit-scrollbar-thumb {
+    background: #FFD700;
+    border-radius: 4px;
+}
+
+.critical-card::-webkit-scrollbar-thumb:hover,
+.recent-changes-card::-webkit-scrollbar-thumb:hover,
+.chart-container::-webkit-scrollbar-thumb:hover {
+    background: #FFA500;
+}
+
+.carbon-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #2E7D32, #66BB6A);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0, 100, 0, 0.4);
+    z-index: 1000;
+    width: 240px; /* Sabit genişlik */
+    height: auto; /* Yüksekliği içeriğe göre ayarlasın */
+    text-align: center;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+    cursor: grab; /* Kullanıcıya sürüklenebilir olduğunu göster */
+}
+
+/* Sürüklerken kayma efekti */
+.carbon-box:active {
+    cursor: grabbing;
+}
+
+
+/* ❌ Küçük Çarpı Butonu */
+.close-carbon {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-carbon:hover {
+    color: white;
+}
+
+
+/* Başlık ve yazı rengi */
+.carbon-box h3 {
+    font-size: 1rem;
+    color: #C8E6C9;
+    margin-bottom: 6px;
+}
+
+.carbon-box p {
+    font-size: 0.85rem;
+    color: #E8F5E9;
+}
+
+
+
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 0;
+    margin-top: 20px; /* İçerikten biraz boşluk bırak */
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+}
+
+.footer a:hover {
+    color: #FFD700;
+}
+ text-decoration: underline;
+}
+
+
+.red-bg {
+    background: linear-gradient(135deg, #D32F2F, #FF6659) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.device-item:hover,
+.critical-card tbody tr:hover,
+.recent-changes-card tbody tr:hover,
+.traffic-card tbody tr:hover,
+.log-analysis-card tbody tr:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.02) !important;
+    transition: all 0.2s ease !important;
+}
+
+.table-container::-webkit-scrollbar,
+.device-list::-webkit-scrollbar,
+.critical-card::-webkit-scrollbar,
+.recent-changes-card::-webkit-scrollbar,
+.traffic-card::-webkit-scrollbar,
+.log-analysis-card::-webkit-scrollbar,
+.rush-hour-card::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+.table-container::-webkit-scrollbar-thumb,
+.device-list::-webkit-scrollbar-thumb,
+.critical-card::-webkit-scrollbar-thumb,
+.recent-changes-card::-webkit-scrollbar-thumb,
+.traffic-card::-webkit-scrollbar-thumb,
+.log-analysis-card::-webkit-scrollbar-thumb,
+.rush-hour-card::-webkit-scrollbar-thumb {
+    background: #FFD700 !important;
+    border-radius: 4px !important;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover,
+.device-list::-webkit-scrollbar-thumb:hover,
+.critical-card::-webkit-scrollbar-thumb:hover,
+.recent-changes-card::-webkit-scrollbar-thumb:hover,
+.traffic-card::-webkit-scrollbar-thumb:hover,
+.log-analysis-card::-webkit-scrollbar-thumb:hover,
+.rush-hour-card::-webkit-scrollbar-thumb:hover {
+    background: #FFA500 !important;
+}
+
+
+#carbonIcon {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #2E7D32;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+#carbonIcon {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    transition: all 0.3s ease !important;
+}
+
+#carbonIcon:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 6px 12px rgba(34, 197, 94, 0.4) !important;
+}
+
+/* Karbon Ayak İzi Kutucuğu */
+#carbonFootprintBox {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #2E7D32, #66BB6A);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0, 100, 0, 0.4);
+    z-index: 1000;
+    width: 240px;
+    height: auto;
+    text-align: center;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+}
+
+/* ❌ Kapatma Butonu */
+.close-carbon {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-carbon:hover {
+    color: white;
+}
+
+@keyframes blinkEffect {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.blink {
+    animation: blinkEffect 1s infinite;
+}
+
+
+.text-red-500 {
+    color: #D32F2F !important;
+    font-weight: bold;
+}
+
+.bg-gray-700 {
+    background-color: #2D3748 !important; /* Daha koyu gri arka plan */
+    color: white;
+}
+
+
+.bg-red-800 {
+    background-color: #7F1D1D !important; /* Kırmızı arka plan */
+    color: white;
+}
+
+ .language-selector {
+            position: absolute;
+            top: 50px; /* Tarih göstergesinin hemen altı */
+            left: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            padding: 5px;
+            display: none; /* Başlangıçta gizli */
+        }
+        .language-selector select {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+/* 🎨 Sidebar Genel Ayarları - İyileştirilmiş */
+.sidebar {
+    position: fixed;
+    left: -380px; /* Başlangıçta gizli - biraz genişlettim */
+    top: 0;
+    width: 380px;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e, #2d2d5f); /* Gradient arka plan */
+    color: white;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6); /* Daha belirgin gölge */
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth animasyon */
+    z-index: 1000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid rgba(255, 215, 0, 0.3); /* Altın kenarlık */
+    backdrop-filter: blur(10px); /* Bulanık efekt */
+}
+
+.sidebar.open {
+    left: 0;
+    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.8); /* Açıkken daha güçlü gölge */
+}
+
+/* 📋 Sidebar Üst Kısmı */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    color: #FFD700;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* ❌ Sidebar Kapama Butonu */
+.close-sidebar {
+    background: rgba(255, 69, 69, 0.2);
+    border: 2px solid #ff4545;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    color: #ff6b6b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-sidebar:hover {
+    background: rgba(255, 69, 69, 0.4);
+    transform: rotate(90deg) scale(1.1);
+    color: #ff4545;
+    box-shadow: 0 0 15px rgba(255, 69, 69, 0.5);
+}
+
+/* 🎛️ Sidebar Açma Butonları */
+.sidebar-toggle-container {
+    position: fixed;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1100;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle-compact {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border: none;
+    color: #2d1b69;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-label {
+    background: rgba(0, 0, 0, 0.8);
+    color: #FFD700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.sidebar-toggle-wrapper:hover .sidebar-toggle-compact {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    transform: scale(1.1) translateX(5px);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.6);
+    color: #1a1a2e;
+}
+
+.sidebar-toggle-wrapper:hover .sidebar-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 💫 Active Durumu */
+.sidebar-toggle-compact:active {
+    transform: scale(0.95) translateX(3px);
+}
+
+/* 🌟 Pulse Efekti */
+.sidebar-toggle-compact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle-compact:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.sidebar-toggle {
+    background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+    color: #2d1b69 !important;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    font-weight: bold;
+    min-height: 100px; /* Biraz uzattım yazılar için */
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-toggle:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00) !important;
+    transform: translateX(8px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(255, 165, 0, 0.5);
+    color: #1a1a2e !important;
+}
+
+.sidebar-toggle:hover .button-label {
+    color: #1a1a2e !important;
+    font-weight: 900;
+}
+
+.sidebar-toggle:active {
+    transform: translateX(6px) scale(0.98) !important;
+}
+
+/* 💫 Pulse Animasyonu (Dikkat çekmek için) */
+.sidebar-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-toggle[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-left: 10px;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* 🔄 Gizleme/Gösterme Animasyonları */
+.sidebar-toggle-container.hidden {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-100px);
+    pointer-events: none;
+}
+
+.sidebar-toggle-container.visible {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+    pointer-events: all;
+}
+
+.sidebar-toggle:hover::before {
+    opacity: 1;
+}
+
+/* 🌟 Özel Icon Renkleri */
+#toggleSidebarBtn i {
+    color: #4D148C;
+}
+
+#toggleMacSearchSidebarBtn i {
+    color: #1E40AF;
+}
+
+#toggleSidebarBtn:hover i {
+    color: #2D1B69;
+}
+
+#toggleMacSearchSidebarBtn:hover i {
+    color: #1E3A8A;
+}
+
+/* 📱 Responsive Tasarım */
+@media (max-width: 768px) {
+    .sidebar-toggle-container {
+        left: 5px;
+        gap: 10px;
+    }
+    
+    .sidebar-toggle {
+        padding: 12px 8px;
+        font-size: 14px;
+        min-height: 80px;
+        min-width: 70px;
+    }
+    
+    .sidebar-toggle .button-label {
+        font-size: 10px;
+    }
+    
+    .sidebar-toggle i {
+        font-size: 18px;
+    }
+}
+
+.sidebar-toggle .button-label {
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.1;
+    z-index: 2;
+    position: relative;
+    writing-mode: horizontal-tb; /* Normal yazı yönü */
+    text-orientation: mixed;
+    white-space: nowrap;
+}
+
+.sidebar-toggle:active {
+    transform: translateX(6px) scale(0.98) !important;
+}
+
+/* 📦 Sidebar İçeriği */
+.sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto; /* ✅ Scroll'u aktif et */
+    overflow-x: hidden; /* Yatay scroll'u kapat */
+    padding-bottom: 20px;
+    margin-top: 10px;
+    /* Scroll çubuğu stilleri */
+    scrollbar-width: thin;
+    scrollbar-color: #FFD700 rgba(255, 255, 255, 0.1);
+}
+
+/* Webkit scroll bar stilleri */
+.sidebar-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+}
+
+/* MAC Sonuç container'ı da scroll edilebilir */
+.mac-result-container {
+    max-height: calc(100vh - 200px); /* Viewport'a sığdır */
+    overflow-y: auto;
+}
+
+/* 🔍 Arama Kutusu */
+.search-box {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.search-box:focus {
+    outline: none;
+    border-color: #FFD700;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transform: scale(1.02);
+}
+
+.search-box::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* 🔄 Yenile Butonu */
+.refresh-button {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 16px !important;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-button:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d) !important;
+    transform: scale(1.05) rotate(180deg) !important;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4) !important;
+}
+
+/* 🔍 Arama Butonu */
+.search-button {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 16px !important;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-button:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* 📱 Arama Container'ı */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+/* 📋 Cihaz Listesi */
+.device-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+}
+
+.device-list li {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+    backdrop-filter: blur(5px);
+}
+
+.device-list li:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: translateX(5px) scale(1.02);
+    border-color: #FFD700;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.device-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* 🎭 Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    display: none;
+    z-index: 900;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 💡 Öneri Kutusu */
+.suggestion-box {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #FFD700;
+    font-size: 14px;
+    display: none;
+}
+
+.suggestion {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.suggestion:hover {
+    color: #FFA500;
+    text-decoration: underline;
+}
+
+/* 📊 Sonuç Kutusu (MAC Arama) */
+.result-box {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+    color: white;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.result-box .error {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* 📱 Responsive Tasarım */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 320px;
+        left: -320px;
+        padding: 15px;
+    }
+    
+    .sidebar-toggle-container {
+        left: 5px;
+        gap: 10px;
+    }
+    
+    .sidebar-toggle {
+        padding: 12px 8px;
+        font-size: 16px;
+        min-height: 60px;
+    }
+}
+
+/* 🎨 Animasyonlar */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+/* 📜 Scrollbar Stilleri */
+.sidebar-content::-webkit-scrollbar,
+.device-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-content::-webkit-scrollbar-track,
+.device-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb,
+.device-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover,
+.device-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+}
+
+.sidebar.expanded {
+    width: 480px !important; /* Daha kontrollü genişlik */
+    left: -480px;
+}
+
+.sidebar.expanded.open {
+    left: 0;
+}
+
+/* 📱 MAC Sonuç Container'ı */
+.mac-result-container {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.25), rgba(34, 197, 94, 0.15));
+    border: 1px solid #22c55e;
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    position: relative;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+}
+
+.mac-result-container.compact {
+    max-height: none; /* Compact modda da tüm temel bilgiler görünsün */
+}
+
+/* 🔄 Genişletme Butonu */
+.expand-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid #FFD700;
+    border-radius: 25px;
+    color: #FFD700;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.expand-toggle:hover {
+    background: rgba(255, 215, 0, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+/* 📊 Ana Başlık */
+.result-header {
+    color: #22c55e;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 120px;
+}
+
+/* 📋 Temel Bilgi Kartı */
+.basic-info-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.basic-info-card:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 📝 Bilgi Satırı */
+.info-row {
+    display: flex;
+    flex-direction: column; /* Alt alta */
+    align-items: center;
+	gap: 4px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 15px;
+}
+
+
+
+
+.info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.info-label i {
+    font-size: 16px;
+    color: #FFD700;
+    width: 18px;
+    text-align: center;
+}
+
+.info-value {
+    color: white;
+    font-weight: 500;
+    text-align: right;
+    flex: 1;
+    margin-left: 16px;
+}
+
+/* 🎨 Durum Badge'leri */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-badge.online {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+}
+
+.status-badge.offline {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+.status-badge.up {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+}
+
+.status-badge.down {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+/* 💻 MAC Kodu Stili */
+.mac-code {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ⏰ Süre Göstergesi */
+.duration-badge {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* 🔽 Genişletilmiş İçerik */
+.expandable-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+    margin-top: 0;
+}
+
+.expandable-content.expanded {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 16px;
+}
+
+/* 📊 Detaylı Bilgi Kartları */
+.detail-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-card h5 {
+    color: #FFD700;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-card h5 i {
+    font-size: 18px;
+}
+
+/* 📈 Trafik Çubukları */
+.traffic-bar-container {
+    margin: 8px 0;
+}
+
+.traffic-bar-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.traffic-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.traffic-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+}
+
+.traffic-fill.input {
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.traffic-fill.output {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+/* 🔘 Aksiyon Butonları */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+    min-height: 42px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.action-btn.success {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.action-btn.success:hover {
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.action-btn.warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.action-btn.warning:hover {
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.action-btn.purple {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.action-btn.purple:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* ⚠️ Uyarı Kartı */
+.warning-card {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.warning-card h5 {
+    color: #ef4444;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+    .sidebar.expanded {
+        width: 95vw !important;
+        left: -95vw;
+    }
+    
+    .info-row {
+    display: flex;
+    flex-direction: column; /* Alt alta */
+    gap: 4px;
+}
+    
+    .info-value {
+        text-align: left;
+        margin-left: 0;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+
+.chart-wrapper {
+        width: 100%;
+        height: 300px;
+        overflow-x: auto; /* Sağa kaydırılabilirlik için */
+        display: flex;
+        justify-content: center;
+    }
+
+  /* Tooltip (Açılır Bilgi Kutusu) Stili */
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .tooltip-container .tooltip-text {
+    visibility: hidden;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    
+    position: absolute;
+    z-index: 1000;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* 🟡 Altın Sarısı Soru İşareti */
+  .tooltip-icon {
+    background-color: red;
+    color: gold;
+    border-radius: 50%;
+    padding: 4px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 5px;
+  }
+  
+  /* 📌 Tarih kutucuğunu daha şık hale getiriyoruz */
+.date-picker {
+    background: rgba(255, 255, 255, 0.2);
+    color: gold;
+    border: 1px solid gold;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+  
+  .date-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px;
+    border-radius: 8px;
+    backdrop-filter: blur(6px);
+}
+
+.date-input {
+    background: transparent;
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.date-input:hover {
+    border-color: #8A2BE2;
+    color: #8A2BE2;
+}
+
+.disabled-date {
+    background-color: #ccc !important;  /* Gri renk */
+    color: #888 !important;
+    pointer-events: none;  /* Tıklanamaz */
+}
+.available-date {
+    background-color: #4CAF50 !important;  /* Yeşil renk (verisi olanlar) */
+    color: white !important;
+}
+
+
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee linear infinite;
+}
+
+.ticker-text {
+    font-size: 0.875rem;
+    color: #374151;
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 90s linear infinite;
+}
+
+@keyframes marquee {
+    0% { transform: translate3d(100%, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+}
+
+
+</style>
+</head>
+
+
+
+<!-- ============================== -->
+<!-- 🏠 HEADER SECTION -->
+<!-- ============================== -->
+<header class="header">
+    <div class="title">Netinfo Dashboard</div>
+</header>
+
+<!-- ============================== -->
+<!-- 📰 INSIGHT TICKER (Şifre girişinden sonra görünecek) -->
+<!-- ============================== -->
+<div id="insightTickerContainer" class="bg-yellow-100 py-2 border-t border-b border-yellow-300 overflow-hidden" style="display: none;">
+    <div id="insightMarquee" class="ticker-text">
+        Yükleniyor...
+    </div>
+</div>
+
+<!-- ============================== -->
+<!-- 🔐 ADMIN LOGIN MODAL -->
+<!-- ============================== -->
+<div id="adminModal" class="modal-container">
+    <h4>Admin Girişi</h4>
+    <input type="password" id="adminPassword" placeholder="Şifreyi Girin">
+    <div class="flex justify-center mt-4">
+        <button onclick="handleAdminLogin()" class="btn-standard">Giriş Yap</button>
+    </div>
+    <div class="warning-message">
+        <i class="fas fa-exclamation-triangle warning-icon"></i>
+        <p class="mt-2 text-sm font-semibold">
+            Yetkisiz giriş kesinlikle yasaktır! Girişler kayıt altına alınmaktadır.
+        </p>
+    </div>
+</div>
+
+<!-- ============================== -->
+<!-- 📊 MAIN DASHBOARD CONTAINER (ORİJİNAL KART YAPISI KORUNDU) -->
+<!-- ============================== -->
+<div id="contentContainer" style="display: none;">
+    
+    <!-- ⏰ Clock & Date -->
+    <div id="clock" style="font-size: 2rem; margin-bottom: 5px;"></div>
+    <div id="date" style="font-size: 1.2rem; color: #ddd; margin-bottom: 5px;"></div>
+
+    <!-- 📈 Dashboard Row - ORİJİNAL YAPIYI KORUYORUM -->
+    <div class="dashboard-row">
+        
+        <!-- ============================== -->
+        <!-- SOL KOLON: Cihaz Durumları ve Son Değişiklikler -->
+        <!-- ============================== -->
+        <div class="card half-card">
+            <!-- 📊 Cihaz Durumları (Grafik) -->
+            <div class="chart-container">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-chart-pie text-yellow-400 mr-2"></i> Cihaz Durumları
+                </h3>
+                <div class="relative mb-4" style="height: 200px;">
+                    <canvas id="deviceChart" style="max-height: 100%; max-width: 100%;"></canvas>
+                </div>
+                <div id="deviceStatusInfo" class="text-sm text-yellow-300"></div>
+            </div>
+
+            <!-- 📋 Son 24 Saatte Durum Değiştiren Cihazlar -->
+            <div class="table-container recent-changes-card">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-history text-yellow-400 mr-2"></i> En Son Durum Değiştiren Cihazlar
+                </h3>
+                <table id="recentChangesTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cihaz Adı</th>
+                            <th>Seri Numarası</th>
+                            <th>Durum Değişiklik Zamanı</th>
+                            <th>Durum Değişikliği</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- ORTA KOLON: Trafik ve Kritik Cihazlar -->
+        <!-- ============================== -->
+        <div class="card half-card">
+            <!-- 🌐 En Çok Data Kullanan Cihazlar -->
+            <div class="table-container traffic-card">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-network-wired text-yellow-400 mr-2"></i> En Çok Data Kullanan Cihazlar
+                </h3>
+                <table id="trafficTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cihaz Adı</th>
+                            <th>Giriş Trafiği (Mbps)</th>
+                            <th>Çıkış Trafiği (Mbps)</th>
+                            <th>En Fazla Trafik Olan Port</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="trafficLoadingMessage" class="text-yellow-400 text-center mt-2" style="display: none;">
+                    🚀 Güncel trafik verisi yükleniyor, lütfen bekleyin...
+                </div>
+            </div>
+
+            <!-- 🚨 Kritik Cihazlar -->
+            <div class="table-container critical-card">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-exclamation-circle text-red-400 mr-2"></i> Kritik Cihazlar
+                </h3>
+                <table id="CriticalDevicesTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cihaz Adı</th>
+                            <th>IP Adresi</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- SAĞ KOLON: Rush Hour ve Log Analizi -->
+        <!-- ============================== -->
+        <div class="card half-card">
+            <!-- ⏰ En Yoğun Saatler - Network Rush Hour -->
+            <div class="table-container rush-hour-card bg-gradient-to-br from-yellow-200 via-orange-100 to-yellow-300 shadow-lg rounded-lg p-4">
+                <h3 class="text-lg font-semibold flex items-center border-b pb-2 mb-3 text-gray-800">
+                    <i class="fas fa-clock text-yellow-600 mr-2 text-xl"></i> En Yoğun Saatler
+                </h3>
+
+                <!-- 📅 Tarih Seçici -->
+                <div class="flex items-center space-x-2 mb-3">
+                    <label for="datePicker" class="text-sm font-medium text-gray-800">Tarih Seç:</label>
+                    <input type="date" id="datePicker" class="date-picker border p-2 rounded text-gray-700 shadow-sm">
+                </div>
+
+                <!-- 📊 Grafik Alanı -->
+                <div class="relative bg-white shadow-md p-4 rounded-lg">
+                    <canvas id="rushHourChart" class="w-full h-64"></canvas>
+                </div>
+
+                <!-- 🔄 Veri Güncelleme Bilgisi -->
+                <div class="mt-3 p-2 bg-yellow-600 text-white rounded text-sm flex items-center shadow-md">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <span id="lastUpdated">Veri güncelleniyor...</span>
+                </div>
+
+                <!-- 📌 Ortalama, Min, Max Bilgileri -->
+                <div id="trafficStats" class="mt-3 p-3 bg-gradient-to-r from-gray-100 to-gray-300 border rounded-lg text-gray-800 text-sm shadow">
+                    <p><i class="fas fa-chart-line text-blue-600"></i> Bugün Ortalama Trafik: <span id="averageTraffic" class="font-bold">Yükleniyor...</span></p>
+                    <p><i class="fas fa-arrow-down text-green-600"></i> Min: <span id="minTraffic" class="font-bold">-</span> Mbps</p>
+                    <p><i class="fas fa-arrow-up text-red-600"></i> Max: <span id="maxTraffic" class="font-bold">-</span> Mbps</p>
+                </div>
+            </div>
+
+            <!-- 📊 Log Analizi -->
+            <div class="table-container log-analysis-card">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i> Ağ Hata Raporu
+                </h3>
+                <table class="table-auto w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-800 text-white">
+                            <th class="border border-gray-300 px-4 py-2">Cihaz</th>
+                            <th class="border border-gray-300 px-4 py-2">Hata Türü</th>
+                            <th class="border border-gray-300 px-4 py-2">En Sorunlu Port</th>
+                            <th class="border border-gray-300 px-4 py-2">Hata Sayısı</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ============================== -->
+<!-- 🔧 SIDEBAR NAVIGATION (Şifre sonrası görünecek) -->
+<!-- ============================== -->
+
+<!-- Sidebar Toggle Buttons -->
+<div class="sidebar-toggle-container" style="display: none;">
+    <!-- Switch Search Butonu -->
+    <div class="sidebar-toggle-wrapper">
+        <button id="toggleSidebarBtn" class="sidebar-toggle-compact" title="Cihaz Listesi ve Arama">
+            <i class="fas fa-list"></i>
+        </button>
+        <span class="sidebar-label">Switches</span>
+    </div>
+
+    <!-- MAC Search Butonu -->
+    <div class="sidebar-toggle-wrapper">
+        <button id="toggleMacSearchSidebarBtn" class="sidebar-toggle-compact" title="MAC Adresi Arama">
+            <i class="fas fa-search"></i>
+        </button>
+        <span class="sidebar-label">MAC</span>
+    </div>
+</div>
+
+<!-- Device List Sidebar -->
+<div id="deviceSidebar" class="sidebar" style="display: none;">
+    <div class="sidebar-header">
+        <h3><i class="fas fa-list text-yellow-400 mr-2"></i> Cihaz Listesi</h3>
+        <button id="closeSidebarBtn" class="close-sidebar">&times;</button>
+    </div>
+    <div class="sidebar-content">
+        <div class="relative mb-4 flex items-center space-x-2">
+            <input type="text" id="deviceSearch" placeholder="Cihaz Ara..." class="search-box" oninput="onSearchInput(event)">
+            <button id="refreshListBtn" type="button" class="refresh-button" title="Listeyi Yenile">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        <div id="suggestionBox" class="suggestion-box"></div>
+        <ul id="deviceList" class="device-list"></ul>
+    </div>
+</div>
+
+<!-- MAC Search Sidebar -->
+<div id="macSearchSidebar" class="sidebar" style="display: none;">
+    <div class="sidebar-header">
+        <h3><i class="fas fa-search text-yellow-400 mr-2"></i> MAC Adresi Ara</h3>
+        <button id="closeMacSearchSidebarBtn" class="close-sidebar">&times;</button>
+    </div>
+    <div class="sidebar-content">
+        <div class="relative mb-4 flex items-center space-x-2">
+            <input type="text" id="macSearchInput" placeholder="MAC Adresi Girin..." class="search-box">
+            <button id="searchMacBtn" type="button" class="search-button" title="MAC Ara">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div id="macSearchResult" class="result-box"></div>
+    </div>
+</div>
+
+<!-- Sidebar Overlay -->
+<div id="sidebarOverlay" class="sidebar-overlay""></div>
+
+<!-- ============================== -->
+<!-- 🔔 NOTIFICATION SYSTEM (Şifre sonrası görünecek) -->
+<!-- ============================== -->
+<div id="notificationContainer" class="notification-container relative" style="display: none;">
+    <div id="notificationIcon" class="notification-icon relative cursor-pointer">
+        <i id="notificationIconFace" class="fas fa-smile text-3xl text-white transition-transform duration-300"></i>
+        <span id="notificationCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+    </div>
+    <div id="notificationMessageBox" class="notification-box" aria-hidden="true">
+        <div id="notificationMessage">✅ Şu an tüm cihazlara erişilebiliyor.</div>
+    </div>
+</div>
+
+<!-- ============================== -->
+<!-- 🌱 CARBON FOOTPRINT (Şifre sonrası görünecek) -->
+<!-- ============================== -->
+<div id="carbonIcon" style="display: none;">
+    <i class="fas fa-leaf text-3xl text-green-400"></i>
+</div>
+
+<div id="carbonFootprintBox" class="carbon-box"">
+    <button id="closeCarbonBox" class="close-carbon">&times;</button>
+    <h3><i class="fas fa-leaf text-green-400"></i> Karbon Ayak İzi</h3>
+    <p>🔋 <strong>Ortalama Güç Tüketimi:</strong> <span id="carbonPower">0 W</span></p>
+    <p>🌍 <strong>Günlük CO2 Emisyonu:</strong> <span id="carbonCO2">0 kg</span></p>
+</div>
+
+<!-- ============================== -->
+<!-- 📱 MODALS & POPUPS -->
+<!-- ============================== -->
+
+<!-- Device Details Popup -->
+<div id="devicePopup" class="popup">
+    <h3>Detaylar</h3>
+    <div class="popup-content">
+        <p><strong>Model:</strong> <span id="popupModel">-</span></p>
+        <p><strong>Seri No:</strong> <span id="popupSerial">-</span></p>
+        <p><strong>IP Adresi:</strong> <span id="popupIP">-</span></p>
+        <a id="popupLink" href="#" target="_blank" class="text-yellow-400 underline">Daha fazla bilgi</a>
+    </div>
+    <button onclick="closePopup()" class="bg-yellow-400 text-purple-900 px-4 py-2 mt-4 rounded">Kapat</button>
+</div>
+
+<!-- Loading Screen -->
+<div id="loaderContainer">
+    <img id="loaderGif" src="https://tr.eu.fedex.com/Netinfo/Netinfo_logo_animated.gif" alt="Yükleniyor...">
+    <p>Veri yükleniyor...</p>
+</div>
+
+<!-- ============================== -->
+<!-- 📋 FOOTER -->
+<!-- ============================== -->
+<div class="fixed bottom-5 right-5 flex items-center justify-center">
+    <img src="https://tr.eu.fedex.com/Netinfo/Netinfo_logo_animated_wtext.gif" class="fedex-logo">
+</div>
+
+<footer class="footer">
+    <p>
+        Netinfo is not an official FedEx application, but it contains sensitive information.  
+        Any unauthorized access or misuse will be logged and investigated.  
+        For inquiries or report something, contact:  
+        <a href="mailto:ufuk.celikeloglu@fedex.com">ufuk.celikeloglu@fedex.com</a>
+    </p>
+</footer>
+
+
+    <script>
+        let stationInfo = {}; // Lokasyon bilgileri burada saklanacak
+		let devices = []; // Tüm cihazlar burada tutulacak
+        let showAllDevices = false;
+        let existingChart = null;
+		let adminSessionTimeout = 15 * 60; // 15 dakika
+		let locationData = {};
+		let selectedCriticalDevices = getSavedCriticalDevices();
+		var userLoggedIn = false;
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    initializeDashboard();
+});
+
+const elements = {
+    contentContainer: document.getElementById("contentContainer"),
+    adminModal: document.getElementById("adminModal"),
+    deviceList: document.getElementById("deviceList"),
+    deviceSearch: document.getElementById("deviceSearch"),
+    deviceChart: document.getElementById("deviceChart"),
+    deviceStatusInfo: document.getElementById("deviceStatusInfo"),
+    notificationIcon: document.getElementById("notificationIcon"),
+    notificationCount: document.getElementById("notificationCount"),
+    notificationMessage: document.getElementById("notificationMessage"),
+    notificationBox: document.getElementById("notificationMessageBox"),
+    loaderContainer: document.getElementById("loaderContainer"),
+};
+
+// **Kolay erişim için tek fonksiyon** 
+function getElement(id) {
+    return elements[id] || document.getElementById(id);
+}
+
+function initializeDashboard() {
+    if (!elements.contentContainer || !elements.adminModal) {
+        console.error("⚠️ Dashboard yüklenirken hata: Gerekli DOM elemanları eksik!");
+        return;
+    }
+
+    elements.contentContainer.style.display = "none";  // İlk başta gizle
+    elements.adminModal.style.display = "block"; // Admin giriş ekranını aç
+
+    // **Arama kutusunu bağla**
+    elements.deviceSearch?.addEventListener("input", function () {
+        filterDeviceList(this.value.trim());
+    });
+
+    // **Bildirim simgesine tıklamayı yönet**
+    elements.notificationIcon?.addEventListener("click", function () {
+        elements.notificationBox.classList.toggle("hidden");
+    });
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const carbonIcon = document.getElementById("carbonIcon");
+    const carbonBox = document.getElementById("carbonFootprintBox");
+    const closeCarbonBox = document.getElementById("closeCarbonBox");
+
+    if (!carbonIcon || !carbonBox || !closeCarbonBox) {
+        console.error("⚠️ Gerekli öğeler bulunamadı!");
+        return;
+    }
+
+    // **Başlangıçta sadece ikonu göster, kutuyu gizle**
+    carbonBox.style.display = "none";
+
+    // 📌 Karbon ikonuna tıklanınca kutuyu aç/kapat
+    carbonIcon.addEventListener("click", function () {
+        if (carbonBox.style.display === "none" || carbonBox.style.display === "") {
+            carbonBox.style.display = "block";
+            carbonIcon.innerHTML = '<i class="fas fa-times text-2xl text-green-400"></i>';
+        } else {
+            carbonBox.style.display = "none";
+            carbonIcon.innerHTML = '<i class="fas fa-leaf text-2xl text-green-400"></i>';
+        }
+    });
+
+    // ❌ Kapatma butonu kutuyu gizlesin
+    closeCarbonBox.addEventListener("click", function () {
+        carbonBox.style.display = "none";
+        carbonIcon.innerHTML = '<i class="fas fa-leaf text-2xl text-green-400"></i>';
+    });
+
+    // 🖱️ Karbon kutusunu sürükleme (Drag & Drop)
+    let isDragging = false;
+    let startX, startY, offsetX = 0, offsetY = 0;
+
+    carbonBox.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX - offsetX;
+        startY = e.clientY - offsetY;
+        carbonBox.style.cursor = "grabbing";
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+    });
+
+    function drag(e) {
+        if (!isDragging) return;
+
+        offsetX = Math.max(10, Math.min(e.clientX - startX, window.innerWidth - carbonBox.offsetWidth - 10));
+        offsetY = Math.max(10, Math.min(e.clientY - startY, window.innerHeight - carbonBox.offsetHeight - 10));
+
+        carbonBox.style.left = `${offsetX}px`;
+        carbonBox.style.top = `${offsetY}px`;
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        carbonBox.style.cursor = "grab";
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", stopDrag);
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let refreshButton = document.getElementById("refreshListBtn");
+    let searchInput = document.getElementById("deviceSearch");
+
+    if (refreshButton) {
+        refreshButton.addEventListener("click", function () {
+            refreshDeviceList();
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            let query = searchInput.value.trim().toLowerCase();
+            updateDeviceList(filterDevices(query), query);
+        });
+    }
+});
+
+
+document.getElementById("refreshListBtn").addEventListener("click", function () {
+    sessionStorage.removeItem("deviceSearchQuery"); // Filtreyi sıfırla
+    document.getElementById("deviceSearch").value = ""; // Arama çubuğunu temizle
+    updateDeviceList(devices, ""); // Tüm cihazları göster
+});
+
+
+
+// **Karbon ayak izi bilgisini güncelle**
+function updateCarbonFootprint() {
+    const power = calculateAveragePowerConsumption();
+    const co2 = calculateCarbonFootprint();
+
+    const powerElement = document.getElementById("carbonPower");
+    const co2Element = document.getElementById("carbonCO2");
+
+    if (!powerElement) {
+        console.warn("⚠️ Hata: 'carbonPower' ID’si bulunamadı!");
+        return;
+    }
+    if (!co2Element) {
+        console.warn("⚠️ Hata: 'carbonCO2' ID’si bulunamadı!");
+        return;
+    }
+
+    powerElement.textContent = `${power} W`;
+    co2Element.textContent = `${co2} kg`;
+}
+
+// 🎨 Geliştirilmiş Sidebar JavaScript - Mevcut kodun yerine koy
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Sidebar sistemi başlatılıyor...");
+
+    // 📋 DOM Elemanlarını Seç
+    const elements = {
+        deviceSidebar: document.getElementById("deviceSidebar"),
+        macSearchSidebar: document.getElementById("macSearchSidebar"),
+        sidebarOverlay: document.getElementById("sidebarOverlay"),
+        toggleDeviceListBtn: document.getElementById("toggleSidebarBtn"),
+        toggleMacSearchBtn: document.getElementById("toggleMacSearchSidebarBtn"),
+        closeDeviceSidebarBtn: document.getElementById("closeSidebarBtn"),
+        closeMacSearchSidebarBtn: document.getElementById("closeMacSearchSidebarBtn"),
+        searchMacBtn: document.getElementById("searchMacBtn"),
+        macSearchInput: document.getElementById("macSearchInput"),
+        contentContainer: document.getElementById("contentContainer")
+    };
+
+    // ✅ Element kontrolü
+    const missingElements = Object.entries(elements)
+        .filter(([key, element]) => !element)
+        .map(([key]) => key);
+    
+    if (missingElements.length > 0) {
+        console.warn("⚠️ Eksik DOM elemanları:", missingElements);
+    }
+
+    // 🎭 Aktif sidebar'ı takip et
+    let activeSidebar = null;
+	
+	function hideSidebarButtons() {
+    const sidebarContainer = document.querySelector(".sidebar-toggle-container");
+    if (sidebarContainer) {
+        sidebarContainer.style.opacity = "0";
+        sidebarContainer.style.transform = "translateX(-100px)";
+        sidebarContainer.style.pointerEvents = "none";
+        console.log("🫥 Sidebar butonları gizlendi");
+    }
+}
+
+function showSidebarButtons() {
+    const sidebarContainer = document.querySelector(".sidebar-toggle-container");
+    if (sidebarContainer) {
+        sidebarContainer.style.opacity = "1";
+        sidebarContainer.style.transform = "translateX(0)";
+        sidebarContainer.style.pointerEvents = "all";
+        console.log("👁️ Sidebar butonları gösterildi");
+    }
+}
+
+    // 📖 **Sidebar Açma Fonksiyonu**
+    function openSidebar(sidebar) {
+    if (!sidebar) {
+        console.error("❌ Açılacak sidebar bulunamadı!");
+        return;
+    }
+
+    // Önce diğer sidebar'ları kapat
+    closeAllSidebars();
+    
+    // Yeni sidebar'ı aç
+    sidebar.classList.add("open");
+    elements.sidebarOverlay?.classList.add("active");
+    activeSidebar = sidebar;
+    
+    // ✅ Sidebar butonlarını gizle
+    hideSidebarButtons();
+    
+    // Animasyon için kısa gecikme
+    setTimeout(() => {
+        sidebar.style.transform = "translateX(0)";
+    }, 10);
+
+    console.log("✅ Sidebar açıldı:", sidebar.id);
+}
+
+    // 📕 **Sidebar Kapatma Fonksiyonu**
+    function closeSidebar(sidebar) {
+    if (!sidebar) return;
+
+    sidebar.classList.remove("open");
+    sidebar.style.transform = "translateX(-100%)";
+    
+    // Overlay'i kapat (eğer başka açık sidebar yoksa)
+    const openSidebars = document.querySelectorAll(".sidebar.open");
+    if (openSidebars.length === 0) {
+        elements.sidebarOverlay?.classList.remove("active");
+        // ✅ Sidebar butonlarını göster
+        showSidebarButtons();
+    }
+    
+    activeSidebar = null;
+    console.log("✅ Sidebar kapatıldı:", sidebar.id);
+}
+
+    // 🔒 **Tüm Sidebar'ları Kapat**
+    function closeAllSidebars() {
+    if (elements.deviceSidebar) closeSidebar(elements.deviceSidebar);
+    if (elements.macSearchSidebar) closeSidebar(elements.macSearchSidebar);
+    elements.sidebarOverlay?.classList.remove("active");
+    activeSidebar = null;
+    // ✅ Sidebar butonlarını göster
+    showSidebarButtons();
+}
+
+    // 🎛️ **Event Listener'ları Ekle**
+    
+    // Cihaz Listesi Aç/Kapat
+    elements.toggleDeviceListBtn?.addEventListener("click", function (e) {
+        e.stopPropagation(); // Event bubbling'i durdur
+        openSidebar(elements.deviceSidebar);
+    });
+
+    elements.closeDeviceSidebarBtn?.addEventListener("click", function () {
+        closeSidebar(elements.deviceSidebar);
+    });
+
+    // MAC Arama Aç/Kapat
+    elements.toggleMacSearchBtn?.addEventListener("click", function (e) {
+        e.stopPropagation(); // Event bubbling'i durdur
+        openSidebar(elements.macSearchSidebar);
+    });
+
+    elements.closeMacSearchSidebarBtn?.addEventListener("click", function () {
+        closeSidebar(elements.macSearchSidebar);
+    });
+
+    // 🎯 **Gelişmiş Kapatma Seçenekleri**
+
+    // 1. Overlay'e tıklayınca kapat
+    elements.sidebarOverlay?.addEventListener("click", function (event) {
+        // Sadece overlay'in kendisine tıklanırsa kapat
+        if (event.target === elements.sidebarOverlay) {
+            closeAllSidebars();
+        }
+    });
+
+    // 2. ESC tuşuna basınca kapat
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && activeSidebar) {
+            closeAllSidebars();
+            console.log("⌨️ ESC ile sidebar kapatıldı");
+        }
+    });
+
+    // 3. Ana dashboard alanına tıklayınca kapat
+    elements.contentContainer?.addEventListener("click", function (event) {
+        // Sidebar toggle butonlarına tıklanmışsa kapatma
+        if (event.target.closest(".sidebar-toggle")) {
+            return;
+        }
+        
+        if (activeSidebar) {
+            closeAllSidebars();
+            console.log("🖱️ Dashboard'a tıklayarak sidebar kapatıldı");
+        }
+    });
+
+    // 4. Sayfa kaydırılınca kapat (opsiyonel - mobil için)
+    let scrollTimeout;
+    window.addEventListener("scroll", function () {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            if (activeSidebar && window.innerWidth < 768) {
+                closeAllSidebars();
+                console.log("📱 Scroll ile sidebar kapatıldı (mobil)");
+            }
+        }, 150);
+    });
+
+    // 🔍 **MAC Arama İşlevselliği**
+    
+    // MAC Arama butonu
+    elements.searchMacBtn?.addEventListener("click", function () {
+        performMacSearch();
+    });
+
+    // Enter tuşu ile arama
+    elements.macSearchInput?.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            performMacSearch();
+        }
+    });
+
+    // Input odaklanınca otomatik temizleme
+    elements.macSearchInput?.addEventListener("focus", function () {
+        const resultContainer = document.getElementById("macSearchResult");
+        if (resultContainer) {
+            resultContainer.innerHTML = "";
+        }
+    });
+
+    // 🎨 **Görsel Geri Bildirimler**
+    
+    // Butonlar için hover efektleri
+    [elements.toggleDeviceListBtn, elements.toggleMacSearchBtn].forEach(btn => {
+        if (!btn) return;
+        
+        btn.addEventListener("mouseenter", function () {
+            this.style.transform = "translateX(5px) scale(1.05)";
+        });
+        
+        btn.addEventListener("mouseleave", function () {
+            this.style.transform = "translateX(0) scale(1)";
+        });
+    });
+
+    // Loading animasyonu fonksiyonu
+    function showSearchLoading() {
+        const resultContainer = document.getElementById("macSearchResult");
+        if (resultContainer) {
+            resultContainer.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #FFD700; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 10px; color: #FFD700;">Aranıyor...</p>
+                </div>
+            `;
+        }
+    }
+
+    console.log("✅ Sidebar sistemi başarıyla başlatıldı!");
+});
+
+// 🔍 Gelişmiş MAC Arama Sonucu - performMacSearch fonksiyonunu güncelle
+
+async function performMacSearch() {
+    const macSearchInput = document.getElementById("macSearchInput");
+    const resultContainer = document.getElementById("macSearchResult");
+    
+    if (!macSearchInput || !resultContainer) {
+        console.error("❌ MAC arama elemanları bulunamadı!");
+        return;
+    }
+
+    const macAddress = macSearchInput.value.trim();
+    
+    if (macAddress === "") {
+        resultContainer.innerHTML = `
+            <div class="error" style="color: #ff6b6b; font-weight: bold;">
+                ⚠️ Lütfen bir MAC adresi girin!
+            </div>
+        `;
+        macSearchInput.focus();
+        return;
+    }
+
+    showSearchLoading();
+
+    try {
+        console.log("🔍 MAC arama başlatıldı:", macAddress);
+
+        const normalizedMac = normalizeMacAddress(macAddress);
+        if (!normalizedMac) {
+            throw new Error("Geçersiz MAC adresi formatı!");
+        }
+
+        // Paralel API çağrıları
+        const [devicesResponse, switchInfoResponse] = await Promise.all([
+            fetch(`/Netinfo/api/device/get_all_device_ports`),
+            fetch(`/Netinfo/api/device/get_all_devices`) // Switch bilgileri için
+        ]);
+
+        if (!devicesResponse.ok || !switchInfoResponse.ok) {
+            throw new Error(`API hatası: ${devicesResponse.status}`);
+        }
+
+        const [devices, switches] = await Promise.all([
+            devicesResponse.json(),
+            switchInfoResponse.json()
+        ]);
+
+        let found = null;
+        let switchInfo = null;
+
+        // MAC adresi ara
+        devices.forEach(device => {
+            if (!device.connected_macs || device.connected_macs.trim() === "") {
+                return;
+            }
+
+            device.connected_macs.split(',').forEach(macEntry => {
+                const macParts = macEntry.split(' ');
+                if (macParts.length === 0) return;
+
+                const rawMac = macParts[0].trim();
+                if (rawMac === "") return;
+
+                const manufacturer = macParts.slice(1).join(' ').trim();
+                const normalizedEntryMac = normalizeMacAddress(rawMac);
+                
+                if (!normalizedEntryMac) return;
+
+                if (normalizedEntryMac === normalizedMac) {
+                    found = {
+                        switch: device.hostname,
+        port: device.interface_name,
+        mac: rawMac,
+        manufacturer: manufacturer || "Bilinmeyen Üretici",
+        // ✅ Doğru field'ları kullan
+        portDescription: device.description || "Açıklama yok",
+        portStatus: device.link_status || "unknown",
+        protocolStatus: device.protocol_status || "unknown",
+        vlan: device.vlan_id || "N/A",
+        vlanName: device.vlan_name || "N/A", 
+        speed: device.speed || "N/A",
+        duplex: device.duplex || "N/A",
+        isUp: device.is_up,
+        inputRate: device.input_rate_mbps || 0,
+        outputRate: device.output_rate_mbps || 0,
+        lastInput: device.last_input || "Bilinmiyor",
+        lastOutput: device.last_output || "Bilinmiyor"
+                    };
+
+                    // Switch bilgilerini bul
+                    switchInfo = switches.find(sw => sw.hostname === device.hostname);
+					
+                }
+            });
+        });
+
+        if (found) {
+            // Lokasyon bilgisi çıkar
+            const location = extractLocationFromHostname(found.switch);
+            const deviceType = getDeviceType(found.manufacturer);
+            const portType = getPortType(found.port);
+			
+            
+            showEnhancedMacResult(found, switchInfo);
+            
+            console.log("✅ MAC adresi bulundu:", found);
+        } else {
+            resultContainer.innerHTML = `
+                <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: white;">
+                    <h4 style="color: #ef4444; margin-bottom: 10px;">❌ Sonuç Bulunamadı</h4>
+                    <p>Aranan MAC adresi: <strong>${macAddress}</strong></p>
+                    <p>Bu MAC adresi hiçbir switch'te bulunamadı.</p>
+                    
+                    <!-- Troubleshooting önerileri -->
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 6px; margin-top: 15px;">
+                        <h5 style="color: #FFD700; margin-bottom: 8px;">💡 Sorun Giderme:</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
+                            <li>Cihaz şu anda açık ve ağa bağlı mı?</li>
+                            <li>MAC adresi formatını kontrol edin (aa:bb:cc:dd:ee:ff)</li>
+                            <li>Cihaz WiFi üzerinden bağlıysa switch'te görünmeyebilir</li>
+                            <li>MAC adresi tablosu güncellensin diye cihazdan trafik gönderin</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+    } catch (error) {
+        console.error("❌ MAC arama hatası:", error);
+        resultContainer.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: white;">
+                <h4 style="color: #ef4444; margin-bottom: 10px;">🚨 Hata Oluştu</h4>
+                <p>${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+function showEnhancedMacResult(found, switchInfo) {
+    const resultContainer = document.getElementById("macSearchResult");
+    const uniqueId = `mac-result-${Date.now()}`;
+    
+    // Online süresini hesapla
+    const onlineTime = calculateOnlineTime(found.lastOutput);
+    
+    // Trafik yüzdesi hesapla
+    const inputPercent = Math.min((found.inputRate || 0) / 10 * 100, 100);
+    const outputPercent = Math.min((found.outputRate || 0) / 10 * 100, 100);
+    
+    resultContainer.innerHTML = `
+        <div id="${uniqueId}" class="mac-result-container compact">
+            <!-- Genişletme Butonu -->
+            <button class="expand-toggle" onclick="toggleMacResult('${uniqueId}')">
+                <i class="fas fa-chevron-down"></i> Detayları Göster
+            </button>
+            
+            <!-- Ana Başlık -->
+            <h4 class="result-header">
+                <i class="fas fa-check-circle"></i>
+                MAC Adresi Bulundu!
+            </h4>
+            
+            <!-- 📋 Temel Bilgiler -->
+            <div class="basic-info-card">
+                <!-- Switch Bilgisi -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-server"></i>
+                        Switch
+                    </span>
+                    <span class="info-value">${found.switch}</span>
+                </div>
+                
+                <!-- Switch IP -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-network-wired"></i>
+                        IP Adresi
+                    </span>
+                    <span class="info-value">${switchInfo?.ipaddress || 'Bilinmiyor'}</span>
+                </div>
+                
+                <!-- Port -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-plug"></i>
+                        Port
+                    </span>
+                    <span class="info-value">${found.port}</span>
+                </div>
+                
+                <!-- Port Durumu -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-circle"></i>
+                        Port Durumu
+                    </span>
+                    <span class="info-value">
+                        <span class="status-badge ${found.portStatus === 'up' ? 'up' : 'down'}">
+                            ${found.portStatus === 'up' ? '🟢 Aktif' : '🔴 Pasif'}
+                        </span>
+                    </span>
+                </div>
+                
+                <!-- Üretici -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-building"></i>
+                        Üretici
+                    </span>
+                    <span class="info-value">${found.manufacturer || 'Bilinmiyor'}</span>
+                </div>
+                
+                <!-- Online Süresi -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-clock"></i>
+                        Son Aktivite
+                    </span>
+                    <span class="info-value">
+                        <span class="duration-badge">${onlineTime}</span>
+                    </span>
+                </div>
+                
+                <!-- MAC Adresi -->
+                <div class="info-row">
+                    <span class="info-label">
+                        <i class="fas fa-fingerprint"></i>
+                        MAC Adresi
+                    </span>
+                    <span class="info-value">
+                        <span class="mac-code">${found.mac}</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 🔽 Genişletilmiş İçerik -->
+            <div class="expandable-content">
+                <!-- Switch Detayları -->
+                <div class="detail-card">
+                    <h5><i class="fas fa-server"></i>Switch Detayları</h5>
+                    <div class="info-row">
+                        <span class="info-label">Model</span>
+                        <span class="info-value">${switchInfo?.model || 'Bilinmiyor'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Serial</span>
+                        <span class="info-value">${switchInfo?.serial || 'Bilinmiyor'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Switch Durumu</span>
+                        <span class="info-value">
+                            <span class="status-badge ${switchInfo?.ping_state === 'up' ? 'online' : 'offline'}">
+                                ${switchInfo?.ping_state === 'up' ? '🟢 Online' : '🔴 Offline'}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Port Teknik Detayları -->
+                <div class="detail-card">
+                    <h5><i class="fas fa-cog"></i>Port Teknik Bilgileri</h5>
+                    <div class="info-row">
+                        <span class="info-label">Hız</span>
+                        <span class="info-value">${found.speed || 'Bilinmiyor'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Duplex</span>
+                        <span class="info-value">${found.duplex || 'Bilinmiyor'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">VLAN</span>
+                        <span class="info-value">${found.vlan}${found.vlanName ? ` (${found.vlanName})` : ''}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Protocol Status</span>
+                        <span class="info-value">${found.protocolStatus || 'Bilinmiyor'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Açıklama</span>
+                        <span class="info-value">${found.portDescription || 'Yok'}</span>
+                    </div>
+                </div>
+
+                <!-- Trafik İstatistikleri -->
+                <div class="detail-card">
+                    <h5><i class="fas fa-chart-line"></i>Trafik İstatistikleri</h5>
+                    
+                    <!-- Anlık Trafik -->
+                    <div class="info-row">
+                        <span class="info-label">Gelen Trafik</span>
+                        <span class="info-value">${found.inputRate || 0} Mbps</span>
+                    </div>
+                    <div class="traffic-bar-container">
+                        <div class="traffic-bar">
+                            <div class="traffic-fill input" style="width: ${inputPercent}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Giden Trafik</span>
+                        <span class="info-value">${found.outputRate || 0} Mbps</span>
+                    </div>
+                    <div class="traffic-bar-container">
+                        <div class="traffic-bar">
+                            <div class="traffic-fill output" style="width: ${outputPercent}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Paket İstatistikleri -->
+                    <div class="info-row">
+                        <span class="info-label">Gelen Paketler</span>
+                        <span class="info-value">${(found.inputPackets || 0).toLocaleString()}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Giden Paketler</span>
+                        <span class="info-value">${(found.outputPackets || 0).toLocaleString()}</span>
+                    </div>
+                    
+                    <!-- Son Aktivite -->
+                    <div class="info-row">
+                        <span class="info-label">Son Giriş</span>
+                        <span class="info-value">${found.lastInput || 'Bilinmiyor'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Son Çıkış</span>
+                        <span class="info-value">${found.lastOutput || 'Bilinmiyor'}</span>
+                    </div>
+                </div>
+
+                <!-- Sorun Giderme (Eğer Port Kapalıysa) -->
+                ${found.portStatus === 'down' ? `
+                    <div class="warning-card">
+                        <h5><i class="fas fa-exclamation-triangle"></i>⚠️ Port Kapalı!</h5>
+                        <p style="font-size: 13px; line-height: 1.4; margin: 0; color: rgba(255, 255, 255, 0.9);">
+                            <strong>Kontrol edilmesi gerekenler:</strong><br>
+                            • Kablo bağlantısı sağlam mı?<br>
+                            • Cihaz açık ve çalışıyor mu?<br>
+                            • Port administratif olarak kapatılmış olabilir<br>
+                            • Network ekibi ile iletişime geçin
+                        </p>
+                    </div>
+                ` : ''}
+            </div>
+
+            <!-- 🔘 Aksiyon Butonları -->
+            <div class="action-buttons">
+                <button class="action-btn success" onclick="pingDevice('${switchInfo?.ipaddress}')">
+                    <i class="fas fa-satellite-dish"></i>Ping
+                </button>
+                <button class="action-btn purple" onclick="copyMacAddress('${found.mac}')">
+                    <i class="fas fa-copy"></i>Kopyala
+                </button>
+                <button class="action-btn warning" onclick="openSwitchDetails('${switchInfo?.uuid || switchInfo?.deviceid}')">
+                    <i class="fas fa-external-link-alt"></i>Detay
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function toggleSidebarWidth(expand = true) {
+    const macSidebar = document.getElementById("macSearchSidebar");
+    if (!macSidebar) return;
+    
+    if (expand) {
+        macSidebar.classList.add("expanded");
+        console.log("📏 Sidebar genişletildi");
+    } else {
+        macSidebar.classList.remove("expanded");
+        console.log("📏 Sidebar normal boyuta döndü");
+    }
+}
+
+// MAC sonuç genişletme/daraltma
+function toggleMacResult(containerId) {
+    const container = document.getElementById(containerId);
+    const expandableContent = container.querySelector('.expandable-content');
+    const toggleBtn = container.querySelector('.expand-toggle');
+    
+    if (!expandableContent || !toggleBtn) return;
+    
+    const isExpanded = expandableContent.classList.contains('expanded');
+    
+    if (isExpanded) {
+        // Daralt
+        expandableContent.classList.remove('expanded');
+        toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Detayları Göster';
+        toggleSidebarWidth(false);
+    } else {
+        // Genişlet
+        expandableContent.classList.add('expanded');
+        toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Detayları Gizle';
+        toggleSidebarWidth(true);
+    }
+}
+
+function calculateOnlineTime(lastOutput) {
+    if (!lastOutput || lastOutput === 'never' || lastOutput === 'Bilinmiyor') {
+        return 'Bilinmiyor';
+    }
+    
+    // "00:00:01" formatını parse et
+    if (lastOutput.includes(':')) {
+        const parts = lastOutput.split(':');
+        if (parts.length === 3) {
+            const hours = parseInt(parts[0]);
+            const minutes = parseInt(parts[1]);
+            const seconds = parseInt(parts[2]);
+            
+            if (hours === 0 && minutes === 0 && seconds <= 5) {
+                return 'Az önce aktif';
+            } else if (hours === 0 && minutes === 0) {
+                return `${seconds} saniye önce`;
+            } else if (hours === 0) {
+                return `${minutes} dakika önce`;
+            } else {
+                return `${hours} saat önce`;
+            }
+        }
+    }
+    
+    // "6w6d" formatını parse et
+    if (lastOutput.includes('w') || lastOutput.includes('d')) {
+        return 'Uzun süredir aktif';
+    }
+    
+    return lastOutput;
+}
+
+
+
+// 🛠️ Yardımcı Fonksiyonlar
+
+function extractLocationFromHostname(hostname) {
+    const match = hostname.match(/Tr([A-Za-z0-9]+?)(?=csw|sw|ttr|UDSD)/i);
+    const code = match ? match[1] : null;
+    
+    // Burada station-info.json'dan şehir bilgisi çekilebilir
+    return {
+        code: code,
+        city: code ? getLocationCity(code) : "Bilinmiyor"
+    };
+}
+
+function getLocationCity(code) {
+    // stationInfo global variable'ından city bilgisi al
+    return window.stationInfo?.[code] || "Bilinmiyor";
+}
+
+function getDeviceType(manufacturer) {
+    const mfg = manufacturer.toLowerCase();
+    if (mfg.includes('hp') || mfg.includes('hewlett')) return 'HP Printer/PC';
+    if (mfg.includes('cisco')) return 'Cisco Device';
+    if (mfg.includes('dell')) return 'Dell Computer';
+    if (mfg.includes('lenovo')) return 'Lenovo Device';
+    if (mfg.includes('apple')) return 'Apple Device';
+    if (mfg.includes('microsoft')) return 'Microsoft Device';
+    if (mfg.includes('intel')) return 'Intel NIC';
+    return 'Network Device';
+}
+
+function getPortType(portName) {
+    if (portName.includes('Gigabit')) return 'gigabit';
+    if (portName.includes('FastEthernet')) return 'fastethernet';
+    if (portName.includes('TenGigabit')) return '10gigabit';
+    return 'ethernet';
+}
+
+function getPortIcon(type) {
+    const icons = {
+        'gigabit': '🚀',
+        'fastethernet': '⚡',
+        '10gigabit': '🔥',
+        'ethernet': '🔌'
+    };
+    return icons[type] || '🔌';
+}
+
+function getDeviceIcon(type) {
+    if (type.includes('Printer')) return '🖨️';
+    if (type.includes('Computer') || type.includes('PC')) return '💻';
+    if (type.includes('Apple')) return '🍎';
+    if (type.includes('Cisco')) return '📡';
+    return '🖥️';
+}
+
+function getStatusBadge(status) {
+    const badges = {
+        'up': '<span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">🟢 UP</span>',
+        'down': '<span style="background: #ef4444; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">🔴 DOWN</span>',
+        'unknown': '<span style="background: #6b7280; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">❓ UNKNOWN</span>'
+    };
+    return badges[status] || badges.unknown;
+}
+
+function formatLastSeen(lastSeen) {
+    if (!lastSeen || lastSeen === 'Bilinmiyor') return 'Bilinmiyor';
+    try {
+        const date = new Date(lastSeen);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        
+        if (diffMins < 1) return 'Az önce';
+        if (diffMins < 60) return `${diffMins} dakika önce`;
+        if (diffMins < 1440) return `${Math.floor(diffMins/60)} saat önce`;
+        return `${Math.floor(diffMins/1440)} gün önce`;
+    } catch {
+        return lastSeen;
+    }
+}
+
+function getTroubleshootingTips(portStatus, deviceType) {
+    if (portStatus === 'down') {
+        return `
+            <div style="background: rgba(239, 68, 68, 0.2); padding: 12px; border-radius: 6px; margin-top: 15px; border-left: 4px solid #ef4444;">
+                <h5 style="color: #ef4444; margin-bottom: 8px;">⚠️ Port Kapalı!</h5>
+                <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
+                    <li>Port administratif olarak kapatılmış olabilir</li>
+                    <li>Kablo bağlantısı kontrol edin</li>
+                    <li>Cihaz kapalı olabilir</li>
+                    <li>Network admin ile iletişime geçin</li>
+                </ul>
+            </div>
+        `;
+    }
+    return '';
+}
+
+// 🔧 İşlem Fonksiyonları
+
+function pingDevice(ipAddress) {
+    if (!ipAddress || ipAddress === 'Bilinmiyor') {
+        alert('Switch IP adresi bulunamadı!');
+        return;
+    }
+    
+    // Ping test sonucunu göster
+    alert(`🏓 Ping testi: ${ipAddress}\n\nNot: Gerçek ping için terminal kullanın:\nping ${ipAddress}`);
+}
+
+function copyMacAddress(macAddress) {
+    // Modern browser için clipboard API dene
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(macAddress).then(() => {
+            showCopySuccess();
+        }).catch(() => {
+            fallbackCopyTextToClipboard(macAddress);
+        });
+    } else {
+        // Eski browser için fallback
+        fallbackCopyTextToClipboard(macAddress);
+    }
+}
+
+// Fallback copy metodu
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    
+    // Görünmez yap ama seçilebilir bırak
+    textArea.style.position = "fixed";
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.width = "2em";
+    textArea.style.height = "2em";
+    textArea.style.padding = "0";
+    textArea.style.border = "none";
+    textArea.style.outline = "none";
+    textArea.style.boxShadow = "none";
+    textArea.style.background = "transparent";
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showCopySuccess();
+        } else {
+            showCopyError(text);
+        }
+    } catch (err) {
+        showCopyError(text);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+// Başarılı kopyalama mesajı
+function showCopySuccess() {
+    const button = event.target.closest('.action-btn');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check"></i>Kopyalandı!';
+    button.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+    
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+    }, 2000);
+}
+
+// Hata durumu
+function showCopyError(text) {
+    alert(`MAC adresi kopyalanamadı. Manuel olarak kopyalayın:\n\n${text}`);
+}
+
+// 📜 MAC Arama Geçmişi Özelliği
+
+// LocalStorage'da MAC geçmişini yönet
+function getMacHistory() {
+    const history = localStorage.getItem('macSearchHistory');
+    return history ? JSON.parse(history) : [];
+}
+
+function saveMacToHistory(macAddress, result) {
+    let history = getMacHistory();
+    
+    // Aynı MAC varsa kaldır (en üste eklemek için)
+    history = history.filter(item => item.mac !== macAddress);
+    
+    // Yeni MAC'i en başa ekle
+    history.unshift({
+        mac: macAddress,
+        timestamp: new Date().toISOString(),
+        switch: result?.switch || 'Bilinmiyor',
+        port: result?.port || 'Bilinmiyor',
+        found: !!result
+    });
+    
+    // Sadece son 5 MAC'i sakla
+    history = history.slice(0, 5);
+    
+    localStorage.setItem('macSearchHistory', JSON.stringify(history));
+    updateMacHistoryDisplay();
+}
+
+function clearMacHistory() {
+    localStorage.removeItem('macSearchHistory');
+    updateMacHistoryDisplay();
+}
+
+// MAC geçmişini sidebar'da göster
+function updateMacHistoryDisplay() {
+    const historyContainer = document.getElementById('macHistoryContainer');
+    if (!historyContainer) return;
+    
+    const history = getMacHistory();
+    
+    if (history.length === 0) {
+        historyContainer.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.6);">
+                <i class="fas fa-history" style="font-size: 24px; margin-bottom: 8px;"></i>
+                <p>Henüz arama yapılmadı</p>
+            </div>
+        `;
+        return;
+    }
+    
+    historyContainer.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h6 style="color: #FFD700; margin: 0; font-size: 14px;">
+                <i class="fas fa-history"></i> Son Aramalar
+            </h6>
+            <button onclick="clearMacHistory()" 
+                    style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer;"
+                    title="Geçmişi Temizle">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        
+        ${history.map((item, index) => `
+            <div class="history-item" onclick="searchHistoryMac('${item.mac}')" 
+                 style="background: rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px; margin-bottom: 8px; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.1);">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-family: monospace; font-size: 12px; font-weight: bold; color: ${item.found ? '#22c55e' : '#ef4444'};">
+                        ${item.mac}
+                    </span>
+                    <span style="font-size: 10px; color: rgba(255, 255, 255, 0.6);">
+                        ${formatHistoryTime(item.timestamp)}
+                    </span>
+                </div>
+                
+                ${item.found ? `
+                    <div style="font-size: 11px; color: rgba(255, 255, 255, 0.8);">
+                        <i class="fas fa-server" style="color: #FFD700; margin-right: 4px;"></i>
+                        ${item.switch}
+                        <br>
+                        <i class="fas fa-plug" style="color: #FFD700; margin-right: 4px;"></i>
+                        ${item.port}
+                    </div>
+                ` : `
+                    <div style="font-size: 11px; color: #ef4444;">
+                        <i class="fas fa-times-circle" style="margin-right: 4px;"></i>
+                        Bulunamadı
+                    </div>
+                `}
+                
+                <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity 0.3s ease;">
+                    <i class="fas fa-redo" style="color: #3b82f6; font-size: 12px;"></i>
+                </div>
+            </div>
+        `).join('')}
+        
+        <style>
+            .history-item:hover {
+                background: rgba(255, 255, 255, 0.15) !important;
+                transform: translateX(4px);
+                border-color: rgba(255, 215, 0, 0.3) !important;
+            }
+            .history-item:hover div:last-child {
+                opacity: 1 !important;
+            }
+        </style>
+    `;
+}
+
+// Zaman formatı
+function formatHistoryTime(timestamp) {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diffMs = now - time;
+    const diffMins = Math.floor(diffMs / 60000);
+    
+    if (diffMins < 1) return 'Az önce';
+    if (diffMins < 60) return `${diffMins}dk önce`;
+    if (diffMins < 1440) return `${Math.floor(diffMins/60)}sa önce`;
+    return `${Math.floor(diffMins/1440)}g önce`;
+}
+
+// Geçmişten MAC'e tıklayınca tekrar ara
+function searchHistoryMac(macAddress) {
+    const macSearchInput = document.getElementById("macSearchInput");
+    if (macSearchInput) {
+        macSearchInput.value = macAddress;
+        performMacSearch();
+    }
+}
+
+// Ana MAC arama fonksiyonunu güncelle
+async function performMacSearch() {
+    const macSearchInput = document.getElementById("macSearchInput");
+    const resultContainer = document.getElementById("macSearchResult");
+    
+    if (!macSearchInput || !resultContainer) {
+        console.error("❌ MAC arama elemanları bulunamadı!");
+        return;
+    }
+
+    const macAddress = macSearchInput.value.trim();
+    
+    if (macAddress === "") {
+        resultContainer.innerHTML = `
+            <div class="error" style="color: #ff6b6b; font-weight: bold;">
+                ⚠️ Lütfen bir MAC adresi girin!
+            </div>
+        `;
+        macSearchInput.focus();
+        return;
+    }
+
+    showSearchLoading();
+
+    try {
+        console.log("🔍 MAC arama başlatıldı:", macAddress);
+
+        const normalizedMac = normalizeMacAddress(macAddress);
+        if (!normalizedMac) {
+            throw new Error("Geçersiz MAC adresi formatı!");
+        }
+
+        // Paralel API çağrıları
+        const [devicesResponse, switchInfoResponse] = await Promise.all([
+            fetch(`/Netinfo/api/device/get_all_device_ports`),
+            fetch(`/Netinfo/api/device/get_all_devices`)
+        ]);
+
+        if (!devicesResponse.ok || !switchInfoResponse.ok) {
+            throw new Error(`API hatası: ${devicesResponse.status}`);
+        }
+
+        const [devices, switches] = await Promise.all([
+            devicesResponse.json(),
+            switchInfoResponse.json()
+        ]);
+
+        let found = null;
+        let switchInfo = null;
+
+        // MAC adresi ara (mevcut kod ile aynı...)
+        devices.forEach(device => {
+            if (!device.connected_macs || device.connected_macs.trim() === "") {
+                return;
+            }
+
+            device.connected_macs.split(',').forEach(macEntry => {
+                const macParts = macEntry.split(' ');
+                if (macParts.length === 0) return;
+
+                const rawMac = macParts[0].trim();
+                if (rawMac === "") return;
+
+                const manufacturer = macParts.slice(1).join(' ').trim();
+                const normalizedEntryMac = normalizeMacAddress(rawMac);
+                
+                if (!normalizedEntryMac) return;
+
+                if (normalizedEntryMac === normalizedMac) {
+                    found = {
+                        switch: device.hostname,
+                        port: device.interface_name,
+                        mac: rawMac,
+                        manufacturer: manufacturer || "Bilinmeyen Üretici",
+                        // Diğer alanlar...
+                        portDescription: device.description || "Açıklama yok",
+                        portStatus: device.link_status || "unknown",
+                        protocolStatus: device.protocol_status || "unknown",
+                        vlan: device.vlan_id || "N/A",
+                        vlanName: device.vlan_name || "N/A", 
+                        speed: device.speed || "N/A",
+                        duplex: device.duplex || "N/A",
+                        isUp: device.is_up,
+                        inputRate: device.input_rate_mbps || 0,
+                        outputRate: device.output_rate_mbps || 0,
+                        lastInput: device.last_input || "Bilinmiyor",
+                        lastOutput: device.last_output || "Bilinmiyor",
+                        inputPackets: device.input_packets || 0,
+                        outputPackets: device.output_packets || 0
+                    };
+
+                    switchInfo = switches.find(sw => sw.hostname === device.hostname);
+                }
+            });
+        });
+
+        // ✅ Geçmişe kaydet
+        saveMacToHistory(macAddress, found);
+
+        if (found) {
+            showEnhancedMacResult(found, switchInfo);
+            console.log("✅ MAC adresi bulundu:", found);
+        } else {
+            resultContainer.innerHTML = `
+                <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: white;">
+                    <h4 style="color: #ef4444; margin-bottom: 10px;">❌ Sonuç Bulunamadı</h4>
+                    <p>Aranan MAC adresi: <strong>${macAddress}</strong></p>
+                    <p>Bu MAC adresi hiçbir switch'te bulunamadı.</p>
+                </div>
+            `;
+        }
+
+    } catch (error) {
+        console.error("❌ MAC arama hatası:", error);
+        saveMacToHistory(macAddress, null); // Hata durumunda da kaydet
+        
+        resultContainer.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; color: white;">
+                <h4 style="color: #ef4444; margin-bottom: 10px;">🚨 Hata Oluştu</h4>
+                <p>${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// Sayfa yüklendiğinde geçmişi göster
+document.addEventListener("DOMContentLoaded", function() {
+    // Geçmiş container'ı oluştur (eğer yoksa)
+    setTimeout(() => {
+        const macSidebar = document.getElementById("macSearchSidebar");
+        if (macSidebar && !document.getElementById('macHistoryContainer')) {
+            const sidebarContent = macSidebar.querySelector('.sidebar-content');
+            if (sidebarContent) {
+                // Arama sonucu container'ından sonra geçmiş ekle
+                const searchResult = document.getElementById("macSearchResult");
+                if (searchResult) {
+                    const historyDiv = document.createElement('div');
+                    historyDiv.id = 'macHistoryContainer';
+                    historyDiv.style.marginTop = '20px';
+                    searchResult.parentNode.insertBefore(historyDiv, searchResult.nextSibling);
+                    updateMacHistoryDisplay();
+                }
+            }
+        }
+    }, 1000);
+});
+
+function openSwitchDetails(switchId) {
+    if (!switchId) {
+        alert('Switch detay bilgisi bulunamadı!');
+        return;
+    }
+    
+    // Switch detay sayfasını aç
+    const url = switchId.includes('-') ? 
+        `index5.html?uuid=${switchId}` : 
+        `deviceDetails.html?deviceid=${switchId}`;
+    
+    window.open(url, '_blank');
+}
+
+// 🔧 **MAC Adresi Normalize Fonksiyonu - İyileştirilmiş**
+function normalizeMacAddress(mac) {
+    if (!mac || typeof mac !== "string") {
+        console.error("❌ Geçersiz MAC adresi:", mac);
+        return null;
+    }
+
+    // Tüm özel karakterleri ve boşlukları temizle, küçük harfe çevir
+    let cleanMac = mac.toLowerCase().replace(/[^a-f0-9]/g, '');
+
+    // 12 karakter kontrolü
+    if (cleanMac.length !== 12) {
+        console.error(`❌ Yanlış MAC uzunluğu! Beklenen: 12, Gelen: ${cleanMac.length} (${mac})`);
+        return null;
+    }
+
+    // 2'şer karakter grupla ve ':' ile birleştir
+    try {
+        let formattedMac = cleanMac.match(/.{1,2}/g);
+        
+        if (!formattedMac) {
+            console.error("❌ MAC formatlama hatası:", mac);
+            return null;
+        }
+
+        const result = formattedMac.join(':');
+        console.log(`🔧 MAC normalize edildi: ${mac} → ${result}`);
+        return result;
+
+    } catch (error) {
+        console.error("❌ MAC normalize hatası:", error);
+        return null;
+    }
+}
+
+// 🎨 **Loading Animasyonu CSS'i Dinamik Ekle**
+function showSearchLoading() {
+    // CSS animasyonunu ekle (eğer yoksa)
+    if (!document.getElementById('search-loading-style')) {
+        const style = document.createElement('style');
+        style.id = 'search-loading-style';
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    const resultContainer = document.getElementById("macSearchResult");
+    if (resultContainer) {
+        resultContainer.innerHTML = `
+            <div style="text-align: center; padding: 20px; background: rgba(255, 215, 0, 0.1); border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.3);">
+                <div style="display: inline-block; width: 24px; height: 24px; border: 3px solid #FFD700; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <p style="margin: 15px 0 0 0; color: #FFD700; font-weight: bold;">🔍 MAC adresi aranıyor...</p>
+                <p style="margin: 5px 0 0 0; color: rgba(255, 215, 0, 0.7); font-size: 0.9em;">Lütfen bekleyin</p>
+            </div>
+        `;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Tüm sidebar content'leri bul ve scroll ekle
+    const sidebarContents = document.querySelectorAll('.sidebar-content');
+    sidebarContents.forEach(content => {
+        content.style.overflowY = 'auto';
+        content.style.overflowX = 'hidden';
+        content.style.maxHeight = 'calc(100vh - 100px)';
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const notificationContainer = document.getElementById("notificationContainer");
+
+    if (!notificationContainer) {
+        console.error("⚠️ Bildirim konteyneri bulunamadı.");
+        return;
+    }
+
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+
+    notificationContainer.style.position = "fixed"; // Mutlaka sabit konumlandır
+
+    notificationContainer.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+
+        // Fareyi takip etmeye başla
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+    });
+
+    function drag(e) {
+        if (!isDragging) return;
+
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+
+        // `requestAnimationFrame` ile performans artırıldı
+        requestAnimationFrame(() => {
+            notificationContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
+        });
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", stopDrag);
+    }
+});
+
+function blinkNotification() {
+    let isBlinking = false;
+
+    function toggleBlink() {
+        getElement("notificationIcon").style.opacity = isBlinking ? "1" : "0.5";
+        isBlinking = !isBlinking;
+        requestAnimationFrame(toggleBlink);
+    }
+
+    toggleBlink();
+}
+
+
+
+
+function updateNotification() {
+    if (!devices || devices.length === 0) {
+        console.warn("⚠️ updateNotification çağrıldı ancak cihaz listesi boş!");
+        return;
+    }
+
+    const offlineDevices = devices.filter(device => device.ping_state === "down");
+    const count = offlineDevices.length;
+
+    const notificationIcon = document.getElementById("notificationIcon");
+    const iconFace = document.getElementById("notificationIconFace");
+    const counter = document.getElementById("notificationCount");
+    const messageBox = document.getElementById("notificationMessageBox");
+    const messageText = document.getElementById("notificationMessage");
+
+    if (!notificationIcon || !iconFace || !counter || !messageBox || !messageText) {
+        console.error("❌ Bildirim elemanları eksik!");
+        return;
+    }
+
+    if (count > 0) {
+        // 🔴 **Alarm durumu**  
+        counter.textContent = count;
+        counter.classList.remove("hidden");
+        iconFace.classList.remove("fa-smile", "fa-grin-wink", "fa-surprise");
+        iconFace.classList.add("fa-frown");
+        iconFace.style.transform = "rotate(0deg)";
+        
+        notificationIcon.style.background = "red"; // **Kırmızı arka plan**
+        notificationIcon.classList.add("blink"); // **Yanıp sönme efekti ekle**
+
+        messageText.innerHTML = `<strong>❌ ${count} cihaz alarmda!</strong><ul>` +
+            offlineDevices.map(device => 
+                `<li>${device.hostname || "Bilinmeyen Cihaz"} (${device.serial || "Seri Yok"}) - Son erişim: ${device.last_status_change || "Bilinmiyor"}</li>`
+            ).join("") +
+        `</ul>`;
+    } else {
+        // ✅ **Her şey yolunda durumu**  
+        counter.classList.add("hidden");
+        iconFace.classList.remove("fa-frown", "fa-surprise");
+        iconFace.classList.add("fa-smile");
+        iconFace.style.transform = "rotate(0deg)";
+        
+        notificationIcon.style.background = "green"; // **Yeşil arka plan**
+        notificationIcon.classList.remove("blink"); // **Yanıp sönme efektini kaldır**
+
+        messageText.innerHTML = "✅ Şu an tüm cihazlara erişilebiliyor.";
+    }
+
+    // 🎭 **Tıklama efekti:**
+    notificationIcon.onclick = function () {
+        if (count > 0) {
+            iconFace.classList.replace("fa-frown", "fa-surprise");
+            setTimeout(() => iconFace.classList.replace("fa-surprise", "fa-frown"), 1000);
+        } else {
+            iconFace.classList.replace("fa-smile", "fa-grin-wink");
+            setTimeout(() => iconFace.classList.replace("fa-grin-wink", "fa-smile"), 1000);
+        }
+
+        // Kutucuğu aç/kapat
+        messageBox.classList.toggle("show");
+    };
+}
+
+
+
+
+// 🖱️ **Bildirim kutusunu sürüklenebilir hale getir**
+document.addEventListener("DOMContentLoaded", () => {
+    const notificationContainer = document.getElementById("notificationContainer");
+    if (!notificationContainer) {
+        console.error("⚠️ Bildirim konteyneri bulunamadı.");
+        return;
+    }
+
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+
+    notificationContainer.style.position = "fixed"; // Sabit konumlandır
+
+    notificationContainer.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+    });
+
+    function drag(e) {
+        if (!isDragging) return;
+
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+
+        requestAnimationFrame(() => {
+            notificationContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
+        });
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", stopDrag);
+    }
+});
+
+// **Sayfa açıldığında ilk kez çalıştır**
+setTimeout(updateNotification, 2000); // İlk güncelleme için 2 saniye beklet
+setInterval(updateNotification, 10000); // Her 10 saniyede bir güncelle
+
+
+
+
+
+
+const lastUpdateTime = document.getElementById('lastUpdateTime');
+
+        // Dashboard başlatma fonksiyonu
+        function init() {
+        }
+
+
+async function fetchAllDevices() {
+    try {
+        // **Yeni JSON dosyalarını kullanarak cihaz verilerini yükle**
+        const response = await fetch(`/Netinfo/api/device/get_all_devices?nocache=${Date.now()}`, {
+            cache: "no-store"
+        });
+
+        if (!response.ok) throw new Error(`Veri alınamadı: ${response.status}`);
+
+        const newDevices = await response.json();
+
+        // Eğer veri değişmediyse güncelleme yapma
+        if (JSON.stringify(newDevices) !== JSON.stringify(devices)) {
+            devices = newDevices;
+            syncAllComponents(devices); // ✅ Parametre olarak gönderiyoruz
+        }
+    } catch (error) {
+        console.error("❌ Cihazları alırken hata oluştu:", error);
+    }
+}
+
+loadInsightCard();
+
+
+
+
+
+async function syncAllComponents(devices) {
+    console.log("🔄 syncAllComponents başlıyor...", devices ? devices.length : 0, "cihaz");
+    
+    if (!devices || !Array.isArray(devices) || devices.length === 0) {
+        console.warn("⚠️ Cihaz listesi boş. Veri yüklenmesi bekleniyor...");
+        await fetchAllDevices();
+        return; // Fonksiyondan çık, fetchAllDevices zaten syncAllComponents'i çağıracak
+    }
+
+    try {
+        updateDeviceList(devices);
+        createDeviceChart(devices); // ✅ Artık güvenli
+        updateRecentStatusChanges(devices);
+        loadInsightCard();
+        updateCriticalDevices();
+        updateCarbonFootprint();
+
+        // Rush Hour verilerini güncelle
+        const datePicker = document.getElementById("datePicker");
+        let selectedDate = datePicker ? datePicker.value : new Date().toLocaleDateString("fr-CA");
+        
+        console.log(`📡 Syncing rush hour data for: ${selectedDate}`);
+        const rushHourData = await fetchNetworkRushHour(selectedDate);
+
+        if (rushHourData && rushHourData.length > 0) {
+            updateBarChart(rushHourData);
+        } else {
+            clearChart(); // ✅ Artık tanımlı
+        }
+
+        // Log analizi
+        try {
+            const logData = await fetchLogAnalysis();
+            if (logData) {
+                renderLogAnalysisTable(logData);
+            }
+        } catch (error) {
+            console.error("🚨 Log analizi yüklenirken hata oluştu:", error);
+        }
+
+        // Kullanılabilir tarihler
+        try {
+            await loadAvailableDates();
+        } catch (error) {
+            console.error("⚠️ Rush Hour verisi yüklenirken hata oluştu:", error);
+        }
+
+        // Bildirim güncellemesi
+        setTimeout(updateNotification, 500);
+        
+        console.log("✅ syncAllComponents tamamlandı!");
+        
+    } catch (error) {
+        console.error("❌ syncAllComponents'te hata oluştu:", error);
+    }
+}
+
+
+
+async function fetchDevicePorts(deviceId) {
+    const apiUrl = `/Netinfo/api/device/get_device_ports?id=${deviceId}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            console.error(`🚨 Port verisi alınamadı: ${response.status} (ID: ${deviceId})`);
+            return [];
+        }
+
+        const ports = await response.json();
+
+        return ports;
+    } catch (error) {
+        console.error(`❌ Portları alırken hata oluştu (${deviceId}):`, error);
+        return [];
+    }
+}
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const adminModal = document.getElementById("adminModal");
+    if (!adminModal) {
+        console.error("adminModal DOM'da bulunamadı.");
+        return;
+    }
+    adminModal.style.display = "block";
+});
+
+
+
+function calculateAveragePowerConsumption() {
+    const powerConsumption = {
+        'C9300-48P': 715,
+        'WS-C3850-48F-E': 845,
+        'WS-C3850-24P-S': 435,
+        'C9500-24Y4C': 650,
+        'C9300-24P': 445,
+        'WS-C2960X-48FPS-L': 740,
+        'ISR4351/K9': 210,
+        'ISR4451-X/K9': 310
+    };
+
+    let totalPower = 0;
+    let deviceCount = 0;
+
+    devices.forEach(device => {
+        const model = device.model;
+        if (powerConsumption[model]) {
+            totalPower += powerConsumption[model];
+            deviceCount++;
+        }
+    });
+
+    const averagePower = deviceCount > 0 ? totalPower / deviceCount : 0;
+    return averagePower.toFixed(2);
+}
+
+function calculateCarbonFootprint() {
+    const co2PerKWh = 0.5; // kWh başına 0.5 kg CO2
+    const averagePower = calculateAveragePowerConsumption();
+    const dailyEnergyKWh = (averagePower * 24) / 1000;
+    const dailyCO2 = dailyEnergyKWh * co2PerKWh;
+    return dailyCO2.toFixed(2);
+}
+
+
+
+// Sayfa açılınca güncelle
+updateCarbonFootprint();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const adminModal = document.getElementById("adminModal");
+    const contentContainer = document.getElementById("contentContainer");
+
+    if (!adminModal || !contentContainer) {
+        console.error("Gerekli DOM elemanları bulunamadı: adminModal veya contentContainer eksik.");
+        return;
+    }
+
+    // Varsayılan olarak dashboard gizlenir
+    contentContainer.style.display = "none";
+    adminModal.style.display = "block";
+
+    // Admin Giriş Doğrulama
+    window.handleAdminLogin = async function () {
+    const password = document.getElementById("adminPassword").value;
+    if (!password) {
+        alert("Lütfen şifre giriniz.");
+        return;
+    }
+
+    const success = await validatePassword(password);
+    if (success) {
+        sessionStorage.setItem("isAuthenticated", "true");
+        
+        // Modal'ı gizle
+        document.getElementById("adminModal").style.display = "none";
+        
+        // Ana dashboard'ı göster
+        document.getElementById("contentContainer").style.display = "block";
+        
+        // Ticker'ı göster
+        const tickerContainer = document.getElementById('insightTickerContainer');
+        if (tickerContainer) tickerContainer.style.display = 'block';
+        
+        // Sidebar butonlarını göster
+        const sidebarContainer = document.querySelector(".sidebar-toggle-container");
+        if (sidebarContainer) sidebarContainer.style.display = "block";
+        
+        // ✅ Sidebar'ları da göster
+        const deviceSidebar = document.getElementById("deviceSidebar");
+        if (deviceSidebar) deviceSidebar.style.display = "block";
+        
+        const macSearchSidebar = document.getElementById("macSearchSidebar");
+        if (macSearchSidebar) macSearchSidebar.style.display = "block";
+        
+
+        
+        // Bildirim ikonunu göster
+        const notificationContainer = document.getElementById("notificationContainer");
+        if (notificationContainer) notificationContainer.style.display = "block";
+        
+        // Karbon ikonunu göster
+        const carbonIcon = document.getElementById("carbonIcon");
+        if (carbonIcon) carbonIcon.style.display = "block";
+        
+        console.log("🚀 Tüm UI elemanları (sidebar'lar dahil) gösterildi!");
+        
+        initDashboard();
+    } else {
+        alert("Hatalı şifre. Lütfen tekrar deneyiniz.");
+    }
+};
+});
+
+async function validatePassword(password) {
+    try {
+        const response = await fetch('/Netinfo/api/environment/validate_admin_password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password }),
+        });
+        if (!response.ok) throw new Error("Şifre doğrulama başarısız.");
+        const result = await response.json();
+        return result.success;
+    } catch (error) {
+        console.error("Şifre doğrulama hatası:", error);
+        return false;
+    }
+}
+
+// Dashboard başlatma fonksiyonu
+function initDashboard() {
+    // Burada diğer dashboard fonksiyonlarını çağırabilirsiniz.
+}
+
+
+
+function handleAdminLogin() {
+    const adminPassword = document.getElementById("adminPassword").value;
+    const notificationContainer = document.getElementById("notificationContainer");
+
+    if (adminPassword === "gizliSifre") {
+        alert("✅ Admin girişi başarılı!");
+        document.getElementById("adminModal").style.display = "none";
+        document.getElementById('insightTickerContainer').style.display = 'block';
+        document.getElementById("contentContainer").style.display = "block";
+
+        // Bildirim ikonunu göster
+        if (notificationContainer) {
+            notificationContainer.style.display = "block";
+        }
+        
+        // ✅ Bu 4 satırı ekle:
+        const sidebarContainer = document.querySelector(".sidebar-toggle-container");
+        if (sidebarContainer) sidebarContainer.style.display = "block";
+        
+        const carbonIcon = document.getElementById("carbonIcon");
+        if (carbonIcon) carbonIcon.style.display = "block";
+        
+    } else {
+        alert("❌ Hatalı şifre! Tekrar deneyin.");
+    }
+}
+
+
+		
+		function handleAdminLogout() {
+    sessionStorage.removeItem("isAuthenticated"); // Oturumu sıfırla
+    location.reload(); // Sayfayı yeniden yükle
+}
+
+
+
+function updateClock() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const date = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    document.getElementById('clock').textContent = time;
+    document.getElementById('date').textContent = date;
+}
+
+
+
+
+
+function updateClock() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const date = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    document.getElementById('clock').textContent = time;
+    document.getElementById('date').textContent = date;
+}
+
+// Her saniye güncelle
+setInterval(updateClock, 1000);
+updateClock();
+
+
+function updateDeviceList(filteredDevices = null) {
+    const deviceList = document.getElementById('deviceList');
+
+    if (!deviceList) {
+        console.error("Cihaz listesi konteyneri bulunamadı!");
+        return;
+    }
+
+    // Eğer filtreli cihaz listesi verilmezse, tüm cihazları kullan
+    const devicesToShow = filteredDevices || devices;
+
+    // Cihazları alfabetik olarak sırala
+    const sortedDevices = devicesToShow.sort((a, b) =>
+        (a.hostname || '').localeCompare(b.hostname || '', 'tr', { sensitivity: 'base' })
+    );
+
+    // Listeyi temizle
+    deviceList.innerHTML = '';
+
+    const deviceMap = new Map();
+
+    sortedDevices.forEach((device) => {
+        const hostname = device.hostname || "Bilinmiyor";
+
+        if (!deviceMap.has(hostname)) {
+            deviceMap.set(hostname, []);
+        }
+        deviceMap.get(hostname).push(device);
+    });
+
+    // Liste elemanlarını oluştur
+    deviceMap.forEach((deviceGroup) => {
+        if (deviceGroup.length > 0) {
+            const primaryDevice = deviceGroup[0];
+
+            // `deviceid` null ise `uuid` kullan, yoksa "unknown-hostname"
+            const deviceIdentifier = primaryDevice.deviceid || primaryDevice.uuid || `unknown-${primaryDevice.hostname}`;
+            const isSelected = selectedCriticalDevices.some(d => d.deviceid === primaryDevice.deviceid);
+            const starIcon = isSelected ? "⭐" : "☆";
+
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <strong>${primaryDevice.hostname}</strong> (${primaryDevice.ipaddress || "IP Yok"})
+                <span id="star-${deviceIdentifier}" class="text-yellow-400 ml-2 cursor-pointer" 
+                    onclick="toggleCriticalDevice('${deviceIdentifier}')">
+                    ${starIcon}
+                </span>
+                <br><em>Model:</em> ${primaryDevice.model || 'Bilinmiyor'}
+                <br><em>Durum:</em> ${translateDeviceStatus(primaryDevice.ping_state)}
+            `;
+
+            listItem.classList.add(getDeviceStatusClass(primaryDevice.ping_state));
+
+            listItem.onclick = function (event) {
+    if (event.target.tagName !== "SPAN") {  
+        if (primaryDevice.deviceid) {
+            window.open(`deviceDetails.html?deviceid=${primaryDevice.deviceid}`, '_blank');
+        } else if (primaryDevice.uuid) {
+            window.open(`index5.html?uuid=${primaryDevice.uuid}`, '_blank');
+        } else {
+            console.error('Hem Device ID hem UUID bulunamadı!', primaryDevice);
+            alert('Bu cihaz için Device ID veya UUID bulunamadı.');
+        }
+    }
+};
+
+
+            deviceList.appendChild(listItem);
+
+            // 🌟 Yıldız elementinin DOM'a eklenip eklenmediğini test et
+            setTimeout(() => {
+}, 1000);  // DOM'un tam render edilmesini beklemek için 1 saniye gecikme ekledik
+
+        }
+    });
+
+
+}
+
+function showPopup(model, serial, ip, link) {
+            document.getElementById('popupModel').textContent = model || '-';
+            document.getElementById('popupSerial').textContent = serial || '-';
+            document.getElementById('popupIP').textContent = ip || '-';
+            document.getElementById('popupLink').href = link || '#';
+            document.getElementById('devicePopup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('devicePopup').style.display = 'none';
+        }
+
+
+        function getDeviceStatusClass(status) {
+    if (!status) return 'gray';
+    if (status.toLowerCase() === 'up') return 'green-bg';
+    if (status.toLowerCase() === 'down') return 'red-bg';
+    return 'gray-bg';
+}
+
+
+function translateDeviceStatus(status) {
+    if (!status) return 'Bilinmiyor';
+    return status.toLowerCase() === 'up' ? 'Aktif' : 'Pasif';
+}
+
+		
+		destroyExistingChart();
+		createDeviceChart(devices);
+
+		
+// Grafik oluşturma fonksiyonu
+function createDeviceChart(devices) {
+    const ctxElement = document.getElementById('deviceChart');
+    if (!ctxElement) {
+        console.error("Grafik alanı bulunamadı!");
+        return;
+    }
+
+    // ✅ devices kontrolü ekle
+    if (!devices || !Array.isArray(devices) || devices.length === 0) {
+        console.warn("⚠️ Cihaz verisi henüz yüklenmedi, grafik oluşturulamıyor.");
+        return;
+    }
+
+    const ctx = ctxElement.getContext('2d');
+    const upDevices = devices.filter(d => d.ping_state && d.ping_state.toLowerCase() === 'up').length;
+    const downDevices = devices.filter(d => d.ping_state && d.ping_state.toLowerCase() === 'down').length;
+    const unknownDevices = devices.filter(d => !['up', 'down'].includes(d.ping_state?.toLowerCase())).length;
+
+    destroyExistingChart(); // Mevcut grafiği yok et
+    existingChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Aktif', 'Pasif', 'Bilinmeyen'],
+            datasets: [{
+                data: [upDevices, downDevices, unknownDevices],
+                backgroundColor: ['#22c55e', '#ef4444', '#6b7280']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#FFD700',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                }
+            }
+        }
+    });
+
+    // Grafik altına cihaz durum bilgilerini ekle
+    const deviceStatusInfo = document.getElementById('deviceStatusInfo');
+    if (deviceStatusInfo) {
+        deviceStatusInfo.innerHTML = `
+            <span><strong>Aktif Cihazlar:</strong> ${upDevices}</span><br>
+            <span><strong>Pasif Cihazlar:</strong> ${downDevices}</span><br>
+            <span><strong>Bilinmeyen Cihazlar:</strong> ${unknownDevices}</span>
+        `;
+    }
+}
+
+function updateNextUpdateTimer() {
+    const timerElement = document.getElementById('nextUpdateTimer');
+    if (timerElement) {
+        // Timer varsa güncelle
+        let timeLeft = 60;
+        setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) timeLeft = 60;
+            timerElement.textContent = `Bir sonraki güncellemeye kalan süre: ${timeLeft} saniye`;
+        }, 1000);
+    } else {
+        // Timer yoksa console'da göster
+        console.log("⏱️ Timer elementi bulunamadı, console'da gösteriliyor.");
+    }
+}
+
+
+function filterDeviceList() {
+    const searchQuery = document.getElementById('deviceSearch').value.toLowerCase();
+
+    if (!devices.length) return;
+
+    let filteredDevices = devices.filter(device => 
+        (device.hostname && device.hostname.toLowerCase().includes(searchQuery)) ||
+        (device.ipaddress && device.ipaddress.toLowerCase().includes(searchQuery))
+    );
+
+    // 🏙 Eğer girilen kelime bir şehir adıysa ona karşılık gelen kodları bul
+    const matchingLocationCodes = Object.keys(stationInfo).filter(code => stationInfo[code] === searchQuery);
+
+    if (matchingLocationCodes.length > 0) {
+        filteredDevices = devices.filter(device =>
+            matchingLocationCodes.some(code => device.hostname.includes(code))
+        );
+    }
+
+    updateDeviceList(filteredDevices);
+}
+
+
+updateDeviceList();
+
+async function createTrafficTable(devices) {
+
+    const tbody = document.querySelector("#trafficTable tbody");
+    const loadingMessage = document.getElementById("trafficLoadingMessage");
+
+    if (!tbody || !loadingMessage) {
+        console.error("🚨 Kritik HTML elemanları bulunamadı! Tablo güncellenemiyor.");
+        return;
+    }
+
+    // 🟡 Kullanıcıya yükleme mesajını göster
+    loadingMessage.style.display = "block";
+    loadingMessage.innerHTML = "🔄 Trafik verisi yükleniyor...";
+    tbody.innerHTML = ""; // Tabloyu temizle
+
+    const trafficMap = new Map(); // Cihaz trafiğini takip edecek harita
+
+    // 🔍 Switch cihazlarını filtrele
+    const switchDevices = devices.filter(device => 
+        device.hostname && device.hostname.toLowerCase().includes("sw")
+    );
+
+    if (switchDevices.length === 0) {
+        loadingMessage.innerHTML = "⚠️ Switch cihazı bulunamadı.";
+        console.warn("⚠️ Trafik tablosu için uygun cihaz bulunamadı.");
+        return;
+    }
+
+    for (const device of switchDevices) {
+        try {
+            const ports = await fetchDevicePorts(device.deviceid);
+
+            if (!ports || ports.length === 0) {
+                console.warn(`⚠️ ${device.hostname} için port verisi bulunamadı.`);
+                continue;
+            }
+
+            // 🌟 Stack (Switch Grubu) adı belirleme
+            const stackName = device.hostname;
+
+            if (!trafficMap.has(stackName)) {
+                trafficMap.set(stackName, {
+                    hostname: stackName,
+                    uuid: device.uuid || "Bilinmiyor",
+                    totalInput: 0,
+                    totalOutput: 0,
+                    busiestPort: { name: "Bilinmiyor", traffic: 0 }
+                });
+            }
+
+            const stackData = trafficMap.get(stackName);
+
+            // 🚀 Trafik verilerini hesapla
+            ports.forEach(port => {
+                const inputRate = parseFloat(port.input_rate_mbps || "0");
+                const outputRate = parseFloat(port.output_rate_mbps || "0");
+                const totalTraffic = inputRate + outputRate;
+
+                if (!isNaN(inputRate)) stackData.totalInput += inputRate;
+                if (!isNaN(outputRate)) stackData.totalOutput += outputRate;
+
+                if (totalTraffic > stackData.busiestPort.traffic) {
+                    stackData.busiestPort.name = port.interface_name || "Bilinmiyor";
+                    stackData.busiestPort.traffic = totalTraffic;
+                }
+            });
+
+        } catch (error) {
+            console.error(`❌ Hata oluştu: ${device.hostname} - ${error.message}`, error);
+            continue;
+        }
+    }
+
+    // 📊 **En çok trafik kullanan 5 switch'i sırala**
+    const topTrafficDevices = Array.from(trafficMap.values())
+        .sort((a, b) => (b.totalInput + b.totalOutput) - (a.totalInput + a.totalOutput))
+        .slice(0, 5);
+
+    if (topTrafficDevices.length === 0) {
+        loadingMessage.innerHTML = "⚠️ Trafik verisi bulunamadı.";
+        return;
+    }
+
+    // 📌 **Tabloya cihazları ekleyelim**
+    topTrafficDevices.forEach(device => {
+        const row = document.createElement("tr");
+
+        const hostnameCell = document.createElement("td");
+        hostnameCell.className = "p-2 border cursor-pointer text-yellow-500 hover:underline";
+        hostnameCell.textContent = device.hostname;
+        hostnameCell.onclick = () => {
+            window.open(`index5.html?uuid=${device.uuid}`, "_blank");
+        };
+
+        const inputCell = document.createElement("td");
+        inputCell.className = "p-2 border";
+        inputCell.textContent = `${device.totalInput.toFixed(2)} Mbps`;
+
+        const outputCell = document.createElement("td");
+        outputCell.className = "p-2 border";
+        outputCell.textContent = `${device.totalOutput.toFixed(2)} Mbps`;
+
+        const maxPortCell = document.createElement("td");
+        maxPortCell.className = "p-2 border";
+        maxPortCell.textContent = `${device.busiestPort.name} (${device.busiestPort.traffic.toFixed(2)} Mbps)`;
+
+        row.appendChild(hostnameCell);
+        row.appendChild(inputCell);
+        row.appendChild(outputCell);
+        row.appendChild(maxPortCell);
+
+        tbody.appendChild(row);
+    });
+
+    // ✅ **İşlem tamamlandı, yükleme mesajını gizle**
+    loadingMessage.style.display = "none";
+}
+
+
+function showTrafficLoadingMessage() {
+    const loadingMessage = document.getElementById("trafficLoadingMessage");
+    if (!loadingMessage) return;
+
+    loadingMessage.style.display = "block";
+    loadingMessage.innerHTML = `
+        <div class="text-center text-yellow-400">
+            🚀 <strong>Veriler yükleniyor, lütfen bekleyin...</strong>
+        </div>
+    `;
+}
+
+
+
+async function fetchDeviceInfo(deviceId) {
+    try {
+        const response = await fetch(`/Netinfo/api/device/get_device_info?id=${deviceId}`);
+        if (!response.ok) throw new Error("Cihaz bilgileri alınamadı.");
+        const deviceInfo = await response.json();
+        return deviceInfo;
+    } catch (error) {
+        console.error("Cihaz bilgisi alınırken hata oluştu:", error);
+        return null;
+    }
+}
+
+
+
+async function fetchDeviceData(endpoint, deviceId) {
+    try {
+        const response = await fetch(`/Netinfo/api/device/${endpoint}?id=${deviceId}`);
+        if (!response.ok) {
+            console.warn(`Data not found for endpoint ${endpoint} with ID ${deviceId}`);
+            return null;
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching device data:", error);
+        return null;
+    }
+}
+
+
+function destroyExistingChart() {
+    if (existingChart) {
+        existingChart.destroy();
+        existingChart = null;
+    }
+}
+
+fetchAllDevices();
+
+// Gösterici fonksiyon
+function showLoader(loaderId) {
+    const loader = document.getElementById(loaderId);
+    if (loader) loader.style.display = 'flex'; // Yükleme GIF'ini göster
+}
+
+// Gizleyici fonksiyon
+function hideLoader(loaderId) {
+    const loader = document.getElementById(loaderId);
+    if (loader) loader.style.display = 'none'; // Yükleme GIF'ini gizle
+}
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const isAdminLoggedIn = sessionStorage.getItem("isAdmin") === "true";
+    if (!isAdminLoggedIn) {
+        document.getElementById("adminModal").style.display = "block";
+    } else {
+        document.getElementById("contentContainer").style.display = "block"; // Dashboard görünür
+        startAdminCountdown(); // Timeout başlat
+    }
+});
+
+function startAdminCountdown() {
+    const countdownBar = document.getElementById('sessionCountdownBar');
+    const countdownContainer = document.getElementById('sessionCountdownContainer');
+
+    if (countdownBar && countdownContainer) {
+        countdownContainer.style.display = 'block';
+        countdownBar.style.width = '100%';
+
+        const interval = setInterval(() => {
+            adminSessionTimeout--;
+
+            countdownBar.style.width = `${(adminSessionTimeout / (15 * 60)) * 100}%`;
+
+            if (adminSessionTimeout <= 0) {
+                clearInterval(interval);
+                sessionStorage.removeItem("isAdmin");
+                alert("Oturum süreniz doldu. Tekrar giriş yapmanız gerekiyor.");
+                location.reload();
+            }
+        }, 1000);
+    }
+}
+
+async function createRecentChangesTable(devices) {
+    const tbody = document.querySelector("#recentChangesTable tbody");
+    if (!tbody) {
+        console.error("❌ Recent changes table body not found!");
+        return;
+    }
+    tbody.innerHTML = "";
+
+    if (!devices || devices.length === 0) {
+        console.warn("⚠️ Cihaz listesi boş!");
+        tbody.innerHTML = `<tr><td colspan="2" class="p-2 border text-center text-gray-400">
+            🚨 Son değişiklik yapan cihaz bulunamadı.
+        </td></tr>`;
+        return;
+    }
+
+    // 🛠 **Son değişiklik yapan 10 cihazı sırala (last_change_time varsa)**
+    const recentChanges = devices
+        .filter(device => device.last_change_time) // Değişiklik zamanı olan cihazları alın
+        .sort((a, b) => new Date(b.last_change_time) - new Date(a.last_change_time)) // Zaman damgasına göre sırala
+        .slice(0, 10); // İlk 10 cihazı göster
+
+
+    if (recentChanges.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" class="p-2 border text-center text-gray-400">
+            🚨 Son değişiklik yapan cihaz bulunamadı.
+        </td></tr>`;
+        return;
+    }
+
+    // **Tabloyu güncelle**
+    recentChanges.forEach(device => {
+        const row = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.className = "p-2 border";
+        nameCell.textContent = device.hostname || "Bilinmiyor";
+        row.appendChild(nameCell);
+
+        const timeCell = document.createElement("td");
+        timeCell.className = "p-2 border";
+        timeCell.textContent = device.last_change_time 
+            ? new Date(device.last_change_time).toLocaleString("tr-TR") 
+            : "Zaman bilgisi yok";
+        row.appendChild(timeCell);
+
+        tbody.appendChild(row);
+    });
+}
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+    await fetchAllDevices();
+    syncAllComponents();
+    startAutoUpdate();
+
+    const searchInput = document.getElementById("deviceSearch");
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            const searchValue = this.value.trim();
+            if (searchValue) {
+                const filteredDevices = filterDevices(searchValue);
+                updateDeviceList(filteredDevices, searchValue);
+            } else {
+                updateDeviceList(devices);
+            }
+        });
+    }
+});
+
+
+
+
+// Tüm cihaz verilerini getir
+async function fetchDevices() {
+    try {
+        const response = await fetch('/Netinfo/api/device/get_all_devices');
+        if (!response.ok) throw new Error("Cihaz verileri alınamadı.");
+        devices = await response.json();
+    } catch (error) {
+        console.error("Cihaz verileri alınırken hata:", error);
+    }
+}
+
+function filterDevices(searchQuery) {
+    const query = searchQuery.toLowerCase();
+
+    // Cihazları filtrele
+    const filtered = devices.filter(device =>
+        (device.hostname && device.hostname.toLowerCase().includes(query)) || 
+        (device.ipaddress && device.ipaddress.toLowerCase().includes(query)) || 
+        (device.location && device.location.toLowerCase().includes(query)) ||
+        (device.city && device.city.toLowerCase().includes(query))
+    );
+
+
+
+    if (searchQuery.trim() !== "") {
+        sessionStorage.setItem("deviceSearchQuery", searchQuery);
+    }
+
+    return filtered;
+}
+
+
+window.onload = function() {
+    const savedQuery = sessionStorage.getItem("deviceSearchQuery");
+
+
+
+    if (savedQuery) {
+        document.getElementById("deviceSearch").value = savedQuery;
+        const filtered = filterDevices(savedQuery);
+        updateDeviceList(filtered, savedQuery);
+    } else {
+        fetchDevices().then(() => {
+            updateDeviceList(devices, "");
+        });
+    }
+};
+
+
+function onSearchInput(event) {
+    const searchQuery = event.target.value.trim();
+
+
+    const filtered = filterDevices(searchQuery);
+    updateDeviceList(filtered, searchQuery);
+
+    // Filtreyi sessionStorage'a kaydet
+    if (searchQuery !== "") {
+        sessionStorage.setItem("deviceSearchQuery", searchQuery);
+    } else {
+        sessionStorage.removeItem("deviceSearchQuery");
+    }
+}
+
+
+
+
+// Levenshtein Mesafesi Hesaplama Fonksiyonu
+function calculateLevenshteinDistance(a, b) {
+    const matrix = Array.from({ length: a.length + 1 }, () =>
+        Array(b.length + 1).fill(0)
+    );
+
+    for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+    for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            matrix[i][j] = Math.min(
+                matrix[i - 1][j] + 1, // Silme
+                matrix[i][j - 1] + 1, // Ekleme
+                matrix[i - 1][j - 1] + cost // Değiştirme
+            );
+        }
+    }
+
+    return matrix[a.length][b.length];
+}
+
+// En Yakın Öneriyi Bulma Fonksiyonu
+function suggestClosestMatch(query) {
+    const queryLower = query.toLowerCase();
+
+    // Cihazların şehir ve hostname bilgilerini al
+    const suggestions = devices.flatMap(device => [device.city, device.hostname])
+        .filter(Boolean)
+        .map(value => value.toLowerCase());
+
+    // Levenshtein mesafesi ile en yakın eşleşmeyi bul
+    let closestMatch = null;
+    let smallestDistance = Infinity;
+
+    for (const suggestion of suggestions) {
+        const distance = calculateLevenshteinDistance(queryLower, suggestion);
+        if (distance < smallestDistance) {
+            smallestDistance = distance;
+            closestMatch = suggestion;
+        }
+    }
+
+    return closestMatch;
+}
+
+function updateDeviceList(filteredDevices = [], searchQuery = "") {
+    const deviceList = document.getElementById("deviceList");
+    const suggestionBox = document.getElementById("suggestionBox");
+
+    if (!deviceList) {
+        console.error("❌ Hata: 'deviceList' bulunamadı.");
+        return;
+    }
+
+    if (!suggestionBox) {
+        console.warn("⚠️ Uyarı: 'suggestionBox' bulunamadı, öneri kutusu gösterilemeyecek.");
+    }
+
+    // Eğer sonuç bulunamazsa öneri yap
+    if (filteredDevices.length === 0) {
+        const closestMatch = suggestClosestMatch(searchQuery);
+        deviceList.innerHTML = "<li>Sonuç bulunamadı.</li>";
+
+        if (closestMatch && suggestionBox) {
+            suggestionBox.innerHTML = `
+                <span class="suggestion clickable" onclick="handleSuggestionClick('${closestMatch}')">
+                    Bunu mu demek istediniz: <strong>${closestMatch}</strong>?
+                </span>
+            `;
+            suggestionBox.style.display = "block"; // Öneriyi göster
+        } else if (suggestionBox) {
+            suggestionBox.style.display = "none"; // Öneri yoksa gizle
+        }
+        return;
+    }
+
+    // Öneri kutusunu gizle ve listeyi güncelle
+    if (suggestionBox) {
+        suggestionBox.style.display = "none";
+    }
+
+    // Listeyi temizle ve cihazları alfabetik sırayla ekle
+    deviceList.innerHTML = '';
+    filteredDevices.sort((a, b) => (a.hostname || "").localeCompare(b.hostname || "", "tr"));
+
+    filteredDevices.forEach(device => {
+        const hostname = device.hostname || "Bilinmiyor";
+        const deviceIdentifier = device.deviceid || device.uuid || `unknown-${hostname}`;
+
+        // ⭐ Kritik cihazları kontrol et (Eğer cihaz kritikse yıldız dolu, değilse boş olacak)
+        const isSelected = selectedCriticalDevices.some(d => d.deviceid === device.deviceid);
+        const starIcon = isSelected ? "⭐" : "☆";
+
+        // Liste elemanını oluştur
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <strong>${hostname}</strong> (${device.ipaddress || "IP Yok"})
+            <br><em>Model:</em> ${device.model || 'Bilinmiyor'}
+            <br><em>Durum:</em> ${translateDeviceStatus(device.ping_state)}
+        `;
+
+        // CSS class ekleyerek durumu vurgula
+        listItem.classList.add(getDeviceStatusClass(device.ping_state));
+
+        // ⭐ Yıldız butonu oluştur ve ekle
+        const starSpan = document.createElement("span");
+        starSpan.id = `star-${deviceIdentifier}`;
+        starSpan.className = "text-yellow-400 ml-2 cursor-pointer";
+        starSpan.textContent = starIcon;
+        starSpan.onclick = () => toggleCriticalDevice(deviceIdentifier);
+
+        listItem.appendChild(starSpan);
+
+        // Liste elemanına tıklanınca detay sayfasına yönlendir
+        listItem.onclick = function (event) {
+            if (event.target.tagName !== "SPAN") {  
+                if (device.uuid) {
+                    window.open(`index5.html?uuid=${device.uuid}`, '_blank');
+                } else {
+                    alert("Bu cihaz için UUID bulunamadı.");
+                }
+            }
+        };
+
+        deviceList.appendChild(listItem);
+    });
+}
+
+
+// 🔄 **Cihaz Listesini Yenileme (Filtreyi Koruyarak)**
+async function refreshDeviceList() {
+
+    // Mevcut arama sorgusunu sakla
+    let searchQuery = document.getElementById("deviceSearch").value.trim().toLowerCase();
+
+    await fetchDevices(); // Yeni cihaz verilerini getir
+
+    // Listeyi güncelle
+    updateDeviceList(filterDevices(searchQuery), searchQuery);
+}
+
+// 🔄 **Sayfa Yenilendiğinde Filtreyi Sıfırla**
+window.addEventListener("beforeunload", function () {
+    sessionStorage.removeItem("deviceSearchQuery"); // Arama çubuğunu sıfırla
+});
+
+
+
+function redirectToDevicePage(uuid) {
+    if (uuid) {
+        const url = `index5.html?uuid=${uuid}`;
+        window.open(url, '_blank'); // Yeni sekmede aç
+    } else {
+        console.error("Bu cihaz için UUID mevcut değil.");
+        alert("Cihazın UUID bilgisi bulunamadı.");
+    }
+}
+
+
+
+// Öneriye Tıklanınca Çalışan Fonksiyon
+function handleSuggestionClick(suggestion) {
+    const searchInput = document.getElementById("deviceSearch");
+    searchInput.value = suggestion; // Arama kutusuna öneriyi yaz
+    const filteredDevices = filterDevices(suggestion); // Yeni filtreleme işlemi başlat
+    updateDeviceList(filteredDevices, suggestion); // Listeyi güncelle
+}
+
+
+
+
+// Cihazların durumu için çeviri
+function translateDeviceStatus(status) {
+    if (!status) return "Bilinmiyor";
+    return status.toLowerCase() === "up" ? "Aktif" : "Pasif";
+}
+
+function getSavedCriticalDevices() {
+    const savedDevices = localStorage.getItem("selectedCriticalDevices");
+    return savedDevices ? JSON.parse(savedDevices) : [];
+}
+
+function saveCriticalDevices(devices) {
+    localStorage.setItem("selectedCriticalDevices", JSON.stringify(devices));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const notificationIcon = document.getElementById("notificationIcon");
+    const messageBox = document.getElementById("notificationMessageBox");
+
+    if (!notificationIcon || !messageBox) {
+        console.error("❌ Bildirim ikonu veya mesaj kutusu bulunamadı!");
+        return;
+    }
+
+    notificationIcon.addEventListener("click", () => {
+
+
+        if (messageBox.classList.contains("show")) {
+            // Kapat
+            messageBox.style.visibility = "hidden";
+            messageBox.style.opacity = "0";
+            messageBox.setAttribute("aria-hidden", "true");
+            messageBox.classList.remove("show");
+        } else {
+            // Aç
+            messageBox.style.visibility = "visible";
+            messageBox.style.opacity = "1";
+            messageBox.setAttribute("aria-hidden", "false");
+            messageBox.classList.add("show");
+        }
+    });
+});
+
+
+
+function startAutoUpdate() {
+
+    setInterval(fetchAllDevices, INTERVALS.normalData);
+    setInterval(createTrafficTable, INTERVALS.trafficData);
+    setInterval(updateClock, INTERVALS.clock);
+}
+
+
+
+
+
+
+function updateCriticalDevices() {
+    
+    const tableBody = document.querySelector("#CriticalDevicesTable tbody");
+    if (!tableBody) {
+        console.error("⚠ Kritik cihazlar tablosu bulunamadı!");
+        return;
+    }
+
+    // 🔴 Tüm içeriği temizle ve tekrar oluştur
+    tableBody.innerHTML = "";
+
+    selectedCriticalDevices.forEach(device => {
+        const row = document.createElement("tr");
+        row.setAttribute("data-id", device.deviceid);
+
+        // 🔵 **Önceki durumu kontrol et**
+        const previousState = row.getAttribute("data-status");
+        const currentState = device.ping_state;
+
+        let rowClass = "";
+        if (previousState && previousState !== currentState) {
+            rowClass = currentState === "up" ? "bg-green-800 blink-effect" : "bg-red-800 blink-effect";
+        }
+
+        row.className = rowClass; // Rengi uygula
+
+        row.innerHTML = `
+            <td class="p-2 border">${device.hostname || "Bilinmiyor"}</td>
+            <td class="p-2 border">${device.ipaddress || "IP Yok"}</td>
+            <td class="p-2 border font-semibold">${translateDeviceStatus(device.ping_state)}</td>
+            <td class="p-2 border">
+                <button class="px-3 py-1 rounded text-white font-bold bg-red-500 hover:bg-red-700"
+                    onclick="removeCriticalDevice('${device.deviceid}')">
+                    Kaldır
+                </button>
+            </td>
+        `;
+
+        // **Yeni durumu DOM'a kaydet**
+        row.setAttribute("data-status", currentState);
+
+        tableBody.appendChild(row);
+    });
+
+}
+
+
+
+function removeCriticalDevice(deviceId) {
+
+
+    // **Cihazı kritik cihaz listesinden kaldır**
+    selectedCriticalDevices = selectedCriticalDevices.filter(device => device.deviceid !== parseInt(deviceId));
+
+    // **Güncellenmiş listeyi kaydet**
+    saveCriticalDevices(selectedCriticalDevices);
+
+    // **Tabloyu güncelle**
+    updateCriticalDevices();
+
+    // **Yıldız ikonunu da güncelle**
+    updateStarIcon(deviceId, false);
+
+    // **Geri bildirim ver**
+    showFeedback("Cihaz kritik listeden kaldırıldı!", false);
+}
+
+function updateStarIcon(deviceId, isCritical) {
+    const starIcon = document.getElementById(`star-${deviceId}`);
+    if (starIcon) {
+        starIcon.innerHTML = isCritical ? "⭐" : "☆";
+        starIcon.classList.remove("blink-star"); // Eğer yanıp sönme efekti varsa kaldır
+    }
+}
+
+
+
+
+// ⏳ Kritik cihazları her 20 saniyede bir güncelle
+setInterval(updateCriticalDevices, 20000);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const notificationElements = {
+        notificationIcon: document.getElementById("notificationIcon"),
+        notificationCount: document.getElementById("notificationCount"),
+        notificationMessage: document.getElementById("notificationMessage")
+    };
+
+
+    if (!notificationElements.notificationCount) {
+        console.error("❌ Hata: `notificationCount` elemanı bulunamadı!");
+    }
+});
+
+
+// **Yanıp sönme efekti için CSS ekleyelim**
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes blink {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(255, 0, 0, 0.5); }
+}
+.blink-effect {
+    animation: blink 0.7s ease-in-out 5;
+}`;
+document.head.appendChild(style);
+
+
+function toggleCriticalDevice(deviceId) {
+    const deviceIndex = selectedCriticalDevices.findIndex(d => d.deviceid === deviceId);
+
+    if (deviceIndex === -1) {
+        // Cihaz kritik listeye ekleniyor
+        const device = devices.find(d => d.deviceid === deviceId);
+        if (!device) return;
+        selectedCriticalDevices.push(device);
+        showFeedback(`${device.hostname} kritik listeye eklendi!`, true);
+
+        // **Yıldız ikonunu güncelle**
+        updateStarIcon(deviceId, true);
+    } else {
+        // Cihaz kritik listeden kaldırılıyor
+        selectedCriticalDevices.splice(deviceIndex, 1);
+        showFeedback("Cihaz kritik listeden kaldırıldı!", false);
+
+        // **Yıldız ikonunu güncelle**
+        updateStarIcon(deviceId, false);
+    }
+
+    saveCriticalDevices(selectedCriticalDevices);
+    updateCriticalDevices();
+    fetchAllDevices();
+}
+
+
+// Otomatik güncellemeler için zamanlayıcılar ve loglar
+let nextUpdateTime = 60; // Saniye cinsinden
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    setTimeout(() => {
+        if (devices.length === 0) {
+            console.warn("⚠️ updateNotification çağrılırken devices boş görünüyor!");
+        }
+        updateNotification();
+    }, 1000);
+});
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+    
+    // 🔄 "Veriler yükleniyor..." mesajını göster
+    showTrafficLoadingMessage();
+
+    await fetchAllDevices();  // 📡 İlk veri çekme işlemi
+    syncAllComponents();      // 📊 Grafikler ve tablolar hemen güncellensin
+    startAutoUpdate();        // 🔄 Periyodik güncellemeleri başlat
+
+    // 📌 En Çok Data Kullanan Cihazlar tablosunu güncelle
+    await createTrafficTable(devices);
+});
+
+
+
+
+
+// Bir sonraki güncellemeye kalan süreyi gösteren sayaç
+setInterval(() => {
+    nextUpdateTime--;
+    if (nextUpdateTime <= 0) {
+        nextUpdateTime = 60; // Sayaç sıfırlanıyor
+    }
+    document.getElementById('nextUpdateTimer').textContent = `Bir sonraki güncellemeye kalan süre: ${nextUpdateTime} saniye`;
+}, 1000);
+
+
+
+async function updateRecentStatusChanges() {
+
+
+    const tbody = document.querySelector("#recentChangesTable tbody");
+    if (!tbody) {
+        console.error("⚠️ 'Son Durum Değiştiren Cihazlar' tablosu bulunamadı!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/Netinfo/api/device/device-status-changes?nocache=${Date.now()}`);
+
+        if (!response.ok) {
+            console.warn("⚠️ API çağrısı başarısız, status:", response.status);
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-gray-400">⚠️ Durum değişiklikleri yüklenemedi.</td></tr>`;
+            return;
+        }
+
+        let allChanges = await response.json();
+
+
+        if (!Array.isArray(allChanges) || allChanges.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-gray-400">✅ Henüz kayıtlı bir değişiklik yok.</td></tr>`;
+            return;
+        }
+
+        // **Zaman damgasına göre sırala (yeniden eskiye)**
+        const sortedChanges = allChanges.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        // **En son 10 cihazı al**
+        const latestChanges = sortedChanges.slice(0, 10);
+
+        // **Tabloyu güncelle**
+        tbody.innerHTML = latestChanges
+            .map(device => {
+                let iconClass = "";
+                let textClass = "";
+                let animationClass = "";
+                let rowClass = "bg-gray-700"; // **Koyulaştırılmış arka plan rengi**
+
+                if (device.old_status === "down" && device.new_status === "up") {
+                    iconClass = "🟢"; // **Yeşil ikon**
+                    textClass = "text-green-500 font-bold";
+                    rowClass = "bg-green-800"; // **Daha belirgin yeşil arka plan**
+                } else if (device.old_status === "up" && device.new_status === "down") {
+                    iconClass = "🔴"; // **Kırmızı ikon**
+                    textClass = "text-red-500 font-bold";
+                    rowClass = "bg-red-800"; // **Daha belirgin kırmızı arka plan**
+                    animationClass = "blink-effect"; // **Yanıp sönme efekti**
+                }
+
+                return `
+                    <tr class="${rowClass} ${animationClass}">
+                        <td>${device.hostname}</td>
+                        <td>${device.serial || "Bilinmiyor"}</td>
+                        <td>${new Date(device.timestamp).toLocaleString("tr-TR")}</td>
+                        <td class="${textClass}">${iconClass} ${device.old_status.toUpperCase()} → ${device.new_status.toUpperCase()}</td>
+                    </tr>
+                `;
+            }).join("");
+
+    } catch (error) {
+        console.error("⚠️ API'den veri çekerken hata oluştu:", error);
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red-500">⚠️ Durum değişiklikleri yüklenemedi.</td></tr>`;
+    }
+}
+
+// 📌 **Her 10 saniyede bir güncelle**
+setInterval(updateRecentStatusChanges, 10000);
+
+
+
+
+// **📌 Sayfa yüklendiğinde ilk kez çalıştır**
+document.addEventListener("DOMContentLoaded", updateRecentStatusChanges);
+document.addEventListener("DOMContentLoaded", createDeviceChart);
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const clockIcon = document.createElement("div");
+    clockIcon.innerHTML = "⏳";
+    clockIcon.style.position = "fixed";
+    clockIcon.style.bottom = "15px";
+    clockIcon.style.right = "15px";
+    clockIcon.style.fontSize = "20px";
+    clockIcon.style.opacity = "0.8";
+    clockIcon.style.cursor = "pointer";
+    
+    const tooltip = document.createElement("div");
+    tooltip.textContent = "Bir sonraki güncellemeye kalan süre: 60 sn";
+    tooltip.style.position = "absolute";
+    tooltip.style.bottom = "35px";
+    tooltip.style.right = "0";
+    tooltip.style.background = "rgba(0, 0, 0, 0.8)";
+    tooltip.style.color = "#FFD700";
+    tooltip.style.padding = "5px 10px";
+    tooltip.style.borderRadius = "5px";
+    tooltip.style.fontSize = "12px";
+    tooltip.style.display = "none";
+    
+    clockIcon.appendChild(tooltip);
+    document.body.appendChild(clockIcon);
+
+    clockIcon.addEventListener("mouseover", () => {
+        tooltip.style.display = "block";
+    });
+
+    clockIcon.addEventListener("mouseleave", () => {
+        tooltip.style.display = "none";
+    });
+
+    let timeLeft = 60;
+    function updateTooltip() {
+        timeLeft--;
+        tooltip.textContent = `Bir sonraki güncellemeye kalan süre: ${timeLeft} sn`;
+        if (timeLeft < 0) timeLeft = 60;
+        setTimeout(updateTooltip, 1000);
+    }
+
+    updateTooltip();
+});
+
+
+
+
+
+
+function showFeedback(message, isSuccess) {
+    const feedbackContainer = document.createElement('div');
+    feedbackContainer.className = `feedback-message ${isSuccess ? 'success' : 'error'}`;
+    feedbackContainer.textContent = message;
+    document.body.appendChild(feedbackContainer);
+    setTimeout(() => feedbackContainer.remove(), 5000); // 5 saniye sonra mesajı kaldır
+}
+
+
+
+
+
+// Kullanıcı önerilen bir cihaza tıkladığında
+function selectCriticalDevice(deviceId) {
+    const selectedDevice = devices.find(device => device.deviceid === deviceId);
+    if (selectedDevice) {
+        toggleCriticalDevice(selectedDevice);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateCriticalDevices();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const carbonBox = document.getElementById("carbonFootprintBox");
+    let isDragging = false;
+    let startX, startY, offsetX = 0, offsetY = 0;
+
+    if (!carbonBox) {
+        console.error("⚠️ Karbon Ayak İzi kutusu bulunamadı!");
+        return;
+    }
+
+    // 🖱️ Sürüklemeye başlama
+    carbonBox.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX - offsetX;
+        startY = e.clientY - offsetY;
+        carbonBox.style.cursor = "grabbing";
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+    });
+
+    function drag(e) {
+        if (!isDragging) return;
+
+        offsetX = e.clientX - startX;
+        offsetY = e.clientY - startY;
+
+        // 🛑 Kutunun ekran dışına çıkmasını engelle
+        const maxX = window.innerWidth - carbonBox.offsetWidth - 10;
+        const maxY = window.innerHeight - carbonBox.offsetHeight - 10;
+
+        offsetX = Math.max(10, Math.min(offsetX, maxX));
+        offsetY = Math.max(10, Math.min(offsetY, maxY));
+
+        // 🏗️ Yeni konumu belirle
+        carbonBox.style.left = `${offsetX}px`;
+        carbonBox.style.top = `${offsetY}px`;
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        carbonBox.style.cursor = "grab";
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", stopDrag);
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("closeCarbonBox").addEventListener("click", () => {
+        document.getElementById("carbonFootprintBox").style.display = "none";
+    });
+});
+
+function logFunctionTime(fn, functionName) {
+    return async function(...args) {
+        console.time(`⏱ ${functionName}`);
+        const result = await fn(...args);
+        console.timeEnd(`⏱ ${functionName}`);
+        return result;
+    };
+}
+
+const INTERVALS = {
+    normalData: 30000, // 30 saniyede bir
+    trafficData: 600000, // 10 dakikada bir
+    clock: 1000, // Her saniye
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadAvailableDates();
+
+    const datePicker = document.getElementById("datePicker");
+    let today = new Date();
+    let todayStr = today.toLocaleDateString("fr-CA"); // 📌 YYYY-MM-DD formatı
+
+    if (isDateAvailable(todayStr)) {
+    datePicker.value = todayStr;
+    console.log(`📊 Bugün (${todayStr}) için grafik çiziliyor...`);
+    fetchNetworkRushHour(todayStr);  // Grafik ÇAĞRILDI
+} else {
+    console.warn(`⚠ Bugün (${todayStr}) için veri bulunamadı, uyarı gösterilecek.`);
+    showNoDataMessage(todayStr);
+}
+
+
+
+    datePicker.addEventListener("change", () => {
+    const selectedDate = datePicker.value;
+    console.log(`📅 Kullanıcı yeni tarih seçti: ${selectedDate}`);
+
+    if (isDateAvailable(selectedDate)) {
+        fetchNetworkRushHour(selectedDate);
+    } else {
+        console.warn(`⚠ ${selectedDate} için veri yok, uyarı gösteriliyor.`);
+        showNoDataMessage(selectedDate);
+    }
+});
+
+
+});
+
+
+
+let trafficDataBuffer = []; // 📌 Saatlik verileri geçici olarak tutacak
+let currentHour = new Date().getHours(); // 📌 Anlık saat
+let averageInput = 0;
+let averageOutput = 0;
+
+function startAutoFetch() {
+    function getNextFetchTime() {
+        const now = new Date();
+        const minutes = now.getMinutes();
+        const nextTimes = [0, 20, 40]; // 00, 20, 40 dakikalarında çalışacak
+
+        let nextMinute = nextTimes.find(m => m > minutes);
+        if (nextMinute === undefined) {
+            nextMinute = 0;
+            now.setHours(now.getHours() + 1);
+        }
+
+        now.setMinutes(nextMinute, 0, 0);
+        return now;
+    }
+
+    function scheduleNextFetch() {
+        const nextFetchTime = getNextFetchTime();
+        const delay = nextFetchTime.getTime() - new Date().getTime();
+
+        console.log(`⏳ Bir sonraki veri çekme saati: ${nextFetchTime.toLocaleTimeString()}`);
+
+        setTimeout(() => {
+            fetchNetworkRushHour();
+            scheduleNextFetch();
+        }, delay);
+    }
+
+    console.log("🚀 Arka planda veri çekme işlemi başlatıldı...");
+    scheduleNextFetch();
+}
+
+async function fetchNetworkRushHour(selectedDate) {
+    // Eğer tarih verilmezse bugünü kullan
+    const today = selectedDate || new Date().toISOString().split('T')[0];
+
+    try {
+        console.log(`📡 Fetching Network Rush Hour data for ${today}...`);
+        const response = await fetch(`/Netinfo/api/device/network_rush_hour?date=${today}`);
+
+        if (!response.ok) {
+            console.error("🚨 API request failed:", response.status);
+            clearChart();
+            return;
+        }
+
+        const responseData = await response.json();
+        console.log("✅ API Response:", responseData);
+
+        if (!responseData || !responseData.rush_hours || responseData.rush_hours.length === 0) {
+            console.warn(`⚠ ${today} için veri bulunamadı.`);
+            showNoDataMessage(today);
+            clearChart();
+            return;
+        }
+
+        updateBarChart(responseData.rush_hours);
+
+        const lastUpdatedTime = responseData.last_updated ? responseData.last_updated : "Bilinmiyor";
+        document.getElementById("lastUpdated").textContent = `Veri güncellenme tarihi: ${lastUpdatedTime}`;
+
+        // Trafik istatistikleri
+        const trafficData = responseData.rush_hours.map(d => ({
+            input: d.input_traffic_mbps,
+            output: d.output_traffic_mbps
+        }));
+
+        const averageInput = Math.round(trafficData.reduce((sum, d) => sum + d.input, 0) / trafficData.length);
+        const averageOutput = Math.round(trafficData.reduce((sum, d) => sum + d.output, 0) / trafficData.length);
+
+        const minInput = Math.min(...trafficData.map(d => d.input));
+        const maxInput = Math.max(...trafficData.map(d => d.input));
+
+        const minOutput = Math.min(...trafficData.map(d => d.output));
+        const maxOutput = Math.max(...trafficData.map(d => d.output));
+
+        document.getElementById("trafficStats").innerHTML = `
+            <p>📊 Bugün Ortalama Trafik: ${averageInput} Mbps (İçeri), ${averageOutput} Mbps (Dışarı)</p>
+            <p>🔻 Minimum: ${minInput} Mbps / ${minOutput} Mbps</p>
+            <p>🔺 Maksimum: ${maxInput} Mbps / ${maxOutput} Mbps</p>
+        `;
+
+        return responseData.rush_hours; // ✅ Veriyi return et
+
+    } catch (error) {
+        console.error("❌ Error fetching data:", error);
+        clearChart();
+        return null;
+    }
+}
+
+startAutoFetch();
+
+function clearChart() {
+    const canvas = document.getElementById("rushHourChart");
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext("2d");
+    if (window.rushHourChart instanceof Chart) {
+        window.rushHourChart.destroy();
+    }
+    
+    // Boş grafik göster
+    window.rushHourChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Veri Yok"],
+            datasets: [{
+                label: "Veri Bulunamadı",
+                data: [0],
+                backgroundColor: "rgba(200, 200, 200, 0.5)"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: "#FFD700" } }
+            }
+        }
+    });
+}
+
+function showNoDataMessage(date) {
+    console.warn(`⚠ ${date} için veri bulunamadı, boş grafik gösteriliyor.`);
+    
+    const ctx = document.getElementById("rushHourChart").getContext("2d");
+
+    if (window.rushHourChart instanceof Chart) {
+        window.rushHourChart.destroy();
+    }
+
+    window.rushHourChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Veri Yok"],
+            datasets: [
+                {
+                    label: "Gelen Trafik (Input Mbps)",
+                    data: [0],
+                    backgroundColor: "rgba(200, 200, 200, 0.5)",
+                },
+                {
+                    label: "Giden Trafik (Output Mbps)",
+                    data: [0],
+                    backgroundColor: "rgba(150, 150, 150, 0.5)",
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { title: { display: true, text: "Saat", color: "#FFD700" }, ticks: { color: "#FFD700" }},
+                y: { beginAtZero: true, title: { display: true, text: "Mbps", color: "#FFD700" }, ticks: { color: "#FFD700" }}
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: { color: "#FFD700", font: { weight: "bold" }}
+                }
+            }
+        }
+    });
+}
+
+
+
+
+let availableDates = new Set();
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadAvailableDates();
+
+    const datePicker = document.getElementById("datePicker");
+    let today = new Date();
+    let todayStr = today.toISOString().split('T')[0]; // ✅ Bugünün tarihi
+
+    // Bugün için veri var mı kontrol et
+    if (isDateAvailable(todayStr)) {
+        datePicker.value = todayStr;
+        console.log(`📊 Bugün (${todayStr}) için grafik çiziliyor...`);
+        await fetchNetworkRushHour(todayStr);  // ✅ Tarihi gönder
+    } else {
+        console.warn(`⚠ Bugün (${todayStr}) için veri bulunamadı.`);
+        showNoDataMessage(todayStr);
+    }
+
+    // Tarih değiştiğinde
+    datePicker.addEventListener("change", async () => {
+        const selectedDate = datePicker.value;
+        console.log(`📅 Kullanıcı yeni tarih seçti: ${selectedDate}`);
+        
+        if (isDateAvailable(selectedDate)) {
+            await fetchNetworkRushHour(selectedDate);
+        } else {
+            console.warn(`⚠ ${selectedDate} için veri yok.`);
+            showNoDataMessage(selectedDate);
+        }
+    });
+});
+
+function isDateAvailable(date) {
+    return availableDates.has(date); // ❌ Fazladan if-else gerek yok
+}
+
+
+function setupDatepicker() {
+    const datePicker = document.getElementById("datePicker");
+    if (!datePicker) return;
+    
+    // jQuery olmadan basit datepicker
+    datePicker.addEventListener("change", function() {
+        const selectedDate = this.value;
+        console.log(`📅 Seçilen tarih: ${selectedDate}`);
+        
+        if (isDateAvailable(selectedDate)) {
+            fetchNetworkRushHour(selectedDate);
+        } else {
+            console.warn(`⚠ ${selectedDate} için veri yok.`);
+            showNoDataMessage(selectedDate);
+        }
+    });
+    
+    console.log("✅ Datepicker jQuery olmadan başlatıldı");
+}
+
+
+
+function updateBarChart(data) {
+    console.log("📊 Updating input/output bar chart with data:", data);
+
+    if (!data || data.length === 0) {
+        console.warn("⚠️ Data is empty or undefined.");
+        return;
+    }
+
+    const canvas = document.getElementById("rushHourChart");
+    if (!canvas) {
+        console.error("❌ rushHourChart canvas element not found.");
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    if (window.rushHourChart instanceof Chart) {
+        window.rushHourChart.destroy();
+    }
+
+    data.sort((a, b) => {
+        const hourA = parseInt(a.hour_range.split(":")[0]);
+        const hourB = parseInt(b.hour_range.split(":")[0]);
+        return hourA - hourB;
+    });
+
+    const hours = data.map(entry => entry.hour_range);
+    const inputTraffic = data.map(entry => entry.input_traffic_mbps);
+    const outputTraffic = data.map(entry => entry.output_traffic_mbps);
+
+    window.rushHourChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: hours,
+            datasets: [
+                {
+                    label: "Gelen Trafik (Input Mbps)",
+                    data: inputTraffic,
+                    backgroundColor: "rgba(21, 233, 142, 0.8)",
+                    borderColor: "rgba(0, 0, 0, 0.8)",
+                    borderWidth: 1
+                },
+                {
+                    label: "Giden Trafik (Output Mbps)",
+                    data: outputTraffic,
+                    backgroundColor: "rgba(214, 29, 54, 0.8)",
+                    borderColor: "rgba(0, 0, 0, 0.8)",
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Saat Dilimi",
+                        color: "#FFD700",
+                        font: { weight: "bold", size: 12 }
+                    },
+                    ticks: { color: "#FFD700" }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Trafik (Mbps)",
+                        color: "#FFD700",
+                        font: { weight: "bold", size: 12 }
+                    },
+                    ticks: { color: "#FFD700" }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "top",
+                    labels: {
+                        color: "#FFD700",
+                        font: { weight: "bold", size: 14 }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+
+async function fetchLogAnalysis() {
+    try {
+        console.log("📡 Fetching log analysis data...");
+
+        const response = await fetch("/Netinfo/api/device/log_analysis");
+        if (!response.ok) {
+            console.error("❌ API response error:", response.status, response.statusText);
+            return null;
+        }
+
+        const data = await response.json();
+        console.log("📜 API Log Data:", data);
+
+        if (!data || Object.keys(data).length === 0) {
+            console.warn("⚠️ Log analysis data is empty.");
+            return null;
+        }
+
+        return Object.values(data);
+    } catch (error) {
+        console.error("🚨 Error fetching log analysis data:", error);
+        return null;
+    }
+}
+
+function renderLogAnalysisTable(data) {
+    console.log("📊 Rendering log analysis table with data:", data);
+
+    const tableBody = document.getElementById("logTableBody");
+    if (!tableBody) {
+        console.error("❌ Table body element not found!");
+        return;
+    }
+
+    tableBody.innerHTML = ""; // Önce tabloyu temizle
+
+    data.forEach(entry => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td class="border px-4 py-2">${entry.device_name || "N/A"}</td>
+            <td class="border px-4 py-2">
+                ${entry.most_common_port_error_type || "N/A"}
+                <div class="tooltip-container">
+                    <span class="tooltip-icon">?</span>
+                    <span class="tooltip-text">${entry.most_problematic_port_solution || "Olası çözüm belirtilmemiş"}</span>
+                </div>
+            </td>
+            <td class="border px-4 py-2">${entry.most_problematic_port || "N/A"}</td>
+            <td class="border px-4 py-2">${entry.most_problematic_port_occurrences || "0"}</td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+
+    console.log("✅ Log analysis table rendered successfully.");
+}
+
+// Sayfa yüklendiğinde veriyi çek ve tabloyu oluştur
+document.addEventListener("DOMContentLoaded", async () => {
+    const logData = await fetchLogAnalysis();
+    if (logData) {
+        renderLogAnalysisTable(logData);
+    }
+});
+
+async function loadInsightCard() {
+    const tickerElement = document.getElementById("insightMarquee");
+    if (!tickerElement) {
+        console.error("❌ insightMarquee elementi bulunamadı.");
+        return;
+    }
+
+    try {
+        const response = await fetch("/Netinfo/api/device/insight_summary");
+        if (!response.ok) throw new Error("Veri alınamadı");
+
+        const latest = await response.json();
+
+        if (!latest) {
+            throw new Error("Boş veya geçersiz veri");
+        }
+
+        const {
+            totalDevices,
+            onlineDevices,
+            recentStatusChanges,
+            insights
+        } = latest;
+
+        let tickerText = `📡 ${onlineDevices}/${totalDevices} cihaz online `;
+
+
+        if (recentStatusChanges?.length > 0) {
+            tickerText += `| `;
+            recentStatusChanges.forEach(change => {
+                const timeOnly = change.timestamp?.split('T')[1].substring(0, 8) || "??:??:??";
+                tickerText += `🕒 ${timeOnly} - ${change.hostname} (${change.statusChange})  |  `;
+            });
+        }
+
+        // insights verilerini tickerText'e ekleyelim
+        if (insights?.length > 0) {
+            tickerText += `| `;
+            tickerText += insights.join(" | "); // Her bir insight'ı "|" ile ayır
+        }
+
+        tickerElement.innerHTML = tickerText.trim().replace(/\|\s*$/, "");
+        console.log("✅ Insight ticker yüklendi.");
+    } catch (error) {
+        console.error("❌ Insight kartı yüklenemedi:", error);
+        tickerElement.innerHTML = "❌ Insight verisi alınamadı.";
+    }
+}
+
+
+
+
+
+
+
+
+
+    </script>
+	
+	<script src="/Netinfo/js/translations.js"></script>
+
+
+</body>
+
+</html>
