@@ -234,12 +234,13 @@ body {
 }
 
 .chassis {
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: var(--radius);
     padding: 16px;
     position: relative;
     overflow-x: auto;
+    backdrop-filter: blur(8px);
 }
 
 .chassis::before {
@@ -252,8 +253,8 @@ body {
 
 /* Each physical module panel */
 .module-panel {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
     padding: 14px 16px;
     margin-bottom: 12px;
@@ -341,36 +342,39 @@ body {
 }
 
 .port.up {
-    background: var(--green-dim);
-    color: var(--green);
-    border-color: rgba(0,230,118,0.3);
+    background: rgba(0,180,90,0.45);
+    color: #fff;
+    border-color: rgba(0,230,118,0.5);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
 .port.down {
-    background: var(--red-dim);
-    color: var(--red);
-    border-color: rgba(255,23,68,0.2);
+    background: rgba(200,20,50,0.45);
+    color: #fff;
+    border-color: rgba(255,23,68,0.4);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
 .port.admin-down {
-    background: rgba(255,255,255,0.04);
-    color: var(--text-muted);
-    border-color: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.7);
+    border-color: rgba(255,255,255,0.12);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .port:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     z-index: 2;
 }
 
 .port.up:hover {
-    background: rgba(0,230,118,0.25);
+    background: rgba(0,200,100,0.6);
     border-color: var(--green);
 }
 
 .port.down:hover {
-    background: rgba(255,23,68,0.25);
+    background: rgba(220,30,60,0.6);
     border-color: var(--red);
 }
 
@@ -890,10 +894,10 @@ body {
         </div>
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background: var(--green-dim); border: 1px solid rgba(0,230,118,0.3);"></div> Up
+                <div class="legend-color" style="background: rgba(0,180,90,0.45); border: 1px solid rgba(0,230,118,0.5);"></div> Up
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: var(--red-dim); border: 1px solid rgba(255,23,68,0.2);"></div> Down
+                <div class="legend-color" style="background: rgba(200,20,50,0.45); border: 1px solid rgba(255,23,68,0.4);"></div> Down
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"></div> Admin Down
