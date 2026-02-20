@@ -128,7 +128,8 @@ builder.Services.AddSingleton<DeviceDataService>(provider =>
 {
     var logger = Log.ForContext<DeviceDataService>();
     var paths = provider.GetRequiredService<DataPathsConfig>();
-    var deviceService = new DeviceDataService(logger, paths);
+    var cache = provider.GetRequiredService<IMemoryCache>();
+    var deviceService = new DeviceDataService(logger, paths, cache);
 
     // Each load is wrapped individually so one missing file doesn't crash the entire service
     void SafeLoad(string label, Action action)
@@ -158,6 +159,7 @@ builder.Services.AddSingleton<AccessPointService>(provider =>
     return new AccessPointService(logger, paths);
 });
 
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 
 var app = builder.Build();

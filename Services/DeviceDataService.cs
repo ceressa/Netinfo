@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Netinfo.Services
 {
@@ -17,6 +18,8 @@ namespace Netinfo.Services
         private readonly Serilog.ILogger _logger;
         private readonly DataPathsConfig _paths;
         private readonly TimeZoneInfo _timeZone;
+        private readonly IMemoryCache _cache;
+        private static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds(30);
         private List<Dictionary<string, object>> _deviceData;
         private List<Dictionary<string, object>> _portData;
         private List<Dictionary<string, object>> _routerPortData;
@@ -28,10 +31,11 @@ namespace Netinfo.Services
         private List<Dictionary<string, object>> _logAnalysisData = new();
         private Dictionary<int, (double input, double output)> _hourlyTrafficData = new();
 
-        public DeviceDataService(Serilog.ILogger logger, DataPathsConfig paths)
+        public DeviceDataService(Serilog.ILogger logger, DataPathsConfig paths, IMemoryCache cache)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _paths = paths ?? throw new ArgumentNullException(nameof(paths));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _timeZone = TimeZoneInfo.FindSystemTimeZoneById(paths.TimeZoneId);
             _deviceData = new List<Dictionary<string, object>>();
             _portData = new List<Dictionary<string, object>>();
@@ -82,29 +86,33 @@ namespace Netinfo.Services
 
         public List<Dictionary<string, object>> GetLatestDeviceStatusChanges()
         {
-            var statusLogFile = Path.Combine(_paths.LogDir, _paths.StatusChangesLog);
-            if (!File.Exists(statusLogFile))
-                return new List<Dictionary<string, object>>();
-
-            var jsonContent = File.ReadAllText(statusLogFile);
-            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
+            return _cache.GetOrCreate("StatusChanges", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = CacheDuration;
+                var statusLogFile = Path.Combine(_paths.LogDir, _paths.StatusChangesLog);
+                if (!File.Exists(statusLogFile))
+                    return new List<Dictionary<string, object>>();
+                var jsonContent = File.ReadAllText(statusLogFile);
+                return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
+            }) ?? new List<Dictionary<string, object>>();
         }
 
         public List<Dictionary<string, object>> GetLatestArchivedStatusLog()
         {
-            if (!Directory.Exists(_paths.ArchiveLogDir))
-                return new List<Dictionary<string, object>>();
-
-            var archiveFiles = Directory.GetFiles(_paths.ArchiveLogDir, "device_status_archive_*.json")
-                                        .OrderByDescending(f => f)
-                                        .ToList();
-
-            if (!archiveFiles.Any())
-                return new List<Dictionary<string, object>>();
-
-            var latestArchiveFile = archiveFiles.First();
-            var jsonContent = File.ReadAllText(latestArchiveFile);
-            return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
+            return _cache.GetOrCreate("ArchivedStatusLog", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = CacheDuration;
+                if (!Directory.Exists(_paths.ArchiveLogDir))
+                    return new List<Dictionary<string, object>>();
+                var archiveFiles = Directory.GetFiles(_paths.ArchiveLogDir, "device_status_archive_*.json")
+                                            .OrderByDescending(f => f)
+                                            .ToList();
+                if (!archiveFiles.Any())
+                    return new List<Dictionary<string, object>>();
+                var latestArchiveFile = archiveFiles.First();
+                var jsonContent = File.ReadAllText(latestArchiveFile);
+                return JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonContent) ?? new List<Dictionary<string, object>>();
+            }) ?? new List<Dictionary<string, object>>();
         }
 
         public void LoadPreviousDeviceData(string filePath)
@@ -297,36 +305,36 @@ namespace Netinfo.Services
 
         public Dictionary<string, double>? GetMainDataMetrics()
         {
-            string filePath = Path.Combine(_paths.DataDir, _paths.MainData);
-
-            if (!File.Exists(filePath))
+            return _cache.GetOrCreate("MainDataMetrics", entry =>
             {
-                _logger.Warning("main_data.json file not found at {FilePath}", filePath);
-                return null;
-            }
-
-            try
-            {
-                string jsonContent = File.ReadAllText(filePath);
-                var jsonData = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
-
-                if (jsonData == null || !jsonData.ContainsKey("cumulated_input_mbps") || !jsonData.ContainsKey("cumulated_output_mbps"))
+                entry.AbsoluteExpirationRelativeToNow = CacheDuration;
+                string filePath = Path.Combine(_paths.DataDir, _paths.MainData);
+                if (!File.Exists(filePath))
                 {
-                    _logger.Warning("main_data.json is missing required fields.");
+                    _logger.Warning("main_data.json file not found at {FilePath}", filePath);
+                    return (Dictionary<string, double>?)null;
+                }
+                try
+                {
+                    string jsonContent = File.ReadAllText(filePath);
+                    var jsonData = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
+                    if (jsonData == null || !jsonData.ContainsKey("cumulated_input_mbps") || !jsonData.ContainsKey("cumulated_output_mbps"))
+                    {
+                        _logger.Warning("main_data.json is missing required fields.");
+                        return null;
+                    }
+                    return new Dictionary<string, double>
+                    {
+                        { "cumulated_input_mbps", Convert.ToDouble(jsonData["cumulated_input_mbps"]) },
+                        { "cumulated_output_mbps", Convert.ToDouble(jsonData["cumulated_output_mbps"]) }
+                    };
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Error reading main_data.json");
                     return null;
                 }
-
-                return new Dictionary<string, double>
-                {
-                    { "cumulated_input_mbps", Convert.ToDouble(jsonData["cumulated_input_mbps"]) },
-                    { "cumulated_output_mbps", Convert.ToDouble(jsonData["cumulated_output_mbps"]) }
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error reading main_data.json");
-                return null;
-            }
+            });
         }
 
         public void LogPingStateChanges()
@@ -623,50 +631,49 @@ namespace Netinfo.Services
 
         public List<Dictionary<string, object>> GetVlanData()
         {
-            string filePath = Path.Combine(_paths.DataDir, _paths.DeviceConfigHistory);
-
-            try
+            return _cache.GetOrCreate("VlanData", entry =>
             {
-                if (!File.Exists(filePath))
+                entry.AbsoluteExpirationRelativeToNow = CacheDuration;
+                string filePath = Path.Combine(_paths.DataDir, _paths.DeviceConfigHistory);
+                try
                 {
-                    _logger.Warning("VLAN data file not found at {FilePath}", filePath);
-                    return new List<Dictionary<string, object>>();
-                }
-
-                var jsonContent = File.ReadAllText(filePath);
-                var vlanData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(jsonContent);
-
-                if (vlanData == null || vlanData.Count == 0)
-                {
-                    _logger.Warning("VLAN data file is empty.");
-                    return new List<Dictionary<string, object>>();
-                }
-
-                var vlanList = new List<Dictionary<string, object>>();
-                foreach (var device in vlanData.Values)
-                {
-                    if (device.TryGetValue("vlans", out var vlanObj) && vlanObj is JObject vlanDict)
+                    if (!File.Exists(filePath))
                     {
-                        foreach (var vlanProp in vlanDict.Properties())
+                        _logger.Warning("VLAN data file not found at {FilePath}", filePath);
+                        return new List<Dictionary<string, object>>();
+                    }
+                    var jsonContent = File.ReadAllText(filePath);
+                    var vlanData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(jsonContent);
+                    if (vlanData == null || vlanData.Count == 0)
+                    {
+                        _logger.Warning("VLAN data file is empty.");
+                        return new List<Dictionary<string, object>>();
+                    }
+                    var vlanList = new List<Dictionary<string, object>>();
+                    foreach (var device in vlanData.Values)
+                    {
+                        if (device.TryGetValue("vlans", out var vlanObj) && vlanObj is JObject vlanDict)
                         {
-                            var vlanInfo = vlanProp.Value.ToObject<Dictionary<string, object>>();
-                            if (vlanInfo != null)
+                            foreach (var vlanProp in vlanDict.Properties())
                             {
-                                vlanInfo["hostname"] = device["hostname"];
-                                vlanList.Add(vlanInfo);
+                                var vlanInfo = vlanProp.Value.ToObject<Dictionary<string, object>>();
+                                if (vlanInfo != null)
+                                {
+                                    vlanInfo["hostname"] = device["hostname"];
+                                    vlanList.Add(vlanInfo);
+                                }
                             }
                         }
                     }
+                    _logger.Information("VLAN data successfully loaded. Total VLANs: {Count}", vlanList.Count);
+                    return vlanList;
                 }
-
-                _logger.Information("VLAN data successfully loaded. Total VLANs: {Count}", vlanList.Count);
-                return vlanList;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error while reading VLAN data from file.");
-                return new List<Dictionary<string, object>>();
-            }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Error while reading VLAN data from file.");
+                    return new List<Dictionary<string, object>>();
+                }
+            }) ?? new List<Dictionary<string, object>>();
         }
 
         public List<Dictionary<string, object>> GetNetworkRushHour(string date)
@@ -810,35 +817,34 @@ namespace Netinfo.Services
 
         public string GetLastWholeDataUpdated()
         {
-            string filePath = Path.Combine(_paths.DataDir, _paths.MainData);
-
-            if (!File.Exists(filePath))
+            return _cache.GetOrCreate("LastWholeDataUpdated", entry =>
             {
-                _logger.Warning("main_data.json file not found.");
-                return "Bilinmiyor";
-            }
-
-            try
-            {
-                string jsonContent = File.ReadAllText(filePath);
-                var jsonData = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
-
-                if (jsonData != null && jsonData.ContainsKey("last_whole_data_updated") && jsonData["last_whole_data_updated"] is string lastUpdated)
+                entry.AbsoluteExpirationRelativeToNow = CacheDuration;
+                string filePath = Path.Combine(_paths.DataDir, _paths.MainData);
+                if (!File.Exists(filePath))
                 {
-                    DateTime parsedDate;
-                    if (DateTime.TryParseExact(lastUpdated, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
-                    {
-                        return parsedDate.ToString("dd.MM.yyyy HH:mm");
-                    }
+                    _logger.Warning("main_data.json file not found.");
                     return "Bilinmiyor";
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error reading 'last_whole_data_updated' from JSON.");
-            }
-
-            return "Bilinmiyor";
+                try
+                {
+                    string jsonContent = File.ReadAllText(filePath);
+                    var jsonData = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
+                    if (jsonData != null && jsonData.ContainsKey("last_whole_data_updated") && jsonData["last_whole_data_updated"] is string lastUpdated)
+                    {
+                        DateTime parsedDate;
+                        if (DateTime.TryParseExact(lastUpdated, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+                        {
+                            return parsedDate.ToString("dd.MM.yyyy HH:mm");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Error reading 'last_whole_data_updated' from JSON.");
+                }
+                return "Bilinmiyor";
+            }) ?? "Bilinmiyor";
         }
 
         public void LoadLogAnalysisData(string filePath)
@@ -1022,32 +1028,33 @@ namespace Netinfo.Services
 
         public List<InsightSummary> GetInsightSummary()
         {
-            try
+            return _cache.GetOrCreate("InsightSummary", entry =>
             {
-                var insightSummaryFilePath = Path.Combine(_paths.DataDir, _paths.InsightSummary);
-                if (!File.Exists(insightSummaryFilePath))
+                entry.AbsoluteExpirationRelativeToNow = CacheDuration;
+                try
                 {
-                    _logger.Warning("Insight summary file not found at {FilePath}", insightSummaryFilePath);
+                    var insightSummaryFilePath = Path.Combine(_paths.DataDir, _paths.InsightSummary);
+                    if (!File.Exists(insightSummaryFilePath))
+                    {
+                        _logger.Warning("Insight summary file not found at {FilePath}", insightSummaryFilePath);
+                        return new List<InsightSummary>();
+                    }
+                    var jsonContent = File.ReadAllText(insightSummaryFilePath);
+                    var list = JsonConvert.DeserializeObject<List<InsightSummary>>(jsonContent);
+                    if (list == null || list.Count == 0)
+                    {
+                        _logger.Warning("Insight summary JSON list is empty.");
+                        return new List<InsightSummary>();
+                    }
+                    _logger.Information("Insight summary loaded. Count: {Count}", list.Count);
+                    return list;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Error reading insight summary JSON.");
                     return new List<InsightSummary>();
                 }
-
-                var jsonContent = File.ReadAllText(insightSummaryFilePath);
-                var list = JsonConvert.DeserializeObject<List<InsightSummary>>(jsonContent);
-
-                if (list == null || list.Count == 0)
-                {
-                    _logger.Warning("Insight summary JSON list is empty.");
-                    return new List<InsightSummary>();
-                }
-
-                _logger.Information("Insight summary loaded. Count: {Count}", list.Count);
-                return list;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error reading insight summary JSON.");
-                return new List<InsightSummary>();
-            }
+            }) ?? new List<InsightSummary>();
         }
 
         public InsightSummary? GetLatestInsightSummary()
