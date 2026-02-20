@@ -179,10 +179,10 @@ app.Use(async (context, next) =>
     headers["Content-Security-Policy"] =
         "default-src 'self'; " +
         "connect-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com; " +
-        "script-src 'self' 'unsafe-inline' https://code.jquery.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com; " +
-        "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com; " +
+        "script-src 'self' 'unsafe-inline' https://code.jquery.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://cdn.tailwindcss.com; " +
+        "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.tailwindcss.com; " +
         "img-src 'self' https://tr.eu.fedex.com data:; " +
-        "font-src 'self' https://cdnjs.cloudflare.com;";
+        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;";
     await next();
 });
 
