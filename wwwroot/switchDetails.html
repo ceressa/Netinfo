@@ -1,182 +1,1302 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cisco 9300 Switch Port Layout</title>
+    <title>Switch Port Detay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-        .switch-container {
-            display: inline-block;
-            background: #34495e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-bottom: 40px;
-        }
-        .port-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-        .port {
-            width: 50px;
-            height: 30px;
-            background-color: #16a085;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
-        .port:hover {
-            transform: scale(1.1);
-            background-color: #1abc9c;
-        }
-        .group-spacing {
-            margin: 0 10px;
-        }
-        .row-spacing {
-            margin: 20px 0;
-        }
-        h1 {
-            color: #ecf0f1;
-        }
-        .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .back-button:hover {
-            background-color: #c0392b;
-            transform: scale(1.05);
-        }
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --purple: #4D148C;
+    --purple-light: #6B2FAD;
+    --orange: #FF6600;
+    --orange-light: #FF8533;
+    --bg-dark: #0a0a1a;
+    --bg-card: #12122a;
+    --bg-surface: #1a1a3e;
+    --text: #e8e8f0;
+    --text-muted: #8888aa;
+    --green: #00e676;
+    --green-dim: #004d25;
+    --red: #ff1744;
+    --red-dim: #4d0014;
+    --yellow: #ffab00;
+    --blue: #448aff;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Background animation */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 20% 50%, rgba(77,20,140,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(255,102,0,0.1) 0%, transparent 50%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes bgPulse {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-2%, 2%) scale(1.05); }
+}
+
+/* ========== HEADER ========== */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.back-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.header-title .hostname {
+    color: var(--orange);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.online {
+    background: rgba(0,230,118,0.15);
+    color: var(--green);
+    border: 1px solid rgba(0,230,118,0.3);
+}
+
+.status-badge.offline {
+    background: rgba(255,23,68,0.15);
+    color: var(--red);
+    border: 1px solid rgba(255,23,68,0.3);
+}
+
+/* ========== LOADING ========== */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.4s;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: var(--orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+    margin-top: 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* ========== MAIN LAYOUT ========== */
+.main {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* ========== STATS BAR ========== */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s;
+}
+
+.stat-card:hover {
+    border-color: rgba(255,255,255,0.15);
+}
+
+.stat-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.stat-icon.ports { background: rgba(68,138,255,0.15); color: var(--blue); }
+.stat-icon.up { background: rgba(0,230,118,0.15); color: var(--green); }
+.stat-icon.down { background: rgba(255,23,68,0.15); color: var(--red); }
+.stat-icon.traffic { background: rgba(255,171,0,0.15); color: var(--yellow); }
+
+.stat-info h4 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.stat-info span {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ========== SWITCH CHASSIS ========== */
+.chassis-section {
+    margin-bottom: 24px;
+}
+
+.chassis-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chassis-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+}
+
+.chassis {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.chassis::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--orange));
+}
+
+.port-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.port-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.port-group {
+    display: flex;
+    gap: 4px;
+    margin-right: 12px;
+}
+
+.port-group:last-child {
+    margin-right: 0;
+}
+
+/* ========== PORT ========== */
+.port {
+    width: 52px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    border: 1px solid transparent;
+    user-select: none;
+}
+
+.port.up {
+    background: var(--green-dim);
+    color: var(--green);
+    border-color: rgba(0,230,118,0.3);
+}
+
+.port.down {
+    background: var(--red-dim);
+    color: var(--red);
+    border-color: rgba(255,23,68,0.2);
+}
+
+.port.admin-down {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-muted);
+    border-color: rgba(255,255,255,0.08);
+}
+
+.port:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.port.up:hover {
+    background: rgba(0,230,118,0.25);
+    border-color: var(--green);
+}
+
+.port.down:hover {
+    background: rgba(255,23,68,0.25);
+    border-color: var(--red);
+}
+
+.port.active {
+    outline: 2px solid var(--orange);
+    outline-offset: 1px;
+    transform: translateY(-2px);
+}
+
+/* Speed indicator dot */
+.port .speed-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+}
+
+.port .speed-dot.gigabit { background: var(--blue); }
+.port .speed-dot.fast { background: var(--yellow); }
+
+/* ========== PORT DETAIL PANEL ========== */
+.detail-panel {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.detail-panel.empty {
+    border-style: dashed;
+    border-color: rgba(255,255,255,0.06);
+}
+
+.detail-header {
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-header .port-status {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.detail-header .port-status.up {
+    background: rgba(0,230,118,0.12);
+    color: var(--green);
+}
+
+.detail-header .port-status.down {
+    background: rgba(255,23,68,0.12);
+    color: var(--red);
+}
+
+.detail-body {
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.detail-item .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.detail-item .value.green { color: var(--green); }
+.detail-item .value.red { color: var(--red); }
+.detail-item .value.yellow { color: var(--yellow); }
+.detail-item .value.blue { color: var(--blue); }
+
+.detail-empty {
+    padding: 40px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.detail-empty i {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+    opacity: 0.4;
+}
+
+/* ========== TRAFFIC BARS ========== */
+.traffic-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.traffic-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.traffic-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.traffic-bar-fill.input { background: var(--blue); }
+.traffic-bar-fill.output { background: var(--orange); }
+
+.traffic-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 70px;
+}
+
+/* ========== PORT TABLE ========== */
+.table-section {
+    margin-top: 24px;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.table-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.table-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.search-input {
+    background: var(--bg-surface);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 8px 12px 8px 36px;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--orange);
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.filter-btn {
+    background: var(--bg-surface);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.port-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.port-table thead th {
+    background: rgba(255,255,255,0.03);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.port-table thead th:hover {
+    color: var(--text);
+}
+
+.port-table tbody tr {
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.port-table tbody tr:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.port-table tbody tr.selected {
+    background: rgba(255,102,0,0.08);
+}
+
+.port-table tbody td {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    white-space: nowrap;
+}
+
+.port-table .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.port-table .status-dot.up { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.port-table .status-dot.down { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.port-table .status-dot.admin-down { background: var(--text-muted); }
+
+/* ========== LEGEND ========== */
+.legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .header { padding: 10px 16px; }
+    .main { padding: 16px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .port { width: 40px; height: 26px; font-size: 10px; }
+    .chassis { padding: 16px; }
+    .detail-body { grid-template-columns: 1fr; }
+    .search-input { width: 150px; }
+    .header-title { font-size: 15px; }
+
+    .port-table thead th,
+    .port-table tbody td { padding: 6px 10px; font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+    .stats-bar { grid-template-columns: 1fr; }
+    .port { width: 34px; height: 24px; font-size: 9px; }
+    .port-group { margin-right: 6px; gap: 2px; }
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.animate-in:nth-child(2) { animation-delay: 0.05s; }
+.animate-in:nth-child(3) { animation-delay: 0.1s; }
+.animate-in:nth-child(4) { animation-delay: 0.15s; }
     </style>
 </head>
 <body>
-    <button class="back-button" onclick="history.back()">⬅ Back</button>
-    
-    <h1>Cisco 9300 Switch Port Layout</h1>
 
-    <!-- 24-Port Switch -->
-    <div class="switch-container">
-        <h2>24-Port Switch</h2>
-        <!-- Top Row: Odd Ports -->
-        <div class="port-row">
-            <div class="port">1</div>
-            <div class="port">3</div>
-            <div class="port">5</div>
-            <div class="port">7</div>
-            <div class="port">9</div>
-            <div class="port">11</div>
-            <div class="group-spacing"></div>
-            <div class="port">13</div>
-            <div class="port">15</div>
-            <div class="port">17</div>
-            <div class="port">19</div>
-            <div class="port">21</div>
-            <div class="port">23</div>
+<!-- Loading -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loader"></div>
+    <div class="loading-text">Port verileri yükleniyor...</div>
+</div>
+
+<!-- Header -->
+<div class="header">
+    <div class="header-left">
+        <a class="back-btn" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i> Geri
+        </a>
+        <div class="header-title" id="headerTitle">
+            Switch Port Detay
         </div>
-        <!-- Bottom Row: Even Ports -->
-        <div class="port-row">
-            <div class="port">2</div>
-            <div class="port">4</div>
-            <div class="port">6</div>
-            <div class="port">8</div>
-            <div class="port">10</div>
-            <div class="port">12</div>
-            <div class="group-spacing"></div>
-            <div class="port">14</div>
-            <div class="port">16</div>
-            <div class="port">18</div>
-            <div class="port">20</div>
-            <div class="port">22</div>
-            <div class="port">24</div>
+    </div>
+    <div class="header-right">
+        <span class="status-badge" id="statusBadge">--</span>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-card animate-in">
+            <div class="stat-icon ports"><i class="fas fa-ethernet"></i></div>
+            <div class="stat-info">
+                <h4 id="totalPorts">--</h4>
+                <span>Toplam Port</span>
+            </div>
+        </div>
+        <div class="stat-card animate-in">
+            <div class="stat-icon up"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-info">
+                <h4 id="upPorts">--</h4>
+                <span>Aktif (Up)</span>
+            </div>
+        </div>
+        <div class="stat-card animate-in">
+            <div class="stat-icon down"><i class="fas fa-times-circle"></i></div>
+            <div class="stat-info">
+                <h4 id="downPorts">--</h4>
+                <span>Kapalı (Down)</span>
+            </div>
+        </div>
+        <div class="stat-card animate-in">
+            <div class="stat-icon traffic"><i class="fas fa-exchange-alt"></i></div>
+            <div class="stat-info">
+                <h4 id="totalTraffic">--</h4>
+                <span>Toplam Trafik</span>
+            </div>
         </div>
     </div>
 
-    <!-- 48-Port Switch -->
-    <div class="switch-container">
-        <h2>48-Port Switch</h2>
-        <!-- Top Row: Odd Ports -->
-        <div class="port-row">
-            <div class="port">1</div>
-            <div class="port">3</div>
-            <div class="port">5</div>
-            <div class="port">7</div>
-            <div class="port">9</div>
-            <div class="port">11</div>
-            <div class="group-spacing"></div>
-            <div class="port">13</div>
-            <div class="port">15</div>
-            <div class="port">17</div>
-            <div class="port">19</div>
-            <div class="port">21</div>
-            <div class="port">23</div>
-            <div class="group-spacing"></div>
-            <div class="port">25</div>
-            <div class="port">27</div>
-            <div class="port">29</div>
-            <div class="port">31</div>
-            <div class="port">33</div>
-            <div class="port">35</div>
-            <div class="group-spacing"></div>
-            <div class="port">37</div>
-            <div class="port">39</div>
-            <div class="port">41</div>
-            <div class="port">43</div>
-            <div class="port">45</div>
-            <div class="port">47</div>
+    <!-- Physical Switch Chassis -->
+    <div class="chassis-section" id="chassisSection">
+        <div class="chassis-label">
+            <i class="fas fa-server"></i> Fiziksel Port Görünümü
         </div>
-        <!-- Bottom Row: Even Ports -->
-        <div class="port-row">
-            <div class="port">2</div>
-            <div class="port">4</div>
-            <div class="port">6</div>
-            <div class="port">8</div>
-            <div class="port">10</div>
-            <div class="port">12</div>
-            <div class="group-spacing"></div>
-            <div class="port">14</div>
-            <div class="port">16</div>
-            <div class="port">18</div>
-            <div class="port">20</div>
-            <div class="port">22</div>
-            <div class="port">24</div>
-            <div class="group-spacing"></div>
-            <div class="port">26</div>
-            <div class="port">28</div>
-            <div class="port">30</div>
-            <div class="port">32</div>
-            <div class="port">34</div>
-            <div class="port">36</div>
-            <div class="group-spacing"></div>
-            <div class="port">38</div>
-            <div class="port">40</div>
-            <div class="port">42</div>
-            <div class="port">44</div>
-            <div class="port">46</div>
-            <div class="port">48</div>
+        <div class="chassis" id="chassis">
+            <!-- Ports rendered dynamically -->
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--green-dim); border: 1px solid rgba(0,230,118,0.3);"></div> Up
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--red-dim); border: 1px solid rgba(255,23,68,0.2);"></div> Down
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"></div> Admin Down
+            </div>
+            <div class="legend-item">
+                <div class="legend-color speed-dot gigabit" style="width:8px;height:8px;border-radius:50%;background:var(--blue);"></div> 1Gbps
+            </div>
+            <div class="legend-item">
+                <div class="legend-color speed-dot fast" style="width:8px;height:8px;border-radius:50%;background:var(--yellow);"></div> 100Mbps
+            </div>
         </div>
     </div>
+
+    <!-- Port Detail Panel -->
+    <div class="detail-panel empty" id="detailPanel">
+        <div class="detail-empty">
+            <i class="fas fa-hand-pointer"></i>
+            Detaylarını görmek için bir port seçin
+        </div>
+    </div>
+
+    <!-- Port Table -->
+    <div class="table-section">
+        <div class="table-header">
+            <h3><i class="fas fa-list"></i> Tüm Portlar</h3>
+            <div class="table-controls">
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Port ara...">
+                </div>
+                <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">Tümü</button>
+                <button class="filter-btn" data-filter="up" onclick="setFilter('up', this)">Up</button>
+                <button class="filter-btn" data-filter="down" onclick="setFilter('down', this)">Down</button>
+            </div>
+        </div>
+        <div style="overflow-x: auto; max-height: 500px; overflow-y: auto; border-radius: var(--radius);">
+            <table class="port-table" id="portTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Port <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(1)">Durum <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(2)">Açıklama <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(3)">VLAN <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(4)">Hız <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(5)">Giriş <i class="fas fa-sort"></i></th>
+                        <th onclick="sortTable(6)">Çıkış <i class="fas fa-sort"></i></th>
+                        <th>Komşu</th>
+                    </tr>
+                </thead>
+                <tbody id="portTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ========== STATE ==========
+let allPorts = [];
+let physicalPorts = [];
+let selectedPort = null;
+let currentFilter = 'all';
+let sortCol = -1;
+let sortAsc = true;
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', init);
+
+async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const uid = params.get('uid');
+
+    if (!uid) {
+        hideLoading();
+        document.getElementById('headerTitle').textContent = 'UUID belirtilmemiş';
+        return;
+    }
+
+    try {
+        // Fetch device info and ports in parallel
+        const [deviceRes, portsRes] = await Promise.all([
+            fetchAPI('/Netinfo/api/device/get_device_info?uid=' + encodeURIComponent(uid)),
+            fetchAPI('/Netinfo/api/device/get_device_ports?uid=' + encodeURIComponent(uid))
+        ]);
+
+        if (deviceRes) {
+            renderDeviceHeader(deviceRes);
+        }
+
+        if (portsRes && Array.isArray(portsRes)) {
+            allPorts = portsRes;
+            physicalPorts = allPorts.filter(function(p) {
+                var name = (p.interface_name || '').toLowerCase();
+                return name.indexOf('gigabitethernet') !== -1 ||
+                       name.indexOf('tengigabitethernet') !== -1 ||
+                       name.indexOf('fastethernet') !== -1 ||
+                       name.indexOf('twentyfivegige') !== -1 ||
+                       name.indexOf('fortygigabitethernet') !== -1;
+            });
+            renderStats();
+            renderChassis();
+            renderTable();
+        }
+    } catch (err) {
+        console.error('Init error:', err);
+    }
+
+    hideLoading();
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', function() {
+        renderTable();
+    });
+}
+
+async function fetchAPI(url) {
+    try {
+        var resp = await fetch(url, { signal: AbortSignal.timeout(15000) });
+        if (!resp.ok) return null;
+        return await resp.json();
+    } catch (e) {
+        console.error('Fetch error:', url, e);
+        return null;
+    }
+}
+
+function hideLoading() {
+    document.getElementById('loadingOverlay').classList.add('hidden');
+}
+
+// ========== RENDER HEADER ==========
+function renderDeviceHeader(device) {
+    var title = document.getElementById('headerTitle');
+    title.innerHTML = '';
+    var span1 = document.createTextNode('Switch Port Detay — ');
+    var span2 = document.createElement('span');
+    span2.className = 'hostname';
+    span2.textContent = device.hostname || 'Bilinmiyor';
+    title.appendChild(span1);
+    title.appendChild(span2);
+
+    var badge = document.getElementById('statusBadge');
+    var isOnline = (device.status || '').toLowerCase() === 'online';
+    badge.textContent = isOnline ? 'Online' : 'Offline';
+    badge.className = 'status-badge ' + (isOnline ? 'online' : 'offline');
+
+    document.title = 'Switch Detay — ' + (device.hostname || '');
+}
+
+// ========== RENDER STATS ==========
+function renderStats() {
+    var phys = physicalPorts;
+    var up = phys.filter(function(p) { return p.is_up === true; });
+    var down = phys.filter(function(p) { return p.is_up !== true; });
+
+    document.getElementById('totalPorts').textContent = phys.length;
+    document.getElementById('upPorts').textContent = up.length;
+    document.getElementById('downPorts').textContent = down.length;
+
+    var totalIn = 0, totalOut = 0;
+    allPorts.forEach(function(p) {
+        totalIn += (p.input_rate_mbps || 0);
+        totalOut += (p.output_rate_mbps || 0);
+    });
+
+    var total = totalIn + totalOut;
+    document.getElementById('totalTraffic').textContent = total < 1 ? total.toFixed(2) + ' Mbps' :
+        total < 1000 ? total.toFixed(1) + ' Mbps' : (total / 1000).toFixed(2) + ' Gbps';
+}
+
+// ========== RENDER CHASSIS ==========
+function renderChassis() {
+    var chassis = document.getElementById('chassis');
+    chassis.textContent = '';
+
+    if (physicalPorts.length === 0) {
+        chassis.textContent = 'Fiziksel port bulunamadı.';
+        return;
+    }
+
+    // Parse port numbers and sort
+    var parsed = physicalPorts.map(function(p) {
+        var match = (p.interface_name || '').match(/(\d+)\/(\d+)\/(\d+)$/);
+        var num = match ? parseInt(match[3]) : 0;
+        var stack = match ? parseInt(match[1]) : 1;
+        return { port: p, num: num, stack: stack };
+    });
+
+    // Group by stack member
+    var stacks = {};
+    parsed.forEach(function(item) {
+        if (!stacks[item.stack]) stacks[item.stack] = [];
+        stacks[item.stack].push(item);
+    });
+
+    Object.keys(stacks).sort().forEach(function(stackNum) {
+        var ports = stacks[stackNum];
+        ports.sort(function(a, b) { return a.num - b.num; });
+
+        var grid = document.createElement('div');
+        grid.className = 'port-grid';
+
+        // Odd ports row (top)
+        var topRow = document.createElement('div');
+        topRow.className = 'port-row';
+        var topGroup = document.createElement('div');
+        topGroup.className = 'port-group';
+        var groupCount = 0;
+
+        ports.forEach(function(item) {
+            if (item.num % 2 === 1) {
+                if (groupCount > 0 && groupCount % 12 === 0) {
+                    topRow.appendChild(topGroup);
+                    topGroup = document.createElement('div');
+                    topGroup.className = 'port-group';
+                }
+                topGroup.appendChild(createPortElement(item));
+                groupCount++;
+            }
+        });
+        topRow.appendChild(topGroup);
+
+        // Even ports row (bottom)
+        var bottomRow = document.createElement('div');
+        bottomRow.className = 'port-row';
+        var bottomGroup = document.createElement('div');
+        bottomGroup.className = 'port-group';
+        var groupCount2 = 0;
+
+        ports.forEach(function(item) {
+            if (item.num % 2 === 0) {
+                if (groupCount2 > 0 && groupCount2 % 12 === 0) {
+                    bottomRow.appendChild(bottomGroup);
+                    bottomGroup = document.createElement('div');
+                    bottomGroup.className = 'port-group';
+                }
+                bottomGroup.appendChild(createPortElement(item));
+                groupCount2++;
+            }
+        });
+        bottomRow.appendChild(bottomGroup);
+
+        grid.appendChild(topRow);
+        grid.appendChild(bottomRow);
+
+        if (Object.keys(stacks).length > 1) {
+            var label = document.createElement('div');
+            label.style.cssText = 'font-size:11px;color:var(--text-muted);margin-bottom:6px;margin-top:12px;';
+            label.textContent = 'Stack ' + stackNum;
+            chassis.appendChild(label);
+        }
+        chassis.appendChild(grid);
+    });
+}
+
+function createPortElement(item) {
+    var el = document.createElement('div');
+    el.className = 'port';
+
+    var p = item.port;
+    var status = (p.link_status || '').toLowerCase();
+    if (p.is_up) {
+        el.classList.add('up');
+    } else if (status.indexOf('administratively') !== -1) {
+        el.classList.add('admin-down');
+    } else {
+        el.classList.add('down');
+    }
+
+    el.textContent = item.num;
+
+    // Speed indicator
+    var speed = (p.speed || '').toLowerCase();
+    if (speed.indexOf('1000') !== -1 || speed.indexOf('10000') !== -1) {
+        var dot = document.createElement('span');
+        dot.className = 'speed-dot gigabit';
+        el.appendChild(dot);
+    } else if (speed.indexOf('100') !== -1) {
+        var dot2 = document.createElement('span');
+        dot2.className = 'speed-dot fast';
+        el.appendChild(dot2);
+    }
+
+    el.addEventListener('click', function() {
+        selectPort(p, el);
+    });
+
+    el.title = (p.interface_name || '') + ' — ' + (p.is_up ? 'Up' : 'Down');
+    return el;
+}
+
+// ========== PORT SELECTION ==========
+function selectPort(port, portEl) {
+    // Clear previous selection
+    document.querySelectorAll('.port.active').forEach(function(el) {
+        el.classList.remove('active');
+    });
+    document.querySelectorAll('.port-table tbody tr.selected').forEach(function(el) {
+        el.classList.remove('selected');
+    });
+
+    if (portEl) portEl.classList.add('active');
+    selectedPort = port;
+    renderDetailPanel(port);
+
+    // Highlight in table
+    var rows = document.querySelectorAll('.port-table tbody tr');
+    rows.forEach(function(row) {
+        if (row.dataset.portName === port.interface_name) {
+            row.classList.add('selected');
+            row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+}
+
+// ========== RENDER DETAIL PANEL ==========
+function renderDetailPanel(port) {
+    var panel = document.getElementById('detailPanel');
+    panel.classList.remove('empty');
+    panel.textContent = '';
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'detail-header';
+
+    var h3 = document.createElement('h3');
+    var icon = document.createElement('i');
+    icon.className = 'fas fa-ethernet';
+    icon.style.color = 'var(--orange)';
+    h3.appendChild(icon);
+    h3.appendChild(document.createTextNode(' ' + (port.interface_name || '')));
+    header.appendChild(h3);
+
+    var statusSpan = document.createElement('span');
+    statusSpan.className = 'port-status ' + (port.is_up ? 'up' : 'down');
+    statusSpan.textContent = port.is_up ? 'UP' : 'DOWN';
+    header.appendChild(statusSpan);
+
+    panel.appendChild(header);
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'detail-body';
+
+    var fields = [
+        { label: 'Açıklama', value: port.description || '—', color: '' },
+        { label: 'Link Durumu', value: port.link_status || '—', color: port.is_up ? 'green' : 'red' },
+        { label: 'Hız / Duplex', value: (port.speed || '—') + ' / ' + (port.duplex || '—'), color: '' },
+        { label: 'VLAN', value: (port.vlan_id || 'N/A') + (port.vlan_name && port.vlan_name !== 'N/A' ? ' (' + port.vlan_name + ')' : ''), color: 'blue' },
+        { label: 'Komşu Cihaz', value: port.neighbor_hostname || 'N/A', color: port.neighbor_hostname && port.neighbor_hostname !== 'N/A' ? 'yellow' : '' },
+        { label: 'Komşu Port', value: port.neighbor_port || 'N/A', color: '' },
+        { label: 'Bağlı MAC', value: port.connected_macs || '—', color: '' },
+        { label: 'Son Giriş', value: port.last_input || '—', color: '' },
+        { label: 'Son Çıkış', value: port.last_output || '—', color: '' }
+    ];
+
+    fields.forEach(function(f) {
+        var item = document.createElement('div');
+        item.className = 'detail-item';
+        var lbl = document.createElement('div');
+        lbl.className = 'label';
+        lbl.textContent = f.label;
+        var val = document.createElement('div');
+        val.className = 'value' + (f.color ? ' ' + f.color : '');
+        val.textContent = f.value;
+        item.appendChild(lbl);
+        item.appendChild(val);
+        body.appendChild(item);
+    });
+
+    panel.appendChild(body);
+
+    // Traffic bars
+    var maxTraffic = Math.max(1, port.input_rate_mbps || 0, port.output_rate_mbps || 0);
+    var trafficSection = document.createElement('div');
+    trafficSection.style.cssText = 'padding: 12px 20px 16px; border-top: 1px solid rgba(255,255,255,0.06);';
+
+    var trafficTitle = document.createElement('div');
+    trafficTitle.style.cssText = 'font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;';
+    trafficTitle.textContent = 'Trafik';
+    trafficSection.appendChild(trafficTitle);
+
+    ['input', 'output'].forEach(function(dir) {
+        var rate = dir === 'input' ? (port.input_rate_mbps || 0) : (port.output_rate_mbps || 0);
+        var container = document.createElement('div');
+        container.className = 'traffic-bar-container';
+
+        var label = document.createElement('div');
+        label.className = 'traffic-label';
+        label.textContent = (dir === 'input' ? 'Giriş' : 'Çıkış') + ': ' + rate.toFixed(2) + ' Mbps';
+
+        var barWrap = document.createElement('div');
+        barWrap.className = 'traffic-bar';
+        var fill = document.createElement('div');
+        fill.className = 'traffic-bar-fill ' + dir;
+        fill.style.width = Math.min(100, (rate / maxTraffic) * 100) + '%';
+        barWrap.appendChild(fill);
+
+        container.appendChild(label);
+        container.appendChild(barWrap);
+        trafficSection.appendChild(container);
+    });
+
+    panel.appendChild(trafficSection);
+}
+
+// ========== RENDER TABLE ==========
+function renderTable() {
+    var tbody = document.getElementById('portTableBody');
+    tbody.textContent = '';
+
+    var search = (document.getElementById('searchInput').value || '').toLowerCase();
+
+    var filtered = allPorts.filter(function(p) {
+        // Filter by status
+        if (currentFilter === 'up' && !p.is_up) return false;
+        if (currentFilter === 'down' && p.is_up) return false;
+
+        // Filter by search
+        if (search) {
+            var haystack = [
+                p.interface_name, p.description, p.vlan_id, p.vlan_name,
+                p.neighbor_hostname, p.speed, p.link_status
+            ].join(' ').toLowerCase();
+            return haystack.indexOf(search) !== -1;
+        }
+        return true;
+    });
+
+    // Sort
+    if (sortCol >= 0) {
+        var keys = ['interface_name', 'is_up', 'description', 'vlan_id', 'speed', 'input_rate_mbps', 'output_rate_mbps'];
+        var key = keys[sortCol];
+        filtered.sort(function(a, b) {
+            var va = a[key], vb = b[key];
+            if (va == null) va = '';
+            if (vb == null) vb = '';
+            if (typeof va === 'number' && typeof vb === 'number') {
+                return sortAsc ? va - vb : vb - va;
+            }
+            va = String(va).toLowerCase();
+            vb = String(vb).toLowerCase();
+            return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+        });
+    }
+
+    filtered.forEach(function(port) {
+        var tr = document.createElement('tr');
+        tr.dataset.portName = port.interface_name;
+
+        // Port name
+        var td1 = document.createElement('td');
+        td1.style.fontWeight = '500';
+        td1.textContent = port.interface_name || '';
+        tr.appendChild(td1);
+
+        // Status
+        var td2 = document.createElement('td');
+        var dot = document.createElement('span');
+        dot.className = 'status-dot';
+        var status = (port.link_status || '').toLowerCase();
+        if (port.is_up) {
+            dot.classList.add('up');
+        } else if (status.indexOf('administratively') !== -1) {
+            dot.classList.add('admin-down');
+        } else {
+            dot.classList.add('down');
+        }
+        td2.appendChild(dot);
+        td2.appendChild(document.createTextNode(port.is_up ? 'Up' : 'Down'));
+        tr.appendChild(td2);
+
+        // Description
+        var td3 = document.createElement('td');
+        td3.textContent = port.description || '—';
+        td3.style.maxWidth = '200px';
+        td3.style.overflow = 'hidden';
+        td3.style.textOverflow = 'ellipsis';
+        tr.appendChild(td3);
+
+        // VLAN
+        var td4 = document.createElement('td');
+        td4.textContent = port.vlan_id || 'N/A';
+        tr.appendChild(td4);
+
+        // Speed
+        var td5 = document.createElement('td');
+        td5.textContent = port.speed || '—';
+        tr.appendChild(td5);
+
+        // Input
+        var td6 = document.createElement('td');
+        td6.textContent = (port.input_rate_mbps || 0).toFixed(2);
+        td6.style.color = (port.input_rate_mbps || 0) > 0 ? 'var(--blue)' : '';
+        tr.appendChild(td6);
+
+        // Output
+        var td7 = document.createElement('td');
+        td7.textContent = (port.output_rate_mbps || 0).toFixed(2);
+        td7.style.color = (port.output_rate_mbps || 0) > 0 ? 'var(--orange)' : '';
+        tr.appendChild(td7);
+
+        // Neighbor
+        var td8 = document.createElement('td');
+        td8.textContent = port.neighbor_hostname || '—';
+        if (port.neighbor_hostname && port.neighbor_hostname !== 'N/A') {
+            td8.style.color = 'var(--yellow)';
+        }
+        tr.appendChild(td8);
+
+        tr.addEventListener('click', function() {
+            selectPort(port, null);
+            // Also highlight chassis port
+            document.querySelectorAll('.port.active').forEach(function(el) { el.classList.remove('active'); });
+        });
+
+        if (selectedPort && selectedPort.interface_name === port.interface_name) {
+            tr.classList.add('selected');
+        }
+
+        tbody.appendChild(tr);
+    });
+}
+
+// ========== TABLE SORT ==========
+function sortTable(col) {
+    if (sortCol === col) {
+        sortAsc = !sortAsc;
+    } else {
+        sortCol = col;
+        sortAsc = true;
+    }
+    renderTable();
+}
+
+// ========== FILTER ==========
+function setFilter(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderTable();
+}
+</script>
+
 </body>
 </html>

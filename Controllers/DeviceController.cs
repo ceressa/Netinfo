@@ -99,15 +99,19 @@ namespace Netinfo.Controllers
         }
 
         [HttpGet("get_device_ports")]
-        public IActionResult GetDevicePorts([FromQuery] string id)
+        public IActionResult GetDevicePorts([FromQuery] string? id, [FromQuery] string? uid)
         {
             try
             {
-                if (string.IsNullOrEmpty(id))
+                if (!string.IsNullOrEmpty(uid))
                 {
-                    _logger.Warning("Device ID is null or empty.");
-                    return BadRequest(new { success = false, error = "Device ID is required" });
+                    id = _deviceDataService.GetDeviceIdByUUID(uid);
+                    if (string.IsNullOrEmpty(id))
+                        return NotFound(new { success = false, error = $"No device found for UUID '{uid}'." });
                 }
+
+                if (string.IsNullOrEmpty(id))
+                    return BadRequest(new { success = false, error = "Device ID (id) or UUID (uid) is required." });
 
                 var ports = _deviceDataService.GetPortsByDeviceId(id);
                 if (ports == null || !ports.Any())
